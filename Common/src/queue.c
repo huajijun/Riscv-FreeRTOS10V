@@ -46,10 +46,22 @@ typedef struct QueueDefinition /* The old naming convention is used to prevent b
     #endif
 } xQUEUE;
 
+ #define queueYIELD_IF_USING_PREEMPTION()    portYIELD_WITHIN_API()
+
+
 /* The old xQUEUE name is maintained above then typedefed to the new Queue_t
  * name below to enable the use of older kernel aware debuggers. */
 typedef xQUEUE Queue_t;
 
+static void prvCopyDataFromQueue( Queue_t * const pxQueue,void * const pvBuffer );
+static BaseType_t prvCopyDataToQueue( Queue_t * const pxQueue,const void * pvItemToQueue,const BaseType_t xPosition );
+static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,uint8_t * pucQueueStorage,const uint8_t ucQueueType,Queue_t * pxNewQueue );
+static BaseType_t prvIsQueueEmpty( const Queue_t * pxQueue );
+static BaseType_t prvIsQueueFull( const Queue_t * pxQueue );
+QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,const uint8_t ucQueueType );
+BaseType_t xQueueGenericReset( QueueHandle_t xQueue,BaseType_t xNewQueue );
+BaseType_t xQueueGenericSend( QueueHandle_t xQueue,const void * const pvItemToQueue,TickType_t xTicksToWait,const BaseType_t xCopyPosition );
+BaseType_t xQueueReceive( QueueHandle_t xQueue,void * const pvBuffer,TickType_t xTicksToWait );
 
 BaseType_t xQueueGenericReset( QueueHandle_t xQueue,
                                BaseType_t xNewQueue )
@@ -138,7 +150,6 @@ static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,
         }
     #endif /* configUSE_QUEUE_SETS */
 
-    traceQUEUE_CREATE( pxNewQueue );
 }
 
 QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
@@ -149,15 +160,12 @@ QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
         size_t xQueueSizeInBytes;
         uint8_t * pucQueueStorage;
 
-        configASSERT( uxQueueLength > ( UBaseType_t ) 0 );
 
         /* Allocate enough space to hold the maximum number of items that
          * can be in the queue at any time.  It is valid for uxItemSize to be
          * zero in the case the queue is used as a semaphore. */
         xQueueSizeInBytes = ( size_t ) ( uxQueueLength * uxItemSize ); /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
 
-        /* Check for multiplication overflow. */
-        configASSERT( ( uxItemSize == 0 ) || ( uxQueueLength == ( xQueueSizeInBytes / uxItemSize ) ) );
 
         /* Allocate the queue and storage area.  Justification for MISRA
          * deviation as follows:  pvPortMalloc() always ensures returned memory
@@ -201,14 +209,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
     TimeOut_t xTimeOut;
     Queue_t * const pxQueue = xQueue;
 
-    configASSERT( pxQueue );
-    configASSERT( !( ( pvItemToQueue == NULL ) && ( pxQueue->uxItemSize != ( UBaseType_t ) 0U ) ) );
-    configASSERT( !( ( xCopyPosition == queueOVERWRITE ) && ( pxQueue->uxLength != 1 ) ) );
-    #if ( ( INCLUDE_xTaskGetSchedulerState == 1 ) || ( configUSE_TIMERS == 1 ) )
-        {
-            configASSERT( !( ( xTaskGetSchedulerState() == taskSCHEDULER_SUSPENDED ) && ( xTicksToWait != 0 ) ) );
-        }
-    #endif
 
     /*lint -save -e904 This function relaxes the coding standard somewhat to
      * allow return statements within the function itself.  This is done in the
@@ -223,7 +223,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
              * queue is full. */
             if( ( pxQueue->uxMessagesWaiting < pxQueue->uxLength ) || ( xCopyPosition == queueOVERWRITE ) )
             {
-                traceQUEUE_SEND( pxQueue );
 
                 #if ( configUSE_QUEUE_SETS == 1 )
                     {
@@ -266,10 +265,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
                                      * kernel takes care of that. */
                                     queueYIELD_IF_USING_PREEMPTION();
                                 }
-                                else
-                                {
-                                    mtCOVERAGE_TEST_MARKER();
-                                }
                             }
                             else if( xYieldRequired != pdFALSE )
                             {
@@ -278,10 +273,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
                                  * and the mutexes were given back in an order that is
                                  * different to that in which they were taken. */
                                 queueYIELD_IF_USING_PREEMPTION();
-                            }
-                            else
-                            {
-                                mtCOVERAGE_TEST_MARKER();
                             }
                         }
                     }
@@ -301,10 +292,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
                                  * takes care of that. */
                                 queueYIELD_IF_USING_PREEMPTION();
                             }
-                            else
-                            {
-                                mtCOVERAGE_TEST_MARKER();
-                            }
                         }
                         else if( xYieldRequired != pdFALSE )
                         {
@@ -313,10 +300,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
                              * the mutexes were given back in an order that is
                              * different to that in which they were taken. */
                             queueYIELD_IF_USING_PREEMPTION();
-                        }
-                        else
-                        {
-                            mtCOVERAGE_TEST_MARKER();
                         }
                     }
                 #endif /* configUSE_QUEUE_SETS */
@@ -334,7 +317,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
 
                     /* Return to the original privilege level before exiting
                      * the function. */
-                    traceQUEUE_SEND_FAILED( pxQueue );
                     return errQUEUE_FULL;
                 }
                 else if( xEntryTimeSet == pdFALSE )
@@ -343,11 +325,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
                      * configure the timeout structure. */
                     vTaskInternalSetTimeOutState( &xTimeOut );
                     xEntryTimeSet = pdTRUE;
-                }
-                else
-                {
-                    /* Entry time was already set. */
-                    mtCOVERAGE_TEST_MARKER();
                 }
             }
         }
@@ -364,7 +341,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
         {
             if( prvIsQueueFull( pxQueue ) != pdFALSE )
             {
-                traceBLOCKING_ON_QUEUE_SEND( pxQueue );
                 vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToSend ), xTicksToWait );
 
                 /* Unlocking the queue means queue events can effect the
@@ -397,7 +373,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
             prvUnlockQueue( pxQueue );
             ( void ) xTaskResumeAll();
 
-            traceQUEUE_SEND_FAILED( pxQueue );
             return errQUEUE_FULL;
         }
     } /*lint -restore */
@@ -440,7 +415,6 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
             {
                 /* Data available, remove one item. */
                 prvCopyDataFromQueue( pxQueue, pvBuffer );
-                traceQUEUE_RECEIVE( pxQueue );
                 pxQueue->uxMessagesWaiting = uxMessagesWaiting - ( UBaseType_t ) 1;
 
                 /* There is now space in the queue, were any tasks waiting to
