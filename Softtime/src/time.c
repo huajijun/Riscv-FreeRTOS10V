@@ -1,5 +1,50 @@
 
+#include <list.h>
+#include <queue.h>
 #include <time.h>
+typedef struct tmrTimerQueueMessage
+{
+        BaseType_t xMessageID; /*<< The command being sent to the timer service task. */
+        union
+        {
+            TimerParameter_t xTimerParameters;
+
+            /* Don't include xCallbackParameters if it is not going to be used as
+             * it makes the structure (and therefore the timer queue) larger. */
+            #if ( INCLUDE_xTimerPendFunctionCall == 1 )
+                CallbackParameters_t xCallbackParameters;
+            #endif /* INCLUDE_xTimerPendFunctionCall */
+        } u;
+} DaemonTaskMessage_t;
+
+static void prvCheckForValidListAndQueue( void );
+static void prvCheckForValidListAndQueue( void );
+static TickType_t prvGetNextExpireTime( BaseType_t * const pxListWasEmpty );
+static void prvInitialiseNewTimer( const char * const pcTimerName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+                                   const TickType_t xTimerPeriodInTicks,
+                                   const UBaseType_t uxAutoReload,
+                                   void * const pvTimerID,
+                                   TimerCallbackFunction_t pxCallbackFunction,
+                                   Timer_t * pxNewTimer );
+
+static BaseType_t prvInsertTimerInActiveList( Timer_t * const pxTimer,
+                                              const TickType_t xNextExpiryTime,
+                                              const TickType_t xTimeNow,
+                                              const TickType_t xCommandTime );
+
+static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
+                                    const TickType_t xTimeNow );
+static void prvProcessReceivedCommands( void );
+
+static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime,
+                                        BaseType_t xListWasEmpty );
+static TickType_t prvSampleTimeNow( BaseType_t * const pxTimerListsWereSwitched );
+static void prvSetNextTimerInterrupt(void);
+static void prvSwitchTimerLists( void );
+static void prvTimerTask( void *pvParameters );
+
+
+
 #define portTASK_FUNCTION_PROTO( vFunction, pvParameters )    void vFunction( void * pvParameters )
 
 typedef struct tmrTimerControl                 
@@ -35,6 +80,14 @@ typedef struct tmrCallbackParameters
 #define tmrSTATUS_IS_STATICALLY_ALLOCATED    ( ( uint8_t ) 0x02 )
 #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
 
+static List_t xActiveTimerList1;
+static List_t xActiveTimerList2;
+static List_t * pxCurrentTimerList;
+static List_t * pxOverflowTimerList;
+
+static QueueHandle_t xTimerQueue = NULL;
+static TaskHandle_t xTimerTaskHandle = NULL;
+
 
             
 
@@ -65,8 +118,6 @@ static portTASK_FUNCTION( prvTimerTask, pvParameters )
     TickType_t xNextExpireTime;
     BaseType_t xListWasEmpty;
 
-    /* Just to avoid compiler warnings. */
-    ( void ) pvParameters;
 
     #if ( configUSE_DAEMON_TASK_STARTUP_HOOK == 1 )
         {
@@ -129,16 +180,8 @@ static void prvCheckForValidListAndQueue( void )
                     {
                         vQueueAddToRegistry( xTimerQueue, "TmrQ" );
                     }
-                    else
-                    {
-                        mtCOVERAGE_TEST_MARKER();
-                    }
                 }
             #endif /* configQUEUE_REGISTRY_SIZE */
-        }
-        else
-        {
-            mtCOVERAGE_TEST_MARKER();
         }
     }
     taskEXIT_CRITICAL();
@@ -271,15 +314,10 @@ static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
             ( void ) xResult;
         }
-        else
-        {
-            mtCOVERAGE_TEST_MARKER();
-        }
     }
     else
     {
         pxTimer->ucStatus &= ~tmrSTATUS_IS_ACTIVE;
-        mtCOVERAGE_TEST_MARKER();
     }
 
     /* Call the timer callback. */
@@ -310,10 +348,6 @@ static void prvProcessReceivedCommands( void )
                     /* Call the function. */
                     pxCallback->pxCallbackFunction( pxCallback->pvParameter1, pxCallback->ulParameter2 );
                 }
-                else
-                {
-                    mtCOVERAGE_TEST_MARKER();
-                }
             }
         #endif /* INCLUDE_xTimerPendFunctionCall */
 
@@ -329,10 +363,6 @@ static void prvProcessReceivedCommands( void )
             {
                 /* The timer is in a list, remove it. */
                 ( void ) uxListRemove( &( pxTimer->xTimerListItem ) );
-            }
-            else
-            {
-                mtCOVERAGE_TEST_MARKER();
             }
 
             traceTIMER_COMMAND_RECEIVED( pxTimer, xMessage.xMessageID, xMessage.u.xTimerParameters.xMessageValue );
@@ -367,14 +397,6 @@ static void prvProcessReceivedCommands( void )
                             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xMessage.u.xTimerParameters.xMessageValue + pxTimer->xTimerPeriodInTicks, NULL, tmrNO_DELAY );
                             ( void ) xResult;
                         }
-                        else
-                        {
-                            mtCOVERAGE_TEST_MARKER();
-                        }
-                    }
-                    else
-                    {
-                        mtCOVERAGE_TEST_MARKER();
                     }
 
                     break;
@@ -630,10 +652,6 @@ BaseType_t xTimerCreateTimerTask( void )
                                        &xTimerTaskHandle );
             }
         #endif /* configSUPPORT_STATIC_ALLOCATION */
-    }
-    else
-    {
-        mtCOVERAGE_TEST_MARKER();
     }
 
     return xReturn;

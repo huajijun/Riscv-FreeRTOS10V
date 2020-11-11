@@ -1,4 +1,4 @@
-#include <heap2.h>
+#include <heap.h>
 #define portBYTE_ALIGNMENT	8
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 100 * 1024 ) )
 #define portBYTE_ALIGNMENT_MASK ( 0x0007 )

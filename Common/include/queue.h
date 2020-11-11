@@ -9,6 +9,14 @@ typedef struct QueueDefinition   * QueueSetHandle_t;
 
 typedef struct QueueDefinition   * QueueSetMemberHandle_t;
 
+#define taskENTER_CRITICAL()		portENTER_CRITICAL()
+#define taskEXIT_CRITICAL()			portEXIT_CRITICAL()
+
+#define portENTER_CRITICAL()					vTaskEnterCritical()
+
+
+#define portEXIT_CRITICAL()						vTaskExitCritical()
+
 
 #define queueSEND_TO_BACK                     ( ( BaseType_t ) 0 )
 #define queueSEND_TO_FRONT                    ( ( BaseType_t ) 1 )
@@ -84,5 +92,17 @@ void vQueueAddToRegistry( QueueHandle_t xQueue,
 QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
                                        const UBaseType_t uxItemSize,
                                        const uint8_t ucQueueType ) ;
+
+
+BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
+                              const void * const pvItemToQueue,
+                              TickType_t xTicksToWait,
+                              const BaseType_t xCopyPosition )
+
+
+BaseType_t xQueueReceive( QueueHandle_t xQueue,
+                          void * const pvBuffer,
+                          TickType_t xTicksToWait )
+    
 
 #endif

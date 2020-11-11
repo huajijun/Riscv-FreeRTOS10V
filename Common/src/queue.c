@@ -51,6 +51,19 @@ typedef struct QueueDefinition /* The old naming convention is used to prevent b
     #endif
 } xQUEUE;
 
+#define prvLockQueue( pxQueue )								\
+	taskENTER_CRITICAL();									\
+	{														\
+		if( ( pxQueue )->xRxLock == queueUNLOCKED )			\
+		{													\
+			( pxQueue )->xRxLock = queueLOCKED_UNMODIFIED;	\
+		}													\
+		if( ( pxQueue )->xTxLock == queueUNLOCKED )			\
+		{													\
+			( pxQueue )->xTxLock = queueLOCKED_UNMODIFIED;	\
+		}													\
+	}														\
+	taskEXIT_CRITICAL()
 
 
 /* The old xQUEUE name is maintained above then typedefed to the new Queue_t
@@ -609,3 +622,154 @@ static BaseType_t prvIsQueueFull( const Queue_t * pxQueue )
 
     return xReturn;
 }
+
+
+
+
+static void prvUnlockQueue( Queue_t * const pxQueue )
+{
+	/* THIS FUNCTION MUST BE CALLED WITH THE SCHEDULER SUSPENDED. */
+
+	/* The lock counts contains the number of extra data items placed or
+	removed from the queue while the queue was locked.  When a queue is
+	locked items can be added or removed, but the event lists cannot be
+	updated. */
+	taskENTER_CRITICAL();
+	{
+		/* See if data was added to the queue while it was locked. */
+		while( pxQueue->xTxLock > queueLOCKED_UNMODIFIED )
+		{
+			/* Data was posted while the queue was locked.  Are any tasks
+			blocked waiting for data to become available? */
+			#if ( configUSE_QUEUE_SETS == 1 )
+			{
+				if( pxQueue->pxQueueSetContainer != NULL )
+				{
+					if( prvNotifyQueueSetContainer( pxQueue, queueSEND_TO_BACK ) == pdTRUE )
+					{
+						/* The queue is a member of a queue set, and posting to
+						the queue set caused a higher priority task to unblock.
+						A context switch is required. */
+						vTaskMissedYield();
+					}
+					else
+					{
+						mtCOVERAGE_TEST_MARKER();
+					}
+				}
+				else
+				{
+					/* Tasks that are removed from the event list will get added to
+					the pending ready list as the scheduler is still suspended. */
+					if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) == pdFALSE )
+					{
+						if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+						{
+							/* The task waiting has a higher priority so record that a
+							context	switch is required. */
+							vTaskMissedYield();
+						}
+						else
+						{
+							mtCOVERAGE_TEST_MARKER();
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			#else /* configUSE_QUEUE_SETS */
+			{
+				/* Tasks that are removed from the event list will get added to
+				the pending ready list as the scheduler is still suspended. */
+				if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) == pdFALSE )
+				{
+					if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToReceive ) ) != pdFALSE )
+					{
+						/* The task waiting has a higher priority so record that a
+						context	switch is required. */
+						vTaskMissedYield();
+					}
+					else
+					{
+						mtCOVERAGE_TEST_MARKER();
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+			#endif /* configUSE_QUEUE_SETS */
+
+			--( pxQueue->xTxLock );
+		}
+
+		pxQueue->xTxLock = queueUNLOCKED;
+	}
+	taskEXIT_CRITICAL();
+
+	/* Do the same for the Rx lock. */
+	taskENTER_CRITICAL();
+	{
+		while( pxQueue->xRxLock > queueLOCKED_UNMODIFIED )
+		{
+			if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
+			{
+				if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) != pdFALSE )
+				{
+					vTaskMissedYield();
+				}
+				else
+				{
+					mtCOVERAGE_TEST_MARKER();
+				}
+
+				--( pxQueue->xRxLock );
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		pxQueue->xRxLock = queueUNLOCKED;
+	}
+	taskEXIT_CRITICAL();
+}
+ void vQueueWaitForMessageRestricted( QueueHandle_t xQueue,
+                                         TickType_t xTicksToWait,
+                                         const BaseType_t xWaitIndefinitely )
+    {
+        Queue_t * const pxQueue = xQueue;
+
+        /* This function should not be called by application code hence the
+         * 'Restricted' in its name.  It is not part of the public API.  It is
+         * designed for use by kernel code, and has special calling requirements.
+         * It can result in vListInsert() being called on a list that can only
+         * possibly ever have one item in it, so the list will be fast, but even
+         * so it should be called with the scheduler locked and not from a critical
+         * section. */
+
+        /* Only do anything if there are no messages in the queue.  This function
+         *  will not actually cause the task to block, just place it on a blocked
+         *  list.  It will not block until the scheduler is unlocked - at which
+         *  time a yield will be performed.  If an item is added to the queue while
+         *  the queue is locked, and the calling task blocks on the queue, then the
+         *  calling task will be immediately unblocked when the queue is unlocked. */
+        prvLockQueue( pxQueue );
+
+        if( pxQueue->uxMessagesWaiting == ( UBaseType_t ) 0U )
+        {
+            /* There is nothing in the queue, block for the specified period. */
+            vTaskPlaceOnEventListRestricted( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait, xWaitIndefinitely );
+        }
+        else
+        {
+            mtCOVERAGE_TEST_MARKER();
+        }
+
+        prvUnlockQueue( pxQueue );
+    }
