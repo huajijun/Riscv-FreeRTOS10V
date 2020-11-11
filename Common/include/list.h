@@ -92,18 +92,18 @@ typedef struct xLIST
 
 #define listLIST_IS_INITIALISED( pxList )                ( ( pxList )->xListEnd.xItemValue == portMAX_DELAY )
 
-void vListInitialise( List_t * const pxList ) PRIVILEGED_FUNCTION;
+void vListInitialise( List_t * const pxList ) ;
 
-void vListInitialiseItem( ListItem_t * const pxItem ) PRIVILEGED_FUNCTION;
+void vListInitialiseItem( ListItem_t * const pxItem ) ;
 
 
 void vListInsert( List_t * const pxList,
-                  ListItem_t * const pxNewListItem ) PRIVILEGED_FUNCTION;
+                  ListItem_t * const pxNewListItem ) ;
 
 void vListInsertEnd( List_t * const pxList,
-                     ListItem_t * const pxNewListItem ) PRIVILEGED_FUNCTION;
+                     ListItem_t * const pxNewListItem ) ;
 
-UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove ) PRIVILEGED_FUNCTION;
+UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove ) ;
 
 #ifdef __cplusplus
     }

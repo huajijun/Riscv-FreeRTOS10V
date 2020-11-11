@@ -1,3 +1,8 @@
+#include <queue.h>
+#include <list.h>
+#include <common.h>
+#include <FreeRTOS.h>
+#include <task.h>
 typedef struct QueuePointers
 {
     int8_t * pcTail;     /*< Points to the byte at the end of the queue storage area.  Once more byte is allocated than necessary to store the queue items, this is used as a marker. */
@@ -46,7 +51,6 @@ typedef struct QueueDefinition /* The old naming convention is used to prevent b
     #endif
 } xQUEUE;
 
- #define queueYIELD_IF_USING_PREEMPTION()    portYIELD_WITHIN_API()
 
 
 /* The old xQUEUE name is maintained above then typedefed to the new Queue_t
@@ -68,7 +72,6 @@ BaseType_t xQueueGenericReset( QueueHandle_t xQueue,
 {
     Queue_t * const pxQueue = xQueue;
 
-    configASSERT( pxQueue );
 
     taskENTER_CRITICAL();
     {
@@ -237,7 +240,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
                                 /* Do not notify the queue set as an existing item
                                  * was overwritten in the queue so the number of items
                                  * in the queue has not changed. */
-                                mtCOVERAGE_TEST_MARKER();
                             }
                             else if( prvNotifyQueueSetContainer( pxQueue ) != pdFALSE )
                             {
@@ -245,10 +247,6 @@ BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
                                  * to the queue set caused a higher priority task to
                                  * unblock. A context switch is required. */
                                 queueYIELD_IF_USING_PREEMPTION();
-                            }
-                            else
-                            {
-                                mtCOVERAGE_TEST_MARKER();
                             }
                         }
                         else
@@ -387,18 +385,12 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
     Queue_t * const pxQueue = xQueue;
 
     /* Check the pointer is not NULL. */
-    configASSERT( ( pxQueue ) );
 
     /* The buffer into which data is received can only be NULL if the data size
      * is zero (so no data is copied into the buffer). */
-    configASSERT( !( ( ( pvBuffer ) == NULL ) && ( ( pxQueue )->uxItemSize != ( UBaseType_t ) 0U ) ) );
+
 
     /* Cannot block if the scheduler is suspended. */
-    #if ( ( INCLUDE_xTaskGetSchedulerState == 1 ) || ( configUSE_TIMERS == 1 ) )
-        {
-            configASSERT( !( ( xTaskGetSchedulerState() == taskSCHEDULER_SUSPENDED ) && ( xTicksToWait != 0 ) ) );
-        }
-    #endif
 
     /*lint -save -e904  This function relaxes the coding standard somewhat to
      * allow return statements within the function itself.  This is done in the
@@ -426,14 +418,6 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
                     {
                         queueYIELD_IF_USING_PREEMPTION();
                     }
-                    else
-                    {
-                        mtCOVERAGE_TEST_MARKER();
-                    }
-                }
-                else
-                {
-                    mtCOVERAGE_TEST_MARKER();
                 }
 
                 taskEXIT_CRITICAL();
@@ -446,7 +430,6 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
                     /* The queue was empty and no block time is specified (or
                      * the block time has expired) so leave now. */
                     taskEXIT_CRITICAL();
-                    traceQUEUE_RECEIVE_FAILED( pxQueue );
                     return errQUEUE_EMPTY;
                 }
                 else if( xEntryTimeSet == pdFALSE )
@@ -455,11 +438,6 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
                      * configure the timeout structure. */
                     vTaskInternalSetTimeOutState( &xTimeOut );
                     xEntryTimeSet = pdTRUE;
-                }
-                else
-                {
-                    /* Entry time was already set. */
-                    mtCOVERAGE_TEST_MARKER();
                 }
             }
         }
@@ -486,10 +464,6 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
                 {
                     portYIELD_WITHIN_API();
                 }
-                else
-                {
-                    mtCOVERAGE_TEST_MARKER();
-                }
             }
             else
             {
@@ -510,10 +484,6 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
             {
                 traceQUEUE_RECEIVE_FAILED( pxQueue );
                 return errQUEUE_EMPTY;
-            }
-            else
-            {
-                mtCOVERAGE_TEST_MARKER();
             }
         }
     } /*lint -restore */
@@ -541,10 +511,6 @@ static BaseType_t prvCopyDataToQueue( Queue_t * const pxQueue,
                     xReturn = xTaskPriorityDisinherit( pxQueue->u.xSemaphore.xMutexHolder );
                     pxQueue->u.xSemaphore.xMutexHolder = NULL;
                 }
-                else
-                {
-                    mtCOVERAGE_TEST_MARKER();
-                }
             }
         #endif /* configUSE_MUTEXES */
     }
@@ -557,10 +523,6 @@ static BaseType_t prvCopyDataToQueue( Queue_t * const pxQueue,
         {
             pxQueue->pcWriteTo = pxQueue->pcHead;
         }
-        else
-        {
-            mtCOVERAGE_TEST_MARKER();
-        }
     }
     else
     {
@@ -570,10 +532,6 @@ static BaseType_t prvCopyDataToQueue( Queue_t * const pxQueue,
         if( pxQueue->u.xQueue.pcReadFrom < pxQueue->pcHead ) /*lint !e946 MISRA exception justified as comparison of pointers is the cleanest solution. */
         {
             pxQueue->u.xQueue.pcReadFrom = ( pxQueue->u.xQueue.pcTail - pxQueue->uxItemSize );
-        }
-        else
-        {
-            mtCOVERAGE_TEST_MARKER();
         }
 
         if( xPosition == queueOVERWRITE )
@@ -586,14 +544,6 @@ static BaseType_t prvCopyDataToQueue( Queue_t * const pxQueue,
                  * correct. */
                 --uxMessagesWaiting;
             }
-            else
-            {
-                mtCOVERAGE_TEST_MARKER();
-            }
-        }
-        else
-        {
-            mtCOVERAGE_TEST_MARKER();
         }
     }
 
@@ -613,10 +563,6 @@ static void prvCopyDataFromQueue( Queue_t * const pxQueue,
         if( pxQueue->u.xQueue.pcReadFrom >= pxQueue->u.xQueue.pcTail ) /*lint !e946 MISRA exception justified as use of the relational operator is the cleanest solutions. */
         {
             pxQueue->u.xQueue.pcReadFrom = pxQueue->pcHead;
-        }
-        else
-        {
-            mtCOVERAGE_TEST_MARKER();
         }
 
         ( void ) memcpy( ( void * ) pvBuffer, ( void * ) pxQueue->u.xQueue.pcReadFrom, ( size_t ) pxQueue->uxItemSize ); /*lint !e961 !e418 !e9087 MISRA exception as the casts are only redundant for some ports.  Also previous logic ensures a null pointer can only be passed to memcpy() when the count is 0.  Cast to void required by function signature and safe as no alignment requirement and copy length specified in bytes. */

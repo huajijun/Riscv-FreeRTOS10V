@@ -1,4 +1,5 @@
-#include "list.h"
+#include <list.h>
+#include <common.h>
 
 void vListInitialise( List_t * const pxList )
 {
@@ -32,8 +33,6 @@ void vListInitialiseItem( ListItem_t * const pxItem )
 
     /* Write known values into the list item if
      * configUSE_LIST_DATA_INTEGRITY_CHECK_BYTES is set to 1. */
-    listSET_FIRST_LIST_ITEM_INTEGRITY_CHECK_VALUE( pxItem );
-    listSET_SECOND_LIST_ITEM_INTEGRITY_CHECK_VALUE( pxItem );
 }
 
 

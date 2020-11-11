@@ -1,0 +1,1441 @@
+    CC ../Common/src/list.c
+    CC ../Common/src/queue.c
+riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../Common/src/list.o ../Common/src/list.c
+riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../Common/src/queue.o ../Common/src/queue.c
+    CC ../schedule/src/task.c
+riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../schedule/src/task.o ../schedule/src/task.c
+    CC ../Softtime/src/time.c
+make: *** No rule to make target '../Common/src/common.o', needed by 'riscv-spike.elf'.  Stop.
+make: *** Waiting for unfinished jobs....
+riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../Softtime/src/time.o ../Softtime/src/time.c
+    CC ../Memory/src/heap.c
+riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../Memory/src/heap.o ../Memory/src/heap.c
+In file included from ../schedule/include/task.h:1,
+                 from ../schedule/src/task.c:1:
+../Common/include/common.h:3:9: error: unknown type name ‘uint32_t’
+    3 | typedef uint32_t TickType_t;
+      |         ^~~~~~~~
+In file included from ../Common/src/list.c:1:
+../Common/include/list.h:24:25: error: unknown type name ‘TickType_t’
+   24 |     configLIST_VOLATILE TickType_t xItemValue;              /*< The value being listed.  In most cases this is used to sort the list in descending order. */
+      |                         ^~~~~~~~~~
+../Common/include/list.h:36:25: error: unknown type name ‘TickType_t’
+   36 |     configLIST_VOLATILE TickType_t xItemValue;
+      |                         ^~~~~~~~~~
+../Common/include/list.h:47:14: error: unknown type name ‘UBaseType_t’
+   47 |     volatile UBaseType_t uxNumberOfItems;
+      |              ^~~~~~~~~~~
+In file included from ../Common/src/queue.c:1:
+../Common/include/queue.h:42:1: error: unknown type name ‘BaseType_t’
+   42 | BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
+      | ^~~~~~~~~~
+In file included from ../schedule/src/task.c:3:
+../Common/include/common.h:3:18: error: conflicting types for ‘TickType_t’
+    3 | typedef uint32_t TickType_t;
+      |                  ^~~~~~~~~~
+In file included from ../schedule/include/task.h:1,
+                 from ../schedule/src/task.c:1:
+../Common/include/common.h:3:18: note: previous declaration of ‘TickType_t’ was here
+    3 | typedef uint32_t TickType_t;
+      |                  ^~~~~~~~~~
+../Common/include/queue.h:44:31: error: unknown type name ‘TickType_t’
+   44 |                               TickType_t xTicksToWait,
+      |                               ^~~~~~~~~~
+../Common/include/queue.h:45:37: error: unknown type name ‘BaseType_t’
+   45 |                               const BaseType_t xCopyPosition ) ;
+      |                                     ^~~~~~~~~~
+../Common/include/list.h:106:1: error: unknown type name ‘UBaseType_t’
+  106 | UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove ) ;
+      | ^~~~~~~~~~~
+In file included from ../Common/src/list.c:2:
+../Common/include/common.h:3:9: error: unknown type name ‘uint32_t’
+    3 | typedef uint32_t TickType_t;
+      |         ^~~~~~~~
+In file included from ../schedule/src/task.c:3:
+../Common/include/common.h:15:17: error: ‘false’ undeclared here (not in a function)
+   15 | #define pdFALSE false
+      |                 ^~~~~
+../schedule/src/task.c:5:55: note: in expansion of macro ‘pdFALSE’
+    5 | static volatile BaseType_t xSchedulerRunning        = pdFALSE;
+      |                                                       ^~~~~~~
+../Common/include/queue.h:47:1: error: unknown type name ‘BaseType_t’
+   47 | BaseType_t xQueuePeek( QueueHandle_t xQueue,
+      | ^~~~~~~~~~
+../Common/src/list.c: In function ‘vListInitialiseItem’:
+../Common/src/list.c:32:27: error: ‘NULL’ undeclared (first use in this function)
+   32 |     pxItem->pxContainer = NULL;
+      |                           ^~~~
+../Common/src/list.c:3:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+    2 | #include <common.h>
+  +++ |+#include <stddef.h>
+    3 | 
+../Common/include/queue.h:49:24: error: unknown type name ‘TickType_t’
+   49 |                        TickType_t xTicksToWait ) ;
+      |                        ^~~~~~~~~~
+../Common/src/list.c:32:27: note: each undeclared identifier is reported only once for each function it appears in
+   32 |     pxItem->pxContainer = NULL;
+      |                           ^~~~
+../schedule/src/task.c:6:55: error: ‘tskIDLE_PRIORITY’ undeclared here (not in a function)
+    6 | static volatile UBaseType_t uxTopReadyPriority      = tskIDLE_PRIORITY;
+      |                                                       ^~~~~~~~~~~~~~~~
+../Common/include/queue.h:51:1: error: unknown type name ‘BaseType_t’
+   51 | BaseType_t xQueuePeekFromISR( QueueHandle_t xQueue,
+      | ^~~~~~~~~~
+../Common/src/list.c: At top level:
+../Common/src/list.c:102:13: error: conflicting types for ‘uxListRemove’
+  102 | UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove )
+      |             ^~~~~~~~~~~~
+In file included from ../Common/src/list.c:1:
+../Common/include/list.h:106:13: note: previous declaration of ‘uxListRemove’ was here
+  106 | UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove ) ;
+      |             ^~~~~~~~~~~~
+../Common/include/queue.h:54:1: error: unknown type name ‘BaseType_t’
+   54 | BaseType_t xQueueReceive( QueueHandle_t xQueue,
+      | ^~~~~~~~~~
+../schedule/src/task.c:23:1: error: unknown type name ‘TCB_t’
+   23 | TCB_t * volatile pxCurrentTCB = NULL;
+      | ^~~~~
+../Common/src/list.c: In function ‘uxListRemove’:
+../schedule/src/task.c:23:33: error: ‘NULL’ undeclared here (not in a function)
+   23 | TCB_t * volatile pxCurrentTCB = NULL;
+      |                                 ^~~~
+../Common/src/list.c:120:35: error: ‘NULL’ undeclared (first use in this function)
+  120 |     pxItemToRemove->pxContainer = NULL;
+      |                                   ^~~~
+../schedule/src/task.c:4:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+    3 | #include <common.h>
+  +++ |+#include <stddef.h>
+    4 | #define portBYTE_ALIGNMENT_MASK (0x001f)
+../Common/src/list.c:120:35: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+../schedule/src/task.c:56:6: warning: no previous prototype for ‘vTaskInternalSetTimeOutState’ [-Wmissing-prototypes]
+   56 | void vTaskInternalSetTimeOutState( TimeOut_t * const pxTimeOut )
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Common/include/queue.h:56:27: error: unknown type name ‘TickType_t’
+   56 |                           TickType_t xTicksToWait ) ;
+      |                           ^~~~~~~~~~
+../Common/include/queue.h:58:1: error: unknown type name ‘UBaseType_t’
+   58 | UBaseType_t uxQueueMessagesWaiting( const QueueHandle_t xQueue ) ;
+      | ^~~~~~~~~~~
+../schedule/src/task.c:63:25: error: unknown type name ‘TaskFunction_t’
+   63 | BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
+      |                         ^~~~~~~~~~~~~~
+../schedule/src/task.c:65:31: error: unknown type name ‘configSTACK_DEPTH_TYPE’
+   65 |                         const configSTACK_DEPTH_TYPE usStackDepth,
+      |                               ^~~~~~~~~~~~~~~~~~~~~~
+../Common/include/queue.h:72:1: error: unknown type name ‘BaseType_t’
+   72 | BaseType_t xQueueGenericSendFromISR( QueueHandle_t xQueue,
+      | ^~~~~~~~~~
+../schedule/src/task.c:68:25: error: unknown type name ‘TaskHandle_t’
+   68 |                         TaskHandle_t * const pxCreatedTask )
+      |                         ^~~~~~~~~~~~
+../Memory/src/heap.c:1:10: fatal error: heap2.h: No such file or directory
+    1 | #include <heap2.h>
+      |          ^~~~~~~~~
+compilation terminated.
+../Common/include/queue.h:74:38: error: unknown type name ‘BaseType_t’
+   74 |                                      BaseType_t * const pxHigherPriorityTaskWoken,
+      |                                      ^~~~~~~~~~
+../Common/include/queue.h:75:44: error: unknown type name ‘BaseType_t’
+   75 |                                      const BaseType_t xCopyPosition ) ;
+      |                                            ^~~~~~~~~~
+In file included from ../Softtime/src/time.c:2:
+../Softtime/include/time.h:22:36: error: unknown type name ‘uint32_t’
+   22 |                                    uint32_t );
+      |                                    ^~~~~~~~
+../Softtime/src/time.c:8:5: error: unknown type name ‘ListItem_t’
+    8 |     ListItem_t xTimerListItem;
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:9:5: error: unknown type name ‘TickType_t’
+    9 |     TickType_t xTimerPeriodInTicks;
+      |     ^~~~~~~~~~
+../Common/include/queue.h:76:1: error: unknown type name ‘BaseType_t’
+   76 | BaseType_t xQueueGiveFromISR( QueueHandle_t xQueue,
+      | ^~~~~~~~~~
+../schedule/src/task.c:151:35: error: unknown type name ‘TaskFunction_t’
+  151 | static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
+      |                                   ^~~~~~~~~~~~~~
+../Softtime/src/time.c:15:5: error: unknown type name ‘uint8_t’
+   15 |     uint8_t ucStatus;
+      |     ^~~~~~~
+../Softtime/src/time.c:21:5: error: unknown type name ‘TickType_t’
+   21 |     TickType_t xMessageValue;
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:28:5: error: unknown type name ‘PendedFunction_t’
+   28 |     PendedFunction_t pxCallbackFunction;
+      |     ^~~~~~~~~~~~~~~~
+../Softtime/src/time.c:30:5: error: unknown type name ‘uint32_t’
+   30 |     uint32_t ulParameter2;
+      |     ^~~~~~~~
+../Common/include/queue.h:77:31: error: unknown type name ‘BaseType_t’
+   77 |                               BaseType_t * const pxHigherPriorityTaskWoken ) ;
+      |                               ^~~~~~~~~~
+../Common/include/queue.h:84:42: error: unknown type name ‘UBaseType_t’
+   84 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
+      |                                          ^~~~~~~~~~~
+../Common/include/queue.h:85:46: error: unknown type name ‘UBaseType_t’
+   85 |                                        const UBaseType_t uxItemSize,
+      |                                              ^~~~~~~~~~~
+../Common/include/queue.h:86:46: error: unknown type name ‘uint8_t’
+   86 |                                        const uint8_t ucQueueType ) ;
+      |                                              ^~~~~~~
+../schedule/src/task.c:156:35: error: unknown type name ‘TaskHandle_t’
+  156 |                                   TaskHandle_t * const pxCreatedTask,
+      |                                   ^~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘prvTimerTask’:
+In file included from ../Common/src/queue.c:2:
+../Common/include/list.h:24:25: error: unknown type name ‘TickType_t’
+   24 |     configLIST_VOLATILE TickType_t xItemValue;              /*< The value being listed.  In most cases this is used to sort the list in descending order. */
+      |                         ^~~~~~~~~~
+../Softtime/src/time.c:43:5: error: unknown type name ‘TickType_t’
+   43 |     TickType_t xNextExpireTime;
+      |     ^~~~~~~~~~
+../schedule/src/task.c:157:35: error: unknown type name ‘TCB_t’
+  157 |                                   TCB_t * pxNewTCB,
+      |                                   ^~~~~
+../Common/include/list.h:36:25: error: unknown type name ‘TickType_t’
+   36 |     configLIST_VOLATILE TickType_t xItemValue;
+      |                         ^~~~~~~~~~
+../Common/include/list.h:47:14: error: unknown type name ‘UBaseType_t’
+   47 |     volatile UBaseType_t uxNumberOfItems;
+      |              ^~~~~~~~~~~
+../Softtime/src/time.c:44:5: error: unknown type name ‘BaseType_t’
+   44 |     BaseType_t xListWasEmpty;
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:49:27: warning: implicit declaration of function ‘prvGetNextExpireTime’ [-Wimplicit-function-declaration]
+   49 |         xNextExpireTime = prvGetNextExpireTime( &xListWasEmpty );
+      |                           ^~~~~~~~~~~~~~~~~~~~
+../Common/include/list.h:106:1: error: unknown type name ‘UBaseType_t’
+  106 | UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove ) ;
+      | ^~~~~~~~~~~
+make: *** [Makefile:62: ../Memory/src/heap.o] Error 1
+In file included from ../Common/src/queue.c:3:
+../Common/include/common.h:3:9: error: unknown type name ‘uint32_t’
+    3 | typedef uint32_t TickType_t;
+      |         ^~~~~~~~
+In file included from ../schedule/include/task.h:1,
+                 from ../Common/src/queue.c:5:
+../Common/include/common.h:3:18: error: conflicting types for ‘TickType_t’
+    3 | typedef uint32_t TickType_t;
+      |                  ^~~~~~~~~~
+In file included from ../Common/src/queue.c:3:
+../Common/include/common.h:3:18: note: previous declaration of ‘TickType_t’ was here
+    3 | typedef uint32_t TickType_t;
+      |                  ^~~~~~~~~~
+../Softtime/src/time.c:53:9: warning: implicit declaration of function ‘prvProcessTimerOrBlockTask’ [-Wimplicit-function-declaration]
+   53 |         prvProcessTimerOrBlockTask( xNextExpireTime, xListWasEmpty );
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../Common/src/queue.c:14:5: error: unknown type name ‘TaskHandle_t’
+   14 |     TaskHandle_t xMutexHolder;        /*< The handle of the task that holds the mutex. */
+      |     ^~~~~~~~~~~~
+../Common/src/queue.c:65:15: error: conflicting types for ‘xQueueGenericCreate’
+   65 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,const uint8_t ucQueueType );
+      |               ^~~~~~~~~~~~~~~~~~~
+In file included from ../Common/src/queue.c:1:
+../Common/include/queue.h:84:15: note: previous declaration of ‘xQueueGenericCreate’ was here
+   84 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
+      |               ^~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:398:39: error: unknown type name ‘TCB_t’
+  398 | static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
+      |                                       ^~~~~
+../Softtime/src/time.c:56:9: warning: implicit declaration of function ‘prvProcessReceivedCommands’ [-Wimplicit-function-declaration]
+   56 |         prvProcessReceivedCommands();
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [Makefile:62: ../Common/src/list.o] Error 1
+../Softtime/src/time.c:41:33: warning: unused parameter ‘pvParameters’ [-Wunused-parameter]
+   41 | static void prvTimerTask( void *pvParameters )
+      |                           ~~~~~~^~~~~~~~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:63:8: warning: return type defaults to ‘int’ [-Wimplicit-int]
+   63 | static portTASK_FUNCTION( prvTimerTask, pvParameters )
+      |        ^~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:63:8: warning: function declaration isn’t a prototype [-Wstrict-prototypes]
+../Softtime/src/time.c: In function ‘portTASK_FUNCTION’:
+../Softtime/src/time.c:63:8: warning: type of ‘prvTimerTask’ defaults to ‘int’ [-Wimplicit-int]
+../Softtime/src/time.c:63:8: warning: type of ‘pvParameters’ defaults to ‘int’ [-Wimplicit-int]
+../schedule/src/task.c:512:6: warning: no previous prototype for ‘vTaskSwitchContext’ [-Wmissing-prototypes]
+  512 | void vTaskSwitchContext( void )
+      |      ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:65:5: error: unknown type name ‘TickType_t’
+   65 |     TickType_t xNextExpireTime;
+      |     ^~~~~~~~~~
+../Common/src/queue.c: In function ‘xQueueGenericReset’:
+../Common/src/queue.c:76:5: warning: implicit declaration of function ‘taskENTER_CRITICAL’ [-Wimplicit-function-declaration]
+   76 |     taskENTER_CRITICAL();
+      |     ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:66:5: error: unknown type name ‘BaseType_t’
+   66 |     BaseType_t xListWasEmpty;
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:63:8: warning: unused parameter ‘prvTimerTask’ [-Wunused-parameter]
+   63 | static portTASK_FUNCTION( prvTimerTask, pvParameters )
+      |        ^~~~~~~~~~~~~~~~~
+../Common/src/queue.c:82:28: error: ‘queueUNLOCKED’ undeclared (first use in this function)
+   82 |         pxQueue->cRxLock = queueUNLOCKED;
+      |                            ^~~~~~~~~~~~~
+../Common/src/queue.c:82:28: note: each undeclared identifier is reported only once for each function it appears in
+../Softtime/src/time.c: In function ‘prvCheckForValidListAndQueue’:
+../schedule/src/task.c: In function ‘vTaskSwitchContext’:
+../Softtime/src/time.c:102:5: warning: implicit declaration of function ‘taskENTER_CRITICAL’ [-Wimplicit-function-declaration]
+  102 |     taskENTER_CRITICAL();
+      |     ^~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:514:9: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
+  514 |     if( uxSchedulerSuspended != ( UBaseType_t ) pdFALSE )
+      |         ^~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:514:9: note: each undeclared identifier is reported only once for each function it appears in
+In file included from ../schedule/include/task.h:1,
+                 from ../Common/src/queue.c:5:
+../Common/include/common.h:15:17: error: ‘false’ undeclared (first use in this function)
+   15 | #define pdFALSE false
+      |                 ^~~~~
+../Common/src/queue.c:85:26: note: in expansion of macro ‘pdFALSE’
+   85 |         if( xNewQueue == pdFALSE )
+      |                          ^~~~~~~
+../Softtime/src/time.c:104:13: error: ‘xTimerQueue’ undeclared (first use in this function)
+  104 |         if( xTimerQueue == NULL )
+      |             ^~~~~~~~~~~
+../Softtime/src/time.c:104:13: note: each undeclared identifier is reported only once for each function it appears in
+../Softtime/src/time.c:104:28: error: ‘NULL’ undeclared (first use in this function)
+  104 |         if( xTimerQueue == NULL )
+      |                            ^~~~
+../Softtime/src/time.c:3:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+    2 | #include <time.h>
+  +++ |+#include <stddef.h>
+    3 | #define portTASK_FUNCTION_PROTO( vFunction, pvParameters )    void vFunction( void * pvParameters )
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../Common/include/list.h:69:116: note: in expansion of macro ‘pdTRUE’
+   69 | #define listLIST_IS_EMPTY( pxList )                       ( ( ( pxList )->uxNumberOfItems == ( UBaseType_t ) 0 ) ? pdTRUE : pdFALSE )
+      |                                                                                                                    ^~~~~~
+../Common/src/queue.c:92:17: note: in expansion of macro ‘listLIST_IS_EMPTY’
+   92 |             if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
+      |                 ^~~~~~~~~~~~~~~~~
+In file included from ../schedule/src/task.c:3:
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../schedule/src/task.c:518:25: note: in expansion of macro ‘pdTRUE’
+  518 |         xYieldPending = pdTRUE;
+      |                         ^~~~~~
+../Softtime/src/time.c:106:13: warning: implicit declaration of function ‘vListInitialise’ [-Wimplicit-function-declaration]
+  106 |             vListInitialise( &xActiveTimerList1 );
+      |             ^~~~~~~~~~~~~~~
+../Softtime/src/time.c:106:31: error: ‘xActiveTimerList1’ undeclared (first use in this function)
+  106 |             vListInitialise( &xActiveTimerList1 );
+      |                               ^~~~~~~~~~~~~~~~~
+../Common/src/queue.c:94:21: warning: implicit declaration of function ‘xTaskRemoveFromEventList’ [-Wimplicit-function-declaration]
+   94 |                 if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) != pdFALSE )
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:523:9: warning: implicit declaration of function ‘traceTASK_SWITCHED_OUT’ [-Wimplicit-function-declaration]
+  523 |         traceTASK_SWITCHED_OUT();
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:107:31: error: ‘xActiveTimerList2’ undeclared (first use in this function)
+  107 |             vListInitialise( &xActiveTimerList2 );
+      |                               ^~~~~~~~~~~~~~~~~
+In file included from ../Common/src/queue.c:4:
+../Common/include/FreeRTOS.h:2:26: warning: implicit declaration of function ‘vPortYield’ [-Wimplicit-function-declaration]
+    2 | #define portYIELD()      vPortYield()
+      |                          ^~~~~~~~~~
+../Common/include/FreeRTOS.h:1:33: note: in expansion of macro ‘portYIELD’
+    1 | #define portYIELD_WITHIN_API    portYIELD
+      |                                 ^~~~~~~~~
+../Common/include/queue.h:4:42: note: in expansion of macro ‘portYIELD_WITHIN_API’
+    4 | #define queueYIELD_IF_USING_PREEMPTION() portYIELD_WITHIN_API()
+      |                                          ^~~~~~~~~~~~~~~~~~~~
+../Common/src/queue.c:96:21: note: in expansion of macro ‘queueYIELD_IF_USING_PREEMPTION’
+   96 |                     queueYIELD_IF_USING_PREEMPTION();
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:108:13: error: ‘pxCurrentTimerList’ undeclared (first use in this function)
+  108 |             pxCurrentTimerList = &xActiveTimerList1;
+      |             ^~~~~~~~~~~~~~~~~~
+In file included from ../schedule/include/task.h:1,
+                 from ../Common/src/queue.c:5:
+../Common/src/queue.c: In function ‘prvInitialiseNewQueue’:
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../Common/src/queue.c:142:46: note: in expansion of macro ‘pdTRUE’
+  142 |     ( void ) xQueueGenericReset( pxNewQueue, pdTRUE );
+      |                                              ^~~~~~
+../Common/src/queue.c: At top level:
+../Common/src/queue.c:158:15: error: conflicting types for ‘xQueueGenericCreate’
+  158 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
+      |               ^~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:554:9: warning: implicit declaration of function ‘taskCHECK_FOR_STACK_OVERFLOW’ [-Wimplicit-function-declaration]
+  554 |         taskCHECK_FOR_STACK_OVERFLOW();
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Common/src/queue.c:1:
+../Common/include/queue.h:84:15: note: previous declaration of ‘xQueueGenericCreate’ was here
+   84 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
+      |               ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:109:13: error: ‘pxOverflowTimerList’ undeclared (first use in this function)
+  109 |             pxOverflowTimerList = &xActiveTimerList2;
+      |             ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:122:35: warning: implicit declaration of function ‘xQueueCreate’ [-Wimplicit-function-declaration]
+  122 |                     xTimerQueue = xQueueCreate( ( UBaseType_t ) configTIMER_QUEUE_LENGTH, sizeof( DaemonTaskMessage_t ) );
+      |                                   ^~~~~~~~~~~~
+../Common/src/queue.c: In function ‘xQueueGenericCreate’:
+../Common/src/queue.c:182:36: warning: implicit declaration of function ‘pvPortMalloc’ [-Wimplicit-function-declaration]
+  182 |         pxNewQueue = ( Queue_t * ) pvPortMalloc( sizeof( Queue_t ) + xQueueSizeInBytes ); /*lint !e9087 !e9079 see comment above. */
+      |                                    ^~~~~~~~~~~~
+../Common/src/queue.c:182:22: warning: cast from function call of type ‘int’ to non-matching type ‘Queue_t *’ {aka ‘struct QueueDefinition *’} [-Wbad-function-cast]
+  182 |         pxNewQueue = ( Queue_t * ) pvPortMalloc( sizeof( Queue_t ) + xQueueSizeInBytes ); /*lint !e9087 !e9079 see comment above. */
+      |                      ^
+../Common/src/queue.c:182:22: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+../Common/src/queue.c:184:27: error: ‘NULL’ undeclared (first use in this function)
+  184 |         if( pxNewQueue != NULL )
+      |                           ^~~~
+../Common/src/queue.c:6:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+    5 | #include <task.h>
+  +++ |+#include <stddef.h>
+    6 | typedef struct QueuePointers
+../Softtime/src/time.c:122:51: error: ‘UBaseType_t’ undeclared (first use in this function)
+  122 |                     xTimerQueue = xQueueCreate( ( UBaseType_t ) configTIMER_QUEUE_LENGTH, sizeof( DaemonTaskMessage_t ) );
+      |                                                   ^~~~~~~~~~~
+../Softtime/src/time.c:122:64: error: expected ‘)’ before ‘configTIMER_QUEUE_LENGTH’
+  122 |                     xTimerQueue = xQueueCreate( ( UBaseType_t ) configTIMER_QUEUE_LENGTH, sizeof( DaemonTaskMessage_t ) );
+      |                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                                )
+../schedule/src/task.c:566:9: warning: implicit declaration of function ‘traceTASK_SWITCHED_IN’ [-Wimplicit-function-declaration]
+  566 |         traceTASK_SWITCHED_IN();
+      |         ^~~~~~~~~~~~~~~~~~~~~
+In file included from ../schedule/include/task.h:1,
+                 from ../Common/src/queue.c:5:
+../Common/src/queue.c: In function ‘xQueueGenericSend’:
+../Common/include/common.h:15:17: error: ‘false’ undeclared (first use in this function)
+   15 | #define pdFALSE false
+      |                 ^~~~~
+../Common/src/queue.c:211:32: note: in expansion of macro ‘pdFALSE’
+  211 |     BaseType_t xEntryTimeSet = pdFALSE, xYieldRequired;
+      |                                ^~~~~~~
+../schedule/src/task.c: At top level:
+../Softtime/src/time.c:141:13: warning: implicit declaration of function ‘mtCOVERAGE_TEST_MARKER’ [-Wimplicit-function-declaration]
+  141 |             mtCOVERAGE_TEST_MARKER();
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:587:6: warning: no previous prototype for ‘vTaskStartScheduler’ [-Wmissing-prototypes]
+  587 | void vTaskStartScheduler( void )
+      |      ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:144:5: warning: implicit declaration of function ‘taskEXIT_CRITICAL’ [-Wimplicit-function-declaration]
+  144 |     taskEXIT_CRITICAL();
+      |     ^~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:148:8: error: unknown type name ‘TickType_t’
+  148 | static TickType_t prvGetNextExpireTime( BaseType_t * const pxListWasEmpty )
+      |        ^~~~~~~~~~
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../Common/include/list.h:69:116: note: in expansion of macro ‘pdTRUE’
+   69 | #define listLIST_IS_EMPTY( pxList )                       ( ( ( pxList )->uxNumberOfItems == ( UBaseType_t ) 0 ) ? pdTRUE : pdFALSE )
+      |                                                                                                                    ^~~~~~
+../Common/src/queue.c:283:29: note: in expansion of macro ‘listLIST_IS_EMPTY’
+  283 |                         if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToReceive ) ) == pdFALSE )
+      |                             ^~~~~~~~~~~~~~~~~
+../schedule/src/task.c: In function ‘vTaskStartScheduler’:
+../schedule/src/task.c:621:23: warning: implicit declaration of function ‘xTaskCreate’ [-Wimplicit-function-declaration]
+  621 |             xReturn = xTaskCreate( prvIdleTask,
+      |                       ^~~~~~~~~~~
+../Softtime/src/time.c:148:41: error: unknown type name ‘BaseType_t’
+  148 | static TickType_t prvGetNextExpireTime( BaseType_t * const pxListWasEmpty )
+      |                                         ^~~~~~~~~~
+../Softtime/src/time.c:175:42: error: unknown type name ‘TickType_t’
+  175 |                                    const TickType_t xTimerPeriodInTicks,
+      |                                          ^~~~~~~~~~
+../Softtime/src/time.c:176:42: error: unknown type name ‘UBaseType_t’
+  176 |                                    const UBaseType_t uxAutoReload,
+      |                                          ^~~~~~~~~~~
+../Softtime/src/time.c: In function ‘prvInitialiseNewTimer’:
+../Softtime/src/time.c:182:23: error: ‘NULL’ undeclared (first use in this function)
+  182 |     if( pxNewTimer != NULL )
+      |                       ^~~~
+../Softtime/src/time.c:182:23: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+../Common/src/queue.c:305:17: warning: implicit declaration of function ‘taskEXIT_CRITICAL’ [-Wimplicit-function-declaration]
+  305 |                 taskEXIT_CRITICAL();
+      |                 ^~~~~~~~~~~~~~~~~
+../schedule/src/task.c:621:36: error: ‘prvIdleTask’ undeclared (first use in this function)
+  621 |             xReturn = xTaskCreate( prvIdleTask,
+      |                                    ^~~~~~~~~~~
+../Softtime/src/time.c:194:9: warning: implicit declaration of function ‘vListInitialiseItem’ [-Wimplicit-function-declaration]
+  194 |         vListInitialiseItem( &( pxNewTimer->xTimerListItem ) );
+      |         ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:196:29: error: ‘pdFALSE’ undeclared (first use in this function)
+  196 |         if( uxAutoReload != pdFALSE )
+      |                             ^~~~~~~
+../Softtime/src/time.c:36:50: error: ‘uint8_t’ undeclared (first use in this function)
+   36 | #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
+      |                                                  ^~~~~~~
+../Softtime/src/time.c:198:37: note: in expansion of macro ‘tmrSTATUS_IS_AUTORELOAD’
+  198 |             pxNewTimer->ucStatus |= tmrSTATUS_IS_AUTORELOAD;
+      |                                     ^~~~~~~~~~~~~~~~~~~~~~~
+../Common/src/queue.c:324:21: warning: implicit declaration of function ‘vTaskInternalSetTimeOutState’ [-Wimplicit-function-declaration]
+  324 |                     vTaskInternalSetTimeOutState( &xTimeOut );
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:36:60: error: expected ‘)’ before numeric constant
+   36 | #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:198:37: note: in expansion of macro ‘tmrSTATUS_IS_AUTORELOAD’
+  198 |             pxNewTimer->ucStatus |= tmrSTATUS_IS_AUTORELOAD;
+      |                                     ^~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:204:8: error: unknown type name ‘BaseType_t’
+  204 | static BaseType_t prvInsertTimerInActiveList( Timer_t * const pxTimer,
+      |        ^~~~~~~~~~
+../Softtime/src/time.c:205:53: error: unknown type name ‘TickType_t’
+  205 |                                               const TickType_t xNextExpiryTime,
+      |                                                     ^~~~~~~~~~
+../Softtime/src/time.c:206:53: error: unknown type name ‘TickType_t’
+  206 |                                               const TickType_t xTimeNow,
+      |                                                     ^~~~~~~~~~
+../Softtime/src/time.c:207:53: error: unknown type name ‘TickType_t’
+  207 |                                               const TickType_t xCommandTime )
+      |                                                     ^~~~~~~~~~
+../schedule/src/task.c:622:36: error: ‘configIDLE_TASK_NAME’ undeclared (first use in this function); did you mean ‘configMAX_TASK_NAME_LEN’?
+  622 |                                    configIDLE_TASK_NAME,
+      |                                    ^~~~~~~~~~~~~~~~~~~~
+      |                                    configMAX_TASK_NAME_LEN
+../Common/src/queue.c:334:9: warning: implicit declaration of function ‘vTaskSuspendAll’ [-Wimplicit-function-declaration]
+  334 |         vTaskSuspendAll();
+      |         ^~~~~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘prvInsertTimerInActiveList’:
+../Softtime/src/time.c:209:5: error: unknown type name ‘BaseType_t’
+  209 |     BaseType_t xProcessTimerNow = pdFALSE;
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:209:35: error: ‘pdFALSE’ undeclared (first use in this function)
+  209 |     BaseType_t xProcessTimerNow = pdFALSE;
+      |                                   ^~~~~~~
+../Common/src/queue.c:335:9: warning: implicit declaration of function ‘prvLockQueue’ [-Wimplicit-function-declaration]
+  335 |         prvLockQueue( pxQueue );
+      |         ^~~~~~~~~~~~
+../Softtime/src/time.c:211:5: warning: implicit declaration of function ‘listSET_LIST_ITEM_VALUE’ [-Wimplicit-function-declaration]
+  211 |     listSET_LIST_ITEM_VALUE( &( pxTimer->xTimerListItem ), xNextExpiryTime );
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:623:36: error: ‘configMINIMAL_STACK_SIZE’ undeclared (first use in this function)
+  623 |                                    configMINIMAL_STACK_SIZE,
+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~
+../Common/src/queue.c:338:13: warning: implicit declaration of function ‘xTaskCheckForTimeOut’ [-Wimplicit-function-declaration]
+  338 |         if( xTaskCheckForTimeOut( &xTimeOut, &xTicksToWait ) == pdFALSE )
+      |             ^~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:212:5: warning: implicit declaration of function ‘listSET_LIST_ITEM_OWNER’ [-Wimplicit-function-declaration]
+  212 |     listSET_LIST_ITEM_OWNER( &( pxTimer->xTimerListItem ), pxTimer );
+      |     ^~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:218:17: error: ‘TickType_t’ undeclared (first use in this function)
+  218 |         if( ( ( TickType_t ) ( xTimeNow - xCommandTime ) ) >= pxTimer->xTimerPeriodInTicks ) /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
+      |                 ^~~~~~~~~~
+../Common/src/queue.c:342:17: warning: implicit declaration of function ‘vTaskPlaceOnEventList’ [-Wimplicit-function-declaration]
+  342 |                 vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToSend ), xTicksToWait );
+      |                 ^~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:626:37: error: ‘xIdleTaskHandle’ undeclared (first use in this function)
+  626 |                                    &xIdleTaskHandle ); /*lint !e961 MISRA exception, justified as it is not a redundant explicit cast to all supported compilers. */
+      |                                     ^~~~~~~~~~~~~~~
+../Softtime/src/time.c:222:32: error: ‘pdTRUE’ undeclared (first use in this function)
+  222 |             xProcessTimerNow = pdTRUE;
+      |                                ^~~~~~
+../Softtime/src/time.c:226:13: warning: implicit declaration of function ‘vListInsert’ [-Wimplicit-function-declaration]
+  226 |             vListInsert( pxOverflowTimerList, &( pxTimer->xTimerListItem ) );
+      |             ^~~~~~~~~~~
+../Common/src/queue.c:349:17: warning: implicit declaration of function ‘prvUnlockQueue’ [-Wimplicit-function-declaration]
+  349 |                 prvUnlockQueue( pxQueue );
+      |                 ^~~~~~~~~~~~~~
+In file included from ../schedule/src/task.c:3:
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../Common/include/common.h:17:27: note: in expansion of macro ‘pdTRUE’
+   17 | #define pdPASS          ( pdTRUE )
+      |                           ^~~~~~
+../schedule/src/task.c:639:20: note: in expansion of macro ‘pdPASS’
+  639 |     if( xReturn == pdPASS )
+      |                    ^~~~~~
+../Softtime/src/time.c:226:26: error: ‘pxOverflowTimerList’ undeclared (first use in this function)
+  226 |             vListInsert( pxOverflowTimerList, &( pxTimer->xTimerListItem ) );
+      |                          ^~~~~~~~~~~~~~~~~~~
+../Common/src/queue.c:356:21: warning: implicit declaration of function ‘xTaskResumeAll’ [-Wimplicit-function-declaration]
+  356 |                 if( xTaskResumeAll() == pdFALSE )
+      |                     ^~~~~~~~~~~~~~
+In file included from ../schedule/include/task.h:1,
+                 from ../Common/src/queue.c:5:
+../Common/src/queue.c: In function ‘xQueueReceive’:
+../schedule/src/task.c:655:9: warning: implicit declaration of function ‘portDISABLE_INTERRUPTS’ [-Wimplicit-function-declaration]
+  655 |         portDISABLE_INTERRUPTS();
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:240:26: error: ‘pxCurrentTimerList’ undeclared (first use in this function)
+  240 |             vListInsert( pxCurrentTimerList, &( pxTimer->xTimerListItem ) );
+      |                          ^~~~~~~~~~~~~~~~~~
+../Common/include/common.h:15:17: error: ‘false’ undeclared (first use in this function)
+   15 | #define pdFALSE false
+      |                 ^~~~~
+../Common/src/queue.c:383:32: note: in expansion of macro ‘pdFALSE’
+  383 |     BaseType_t xEntryTimeSet = pdFALSE;
+      |                                ^~~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:248:43: error: unknown type name ‘TickType_t’
+  248 | static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
+      |                                           ^~~~~~~~~~
+../Softtime/src/time.c:249:43: error: unknown type name ‘TickType_t’
+  249 |                                     const TickType_t xTimeNow )
+      |                                           ^~~~~~~~~~
+../Softtime/src/time.c: In function ‘prvProcessExpiredTimer’:
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../Common/include/list.h:69:116: note: in expansion of macro ‘pdTRUE’
+   69 | #define listLIST_IS_EMPTY( pxList )                       ( ( ( pxList )->uxNumberOfItems == ( UBaseType_t ) 0 ) ? pdTRUE : pdFALSE )
+      |                                                                                                                    ^~~~~~
+../Common/src/queue.c:415:21: note: in expansion of macro ‘listLIST_IS_EMPTY’
+  415 |                 if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
+      |                     ^~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:251:5: error: unknown type name ‘BaseType_t’
+  251 |     BaseType_t xResult;
+      |     ^~~~~~~~~~
+../schedule/src/task.c:677:9: warning: implicit declaration of function ‘portCONFIGURE_TIMER_FOR_RUN_TIME_STATS’ [-Wimplicit-function-declaration]
+  677 |         portCONFIGURE_TIMER_FOR_RUN_TIME_STATS();
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:252:45: warning: implicit declaration of function ‘listGET_OWNER_OF_HEAD_ENTRY’ [-Wimplicit-function-declaration]
+  252 |     Timer_t * const pxTimer = ( Timer_t * ) listGET_OWNER_OF_HEAD_ENTRY( pxCurrentTimerList ); /*lint !e9087 !e9079 void * is used as this macro is used with tasks and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
+      |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:682:13: warning: implicit declaration of function ‘xPortStartScheduler’; did you mean ‘vTaskStartScheduler’? [-Wimplicit-function-declaration]
+  682 |         if( xPortStartScheduler() != pdFALSE )
+      |             ^~~~~~~~~~~~~~~~~~~
+      |             vTaskStartScheduler
+../schedule/src/task.c: At top level:
+../schedule/src/task.c:704:12: warning: no previous prototype for ‘xTaskRemoveFromEventList’ [-Wmissing-prototypes]
+  704 | BaseType_t xTaskRemoveFromEventList( const List_t * const pxEventList )
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c: In function ‘xTaskRemoveFromEventList’:
+../schedule/src/task.c:706:5: error: unknown type name ‘TCB_t’
+  706 |     TCB_t * pxUnblockedTCB;
+      |     ^~~~~
+../schedule/src/task.c:723:45: error: request for member ‘xEventListItem’ in something not a structure or union
+  723 |     ( void ) uxListRemove( &( pxUnblockedTCB->xEventListItem ) );
+      |                                             ^~
+../Common/src/queue.c:459:17: warning: implicit declaration of function ‘traceBLOCKING_ON_QUEUE_RECEIVE’ [-Wimplicit-function-declaration]
+  459 |                 traceBLOCKING_ON_QUEUE_RECEIVE( pxQueue );
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:252:74: error: ‘pxCurrentTimerList’ undeclared (first use in this function)
+  252 |     Timer_t * const pxTimer = ( Timer_t * ) listGET_OWNER_OF_HEAD_ENTRY( pxCurrentTimerList ); /*lint !e9087 !e9079 void * is used as this macro is used with tasks and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
+      |                                                                          ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:257:14: warning: implicit declaration of function ‘uxListRemove’ [-Wimplicit-function-declaration]
+  257 |     ( void ) uxListRemove( &( pxTimer->xTimerListItem ) );
+      |              ^~~~~~~~~~~~
+../schedule/src/task.c:725:9: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
+  725 |     if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
+      |         ^~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:727:49: error: request for member ‘xStateListItem’ in something not a structure or union
+  727 |         ( void ) uxListRemove( &( pxUnblockedTCB->xStateListItem ) );
+      |                                                 ^~
+../schedule/src/task.c:53:41: error: request for member ‘uxPriority’ in something not a structure or union
+   53 |     taskRECORD_READY_PRIORITY( ( pxTCB )->uxPriority );                                                \
+      |                                         ^~
+../schedule/src/task.c:45:15: note: in definition of macro ‘taskRECORD_READY_PRIORITY’
+   45 |         if( ( uxPriority ) > uxTopReadyPriority )   \
+      |               ^~~~~~~~~~
+../schedule/src/task.c:728:9: note: in expansion of macro ‘prvAddTaskToReadyList’
+  728 |         prvAddTaskToReadyList( pxUnblockedTCB );
+      |         ^~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:53:41: error: request for member ‘uxPriority’ in something not a structure or union
+   53 |     taskRECORD_READY_PRIORITY( ( pxTCB )->uxPriority );                                                \
+      |                                         ^~
+../schedule/src/task.c:47:36: note: in definition of macro ‘taskRECORD_READY_PRIORITY’
+   47 |             uxTopReadyPriority = ( uxPriority );    \
+      |                                    ^~~~~~~~~~
+../schedule/src/task.c:728:9: note: in expansion of macro ‘prvAddTaskToReadyList’
+  728 |         prvAddTaskToReadyList( pxUnblockedTCB );
+      |         ^~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:258:5: warning: implicit declaration of function ‘traceTIMER_EXPIRED’ [-Wimplicit-function-declaration]
+  258 |     traceTIMER_EXPIRED( pxTimer );
+      |     ^~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:54:52: error: request for member ‘uxPriority’ in something not a structure or union
+   54 |     vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xStateListItem ) ); \
+      |                                                    ^~
+../schedule/src/task.c:728:9: note: in expansion of macro ‘prvAddTaskToReadyList’
+  728 |         prvAddTaskToReadyList( pxUnblockedTCB );
+      |         ^~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:54:82: error: request for member ‘xStateListItem’ in something not a structure or union
+   54 |     vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xStateListItem ) ); \
+      |                                                                                  ^~
+../schedule/src/task.c:728:9: note: in expansion of macro ‘prvAddTaskToReadyList’
+  728 |         prvAddTaskToReadyList( pxUnblockedTCB );
+      |         ^~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:748:66: error: request for member ‘xEventListItem’ in something not a structure or union
+  748 |         vListInsertEnd( &( xPendingReadyList ), &( pxUnblockedTCB->xEventListItem ) );
+      |                                                                  ^~
+../Common/src/queue.c:485:17: warning: implicit declaration of function ‘traceQUEUE_RECEIVE_FAILED’ [-Wimplicit-function-declaration]
+  485 |                 traceQUEUE_RECEIVE_FAILED( pxQueue );
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:751:23: error: request for member ‘uxPriority’ in something not a structure or union
+  751 |     if( pxUnblockedTCB->uxPriority > pxCurrentTCB->uxPriority )
+      |                       ^~
+../Softtime/src/time.c:36:50: error: ‘uint8_t’ undeclared (first use in this function)
+   36 | #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
+      |                                                  ^~~~~~~
+../Softtime/src/time.c:262:31: note: in expansion of macro ‘tmrSTATUS_IS_AUTORELOAD’
+  262 |     if( ( pxTimer->ucStatus & tmrSTATUS_IS_AUTORELOAD ) != 0 )
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:751:50: error: request for member ‘uxPriority’ in something not a structure or union
+  751 |     if( pxUnblockedTCB->uxPriority > pxCurrentTCB->uxPriority )
+      |                                                  ^~
+../Softtime/src/time.c:36:60: error: expected ‘)’ before numeric constant
+   36 | #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:262:31: note: in expansion of macro ‘tmrSTATUS_IS_AUTORELOAD’
+  262 |     if( ( pxTimer->ucStatus & tmrSTATUS_IS_AUTORELOAD ) != 0 )
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../schedule/src/task.c:3:
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../schedule/src/task.c:756:19: note: in expansion of macro ‘pdTRUE’
+  756 |         xReturn = pdTRUE;
+      |                   ^~~~~~
+../schedule/src/task.c: At top level:
+In file included from ../schedule/include/task.h:1,
+                 from ../Common/src/queue.c:5:
+../Common/src/queue.c: In function ‘prvCopyDataToQueue’:
+../schedule/src/task.c:770:12: warning: no previous prototype for ‘xTaskCheckForTimeOut’ [-Wmissing-prototypes]
+  770 | BaseType_t xTaskCheckForTimeOut( TimeOut_t * const pxTimeOut,
+      |            ^~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:267:133: error: ‘pdFALSE’ undeclared (first use in this function)
+  267 |         if( prvInsertTimerInActiveList( pxTimer, ( xNextExpireTime + pxTimer->xTimerPeriodInTicks ), xTimeNow, xNextExpireTime ) != pdFALSE )
+      |                                                                                                                                     ^~~~~~~
+../Common/include/common.h:15:17: error: ‘false’ undeclared (first use in this function)
+   15 | #define pdFALSE false
+      |                 ^~~~~
+../Common/src/queue.c:497:26: note: in expansion of macro ‘pdFALSE’
+  497 |     BaseType_t xReturn = pdFALSE;
+      |                          ^~~~~~~
+../schedule/src/task.c: In function ‘xTaskCheckForTimeOut’:
+../Common/src/queue.c:519:18: warning: implicit declaration of function ‘memcpy’ [-Wimplicit-function-declaration]
+  519 |         ( void ) memcpy( ( void * ) pxQueue->pcWriteTo, pvItemToQueue, ( size_t ) pxQueue->uxItemSize ); /*lint !e961 !e418 !e9087 MISRA exception as the casts are only redundant for some ports, plus previous logic ensures a null pointer can only be passed to memcpy() if the copy size is 0.  Cast to void required by function signature and safe as no alignment requirement and copy length specified in bytes. */
+      |                  ^~~~~~
+../schedule/src/task.c:776:5: warning: implicit declaration of function ‘taskENTER_CRITICAL’ [-Wimplicit-function-declaration]
+  776 |     taskENTER_CRITICAL();
+      |     ^~~~~~~~~~~~~~~~~~
+../Common/src/queue.c:6:1: note: ‘memcpy’ is defined in header ‘<string.h>’; did you forget to ‘#include <string.h>’?
+    5 | #include <task.h>
+  +++ |+#include <string.h>
+    6 | typedef struct QueuePointers
+../Softtime/src/time.c:271:23: warning: implicit declaration of function ‘xTimerGenericCommand’ [-Wimplicit-function-declaration]
+  271 |             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                       ^~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:804:83: warning: comparison of integer expressions of different signedness: ‘TickType_t’ {aka ‘const unsigned int’} and ‘TickType_t’ {aka ‘int’} [-Wsign-compare]
+  804 |         if( ( xNumOfOverflows != pxTimeOut->xOverflowCount ) && ( xConstTickCount >= pxTimeOut->xTimeOnEntering ) ) /*lint !e525 Indentation preferred as is to make code within pre-processor directives clearer. */
+      |                                                                                   ^~
+In file included from ../schedule/src/task.c:3:
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../schedule/src/task.c:811:23: note: in expansion of macro ‘pdTRUE’
+  811 |             xReturn = pdTRUE;
+      |                       ^~~~~~
+In file included from ../Softtime/src/time.c:2:
+../Softtime/include/time.h:3:53: error: ‘BaseType_t’ undeclared (first use in this function)
+    3 | #define tmrCOMMAND_START_DONT_TRACE             ( ( BaseType_t ) 0 )
+      |                                                     ^~~~~~~~~~
+../Softtime/src/time.c:271:54: note: in expansion of macro ‘tmrCOMMAND_START_DONT_TRACE’
+  271 |             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/include/time.h:3:66: error: expected ‘)’ before numeric constant
+    3 | #define tmrCOMMAND_START_DONT_TRACE             ( ( BaseType_t ) 0 )
+      |                                                 ~                ^
+../Softtime/src/time.c:271:54: note: in expansion of macro ‘tmrCOMMAND_START_DONT_TRACE’
+  271 |             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:271:100: error: ‘NULL’ undeclared (first use in this function)
+  271 |             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                                                                                                    ^~~~
+../Softtime/src/time.c:271:100: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+../schedule/src/task.c:827:5: warning: implicit declaration of function ‘taskEXIT_CRITICAL’ [-Wimplicit-function-declaration]
+  827 |     taskEXIT_CRITICAL();
+      |     ^~~~~~~~~~~~~~~~~
+../schedule/src/task.c: At top level:
+../schedule/src/task.c:833:6: warning: no previous prototype for ‘vTaskPlaceOnEventList’ [-Wmissing-prototypes]
+  833 | void vTaskPlaceOnEventList( List_t * const pxEventList,
+      |      ^~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c: In function ‘vTaskPlaceOnEventList’:
+../Softtime/src/time.c:271:106: error: ‘tmrNO_DELAY’ undeclared (first use in this function)
+  271 |             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                                                                                                          ^~~~~~~~~~~
+../schedule/src/task.c:844:46: error: request for member ‘xEventListItem’ in something not a structure or union
+  844 |     vListInsert( pxEventList, &( pxCurrentTCB->xEventListItem ) );
+      |                                              ^~
+In file included from ../schedule/include/task.h:1,
+                 from ../Common/src/queue.c:5:
+../Common/src/queue.c: In function ‘prvIsQueueEmpty’:
+../Softtime/src/time.c:34:60: error: expected ‘)’ before numeric constant
+   34 | #define tmrSTATUS_IS_ACTIVE                  ( ( uint8_t ) 0x01 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:281:31: note: in expansion of macro ‘tmrSTATUS_IS_ACTIVE’
+  281 |         pxTimer->ucStatus &= ~tmrSTATUS_IS_ACTIVE;
+      |                               ^~~~~~~~~~~~~~~~~~~
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../Common/src/queue.c:580:23: note: in expansion of macro ‘pdTRUE’
+  580 |             xReturn = pdTRUE;
+      |                       ^~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:290:13: warning: conflicting types for ‘prvProcessReceivedCommands’
+  290 | static void prvProcessReceivedCommands( void )
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:290:13: error: static declaration of ‘prvProcessReceivedCommands’ follows non-static declaration
+../Softtime/src/time.c:56:9: note: previous implicit declaration of ‘prvProcessReceivedCommands’ was here
+   56 |         prvProcessReceivedCommands();
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:846:5: warning: implicit declaration of function ‘prvAddCurrentTaskToDelayedList’ [-Wimplicit-function-declaration]
+  846 |     prvAddCurrentTaskToDelayedList( xTicksToWait, pdTRUE );
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Common/include/common.h:15:17: error: ‘false’ undeclared (first use in this function)
+   15 | #define pdFALSE false
+      |                 ^~~~~
+../Common/src/queue.c:584:23: note: in expansion of macro ‘pdFALSE’
+  584 |             xReturn = pdFALSE;
+      |                       ^~~~~~~
+In file included from ../schedule/src/task.c:3:
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../schedule/src/task.c:846:51: note: in expansion of macro ‘pdTRUE’
+  846 |     prvAddCurrentTaskToDelayedList( xTicksToWait, pdTRUE );
+      |                                                   ^~~~~~
+../schedule/src/task.c: At top level:
+../schedule/src/task.c:851:13: warning: conflicting types for ‘prvAddCurrentTaskToDelayedList’
+  851 | static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:851:13: error: static declaration of ‘prvAddCurrentTaskToDelayedList’ follows non-static declaration
+../Softtime/src/time.c: In function ‘prvProcessReceivedCommands’:
+../Softtime/src/time.c:292:5: error: unknown type name ‘DaemonTaskMessage_t’
+  292 |     DaemonTaskMessage_t xMessage;
+      |     ^~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:846:5: note: previous implicit declaration of ‘prvAddCurrentTaskToDelayedList’ was here
+  846 |     prvAddCurrentTaskToDelayedList( xTicksToWait, pdTRUE );
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c: In function ‘prvAddCurrentTaskToDelayedList’:
+../Common/src/queue.c: In function ‘prvIsQueueFull’:
+../schedule/src/task.c:868:38: error: request for member ‘xStateListItem’ in something not a structure or union
+  868 |     if( uxListRemove( &( pxCurrentTCB->xStateListItem ) ) == ( UBaseType_t ) 0 )
+      |                                      ^~
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../Common/src/queue.c:601:23: note: in expansion of macro ‘pdTRUE’
+  601 |             xReturn = pdTRUE;
+      |                       ^~~~~~
+../Softtime/src/time.c:294:5: error: unknown type name ‘BaseType_t’
+  294 |     BaseType_t xTimerListsWereSwitched, xResult;
+      |     ^~~~~~~~~~
+../Common/include/common.h:15:17: error: ‘false’ undeclared (first use in this function)
+   15 | #define pdFALSE false
+      |                 ^~~~~
+../Common/src/queue.c:605:23: note: in expansion of macro ‘pdFALSE’
+  605 |             xReturn = pdFALSE;
+      |                       ^~~~~~~
+../schedule/src/task.c:872:9: warning: implicit declaration of function ‘portRESET_READY_PRIORITY’; did you mean ‘taskRECORD_READY_PRIORITY’? [-Wimplicit-function-declaration]
+  872 |         portRESET_READY_PRIORITY( pxCurrentTCB->uxPriority, uxTopReadyPriority ); /*lint !e931 pxCurrentTCB cannot change as it is the calling task.  pxCurrentTCB->uxPriority and uxTopReadyPriority cannot change as called with scheduler suspended or in a critical section. */
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~
+      |         taskRECORD_READY_PRIORITY
+../schedule/src/task.c:872:47: error: request for member ‘uxPriority’ in something not a structure or union
+  872 |         portRESET_READY_PRIORITY( pxCurrentTCB->uxPriority, uxTopReadyPriority ); /*lint !e931 pxCurrentTCB cannot change as it is the calling task.  pxCurrentTCB->uxPriority and uxTopReadyPriority cannot change as called with scheduler suspended or in a critical section. */
+      |                                               ^~
+../Softtime/src/time.c:295:5: error: unknown type name ‘TickType_t’
+  295 |     TickType_t xTimeNow;
+      |     ^~~~~~~~~~
+In file included from ../schedule/src/task.c:2:
+../schedule/src/task.c:928:53: error: request for member ‘xStateListItem’ in something not a structure or union
+  928 |             listSET_LIST_ITEM_VALUE( &( pxCurrentTCB->xStateListItem ), xTimeToWake );
+      |                                                     ^~
+../Common/include/list.h:57:63: note: in definition of macro ‘listSET_LIST_ITEM_VALUE’
+   57 | #define listSET_LIST_ITEM_VALUE( pxListItem, xValue )     ( ( pxListItem )->xItemValue = ( xValue ) )
+      |                                                               ^~~~~~~~~~
+../schedule/src/task.c:933:72: error: request for member ‘xStateListItem’ in something not a structure or union
+  933 |                 vListInsert( pxOverflowDelayedTaskList, &( pxCurrentTCB->xStateListItem ) );
+      |                                                                        ^~
+../schedule/src/task.c:938:64: error: request for member ‘xStateListItem’ in something not a structure or union
+  938 |                 vListInsert( pxDelayedTaskList, &( pxCurrentTCB->xStateListItem ) );
+      |                                                                ^~
+../Softtime/src/time.c:297:12: warning: implicit declaration of function ‘xQueueReceive’ [-Wimplicit-function-declaration]
+  297 |     while( xQueueReceive( xTimerQueue, &xMessage, tmrNO_DELAY ) != pdFAIL ) /*lint !e603 xMessage does not have to be initialised as it is passed out, not in, and it is not used unless xQueueReceive() returns pdTRUE. */
+      |            ^~~~~~~~~~~~~
+../Common/src/queue.c: In function ‘xQueueGenericReset’:
+../schedule/src/task.c:852:62: warning: unused parameter ‘xCanBlockIndefinitely’ [-Wunused-parameter]
+  852 |                                             const BaseType_t xCanBlockIndefinitely )
+      |                                             ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c: At top level:
+../Common/src/queue.c:112:1: warning: control reaches end of non-void function [-Wreturn-type]
+  112 | }
+      | ^
+../schedule/src/task.c:955:12: warning: no previous prototype for ‘xTaskIncrementTick’ [-Wmissing-prototypes]
+  955 | BaseType_t xTaskIncrementTick( void )
+      |            ^~~~~~~~~~~~~~~~~~
+../schedule/src/task.c: In function ‘xTaskIncrementTick’:
+../Softtime/src/time.c:297:27: error: ‘xTimerQueue’ undeclared (first use in this function)
+  297 |     while( xQueueReceive( xTimerQueue, &xMessage, tmrNO_DELAY ) != pdFAIL ) /*lint !e603 xMessage does not have to be initialised as it is passed out, not in, and it is not used unless xQueueReceive() returns pdTRUE. */
+      |                           ^~~~~~~~~~~
+../schedule/src/task.c:957:5: error: unknown type name ‘TCB_t’
+  957 |     TCB_t * pxTCB;
+      |     ^~~~~
+../Softtime/src/time.c:297:51: error: ‘tmrNO_DELAY’ undeclared (first use in this function)
+  297 |     while( xQueueReceive( xTimerQueue, &xMessage, tmrNO_DELAY ) != pdFAIL ) /*lint !e603 xMessage does not have to be initialised as it is passed out, not in, and it is not used unless xQueueReceive() returns pdTRUE. */
+      |                                                   ^~~~~~~~~~~
+../schedule/src/task.c:964:5: warning: implicit declaration of function ‘traceTASK_INCREMENT_TICK’ [-Wimplicit-function-declaration]
+  964 |     traceTASK_INCREMENT_TICK( xTickCount );
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:297:68: error: ‘pdFAIL’ undeclared (first use in this function)
+  297 |     while( xQueueReceive( xTimerQueue, &xMessage, tmrNO_DELAY ) != pdFAIL ) /*lint !e603 xMessage does not have to be initialised as it is passed out, not in, and it is not used unless xQueueReceive() returns pdTRUE. */
+      |                                                                    ^~~~~~
+../Softtime/src/time.c:322:21: error: request for member ‘xMessageID’ in something not a structure or union
+  322 |         if( xMessage.xMessageID >= ( BaseType_t ) 0 )
+      |                     ^
+../Softtime/src/time.c:322:38: error: ‘BaseType_t’ undeclared (first use in this function)
+  322 |         if( xMessage.xMessageID >= ( BaseType_t ) 0 )
+      |                                      ^~~~~~~~~~
+../schedule/src/task.c:966:9: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
+  966 |     if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
+      |         ^~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:322:50: error: expected ‘)’ before numeric constant
+  322 |         if( xMessage.xMessageID >= ( BaseType_t ) 0 )
+      |           ~                                      ^~
+      |                                                  )
+../Softtime/src/time.c:326:31: error: request for member ‘u’ in something not a structure or union
+  326 |             pxTimer = xMessage.u.xTimerParameters.pxTimer;
+      |                               ^
+../schedule/src/task.c:978:13: warning: implicit declaration of function ‘taskSWITCH_DELAYED_LISTS’ [-Wimplicit-function-declaration]
+  978 |             taskSWITCH_DELAYED_LISTS();
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:328:17: warning: implicit declaration of function ‘listIS_CONTAINED_WITHIN’ [-Wimplicit-function-declaration]
+  328 |             if( listIS_CONTAINED_WITHIN( NULL, &( pxTimer->xTimerListItem ) ) == pdFALSE ) /*lint !e961. The cast is only redundant when NULL is passed into the macro. */
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:328:42: error: ‘NULL’ undeclared (first use in this function)
+  328 |             if( listIS_CONTAINED_WITHIN( NULL, &( pxTimer->xTimerListItem ) ) == pdFALSE ) /*lint !e961. The cast is only redundant when NULL is passed into the macro. */
+      |                                          ^~~~
+../Softtime/src/time.c:328:42: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+../schedule/src/task.c:982:13: warning: implicit declaration of function ‘mtCOVERAGE_TEST_MARKER’ [-Wimplicit-function-declaration]
+  982 |             mtCOVERAGE_TEST_MARKER();
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:328:82: error: ‘pdFALSE’ undeclared (first use in this function)
+  328 |             if( listIS_CONTAINED_WITHIN( NULL, &( pxTimer->xTimerListItem ) ) == pdFALSE ) /*lint !e961. The cast is only redundant when NULL is passed into the macro. */
+      |                                                                                  ^~~~~~~
+In file included from ../schedule/src/task.c:3:
+../Common/include/common.h:16:17: error: ‘true’ undeclared (first use in this function)
+   16 | #define pdTRUE  true
+      |                 ^~~~
+../Common/include/list.h:69:116: note: in expansion of macro ‘pdTRUE’
+   69 | #define listLIST_IS_EMPTY( pxList )                       ( ( ( pxList )->uxNumberOfItems == ( UBaseType_t ) 0 ) ? pdTRUE : pdFALSE )
+      |                                                                                                                    ^~~~~~
+../schedule/src/task.c:993:21: note: in expansion of macro ‘listLIST_IS_EMPTY’
+  993 |                 if( listLIST_IS_EMPTY( pxDelayedTaskList ) != pdFALSE )
+      |                     ^~~~~~~~~~~~~~~~~
+In file included from ../schedule/src/task.c:2:
+../schedule/src/task.c:1010:67: error: request for member ‘xStateListItem’ in something not a structure or union
+ 1010 |                     xItemValue = listGET_LIST_ITEM_VALUE( &( pxTCB->xStateListItem ) );
+      |                                                                   ^~
+../Common/include/list.h:59:63: note: in definition of macro ‘listGET_LIST_ITEM_VALUE’
+   59 | #define listGET_LIST_ITEM_VALUE( pxListItem )             ( ( pxListItem )->xItemValue )
+      |                                                               ^~~~~~~~~~
+../schedule/src/task.c:1028:52: error: request for member ‘xStateListItem’ in something not a structure or union
+ 1028 |                     ( void ) uxListRemove( &( pxTCB->xStateListItem ) );
+      |                                                    ^~
+In file included from ../schedule/src/task.c:2:
+../schedule/src/task.c:1032:58: error: request for member ‘xEventListItem’ in something not a structure or union
+ 1032 |                     if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) ) != NULL )
+      |                                                          ^~
+../Common/include/list.h:91:62: note: in definition of macro ‘listLIST_ITEM_CONTAINER’
+   91 | #define listLIST_ITEM_CONTAINER( pxListItem )            ( ( pxListItem )->pxContainer )
+      |                                                              ^~~~~~~~~~
+../Softtime/src/time.c:338:13: warning: implicit declaration of function ‘traceTIMER_COMMAND_RECEIVED’ [-Wimplicit-function-declaration]
+  338 |             traceTIMER_COMMAND_RECEIVED( pxTimer, xMessage.xMessageID, xMessage.u.xTimerParameters.xMessageValue );
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:1034:56: error: request for member ‘xEventListItem’ in something not a structure or union
+ 1034 |                         ( void ) uxListRemove( &( pxTCB->xEventListItem ) );
+      |                                                        ^~
+../Softtime/src/time.c:338:59: error: request for member ‘xMessageID’ in something not a structure or union
+  338 |             traceTIMER_COMMAND_RECEIVED( pxTimer, xMessage.xMessageID, xMessage.u.xTimerParameters.xMessageValue );
+      |                                                           ^
+../Softtime/src/time.c:338:80: error: request for member ‘u’ in something not a structure or union
+  338 |             traceTIMER_COMMAND_RECEIVED( pxTimer, xMessage.xMessageID, xMessage.u.xTimerParameters.xMessageValue );
+      |                                                                                ^
+../schedule/src/task.c:53:41: error: request for member ‘uxPriority’ in something not a structure or union
+   53 |     taskRECORD_READY_PRIORITY( ( pxTCB )->uxPriority );                                                \
+      |                                         ^~
+../schedule/src/task.c:45:15: note: in definition of macro ‘taskRECORD_READY_PRIORITY’
+   45 |         if( ( uxPriority ) > uxTopReadyPriority )   \
+      |               ^~~~~~~~~~
+../schedule/src/task.c:1043:21: note: in expansion of macro ‘prvAddTaskToReadyList’
+ 1043 |                     prvAddTaskToReadyList( pxTCB );
+      |                     ^~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:53:41: error: request for member ‘uxPriority’ in something not a structure or union
+   53 |     taskRECORD_READY_PRIORITY( ( pxTCB )->uxPriority );                                                \
+      |                                         ^~
+../schedule/src/task.c:47:36: note: in definition of macro ‘taskRECORD_READY_PRIORITY’
+   47 |             uxTopReadyPriority = ( uxPriority );    \
+      |                                    ^~~~~~~~~~
+../schedule/src/task.c:1043:21: note: in expansion of macro ‘prvAddTaskToReadyList’
+ 1043 |                     prvAddTaskToReadyList( pxTCB );
+      |                     ^~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:54:52: error: request for member ‘uxPriority’ in something not a structure or union
+   54 |     vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xStateListItem ) ); \
+      |                                                    ^~
+../schedule/src/task.c:1043:21: note: in expansion of macro ‘prvAddTaskToReadyList’
+ 1043 |                     prvAddTaskToReadyList( pxTCB );
+      |                     ^~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:346:24: warning: implicit declaration of function ‘prvSampleTimeNow’ [-Wimplicit-function-declaration]
+  346 |             xTimeNow = prvSampleTimeNow( &xTimerListsWereSwitched );
+      |                        ^~~~~~~~~~~~~~~~
+../schedule/src/task.c:54:82: error: request for member ‘xStateListItem’ in something not a structure or union
+   54 |     vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xStateListItem ) ); \
+      |                                                                                  ^~
+../schedule/src/task.c:1043:21: note: in expansion of macro ‘prvAddTaskToReadyList’
+ 1043 |                     prvAddTaskToReadyList( pxTCB );
+      |                     ^~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:348:29: error: request for member ‘xMessageID’ in something not a structure or union
+  348 |             switch( xMessage.xMessageID )
+      |                             ^
+In file included from ../Softtime/src/time.c:2:
+../Softtime/include/time.h:4:66: error: expected ‘)’ before numeric constant
+    4 | #define tmrCOMMAND_START                        ( ( BaseType_t ) 1 )
+      |                                                 ~                ^
+../Softtime/src/time.c:350:22: note: in expansion of macro ‘tmrCOMMAND_START’
+  350 |                 case tmrCOMMAND_START:
+      |                      ^~~~~~~~~~~~~~~~
+../Softtime/include/time.h:11:66: error: expected ‘)’ before numeric constant
+   11 | #define tmrCOMMAND_START_FROM_ISR               ( ( BaseType_t ) 6 )
+      |                                                 ~                ^
+../Softtime/src/time.c:351:22: note: in expansion of macro ‘tmrCOMMAND_START_FROM_ISR’
+  351 |                 case tmrCOMMAND_START_FROM_ISR:
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:1113:11: error: ‘xPendedTicks’ undeclared (first use in this function); did you mean ‘uxPendedTicks’?
+ 1113 |         ++xPendedTicks;
+      |           ^~~~~~~~~~~~
+      |           uxPendedTicks
+../Softtime/include/time.h:5:66: error: expected ‘)’ before numeric constant
+    5 | #define tmrCOMMAND_RESET                        ( ( BaseType_t ) 2 )
+      |                                                 ~                ^
+../Softtime/src/time.c:352:22: note: in expansion of macro ‘tmrCOMMAND_RESET’
+  352 |                 case tmrCOMMAND_RESET:
+      |                      ^~~~~~~~~~~~~~~~
+../schedule/src/task.c: At top level:
+../Softtime/include/time.h:12:66: error: expected ‘)’ before numeric constant
+   12 | #define tmrCOMMAND_RESET_FROM_ISR               ( ( BaseType_t ) 7 )
+      |                                                 ~                ^
+../Softtime/src/time.c:353:22: note: in expansion of macro ‘tmrCOMMAND_RESET_FROM_ISR’
+  353 |                 case tmrCOMMAND_RESET_FROM_ISR:
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:1127:12: warning: no previous prototype for ‘xTaskGetTickCount’ [-Wmissing-prototypes]
+ 1127 | TickType_t xTaskGetTickCount( void )
+      |            ^~~~~~~~~~~~~~~~~
+make: *** [Makefile:62: ../Common/src/queue.o] Error 1
+../Softtime/include/time.h:3:66: error: expected ‘)’ before numeric constant
+    3 | #define tmrCOMMAND_START_DONT_TRACE             ( ( BaseType_t ) 0 )
+      |                                                 ~                ^
+../Softtime/src/time.c:354:22: note: in expansion of macro ‘tmrCOMMAND_START_DONT_TRACE’
+  354 |                 case tmrCOMMAND_START_DONT_TRACE:
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:34:50: error: ‘uint8_t’ undeclared (first use in this function)
+   34 | #define tmrSTATUS_IS_ACTIVE                  ( ( uint8_t ) 0x01 )
+      |                                                  ^~~~~~~
+../Softtime/src/time.c:356:42: note: in expansion of macro ‘tmrSTATUS_IS_ACTIVE’
+  356 |                     pxTimer->ucStatus |= tmrSTATUS_IS_ACTIVE;
+      |                                          ^~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c: In function ‘xTaskGetTickCount’:
+../Softtime/src/time.c:34:60: error: expected ‘)’ before numeric constant
+   34 | #define tmrSTATUS_IS_ACTIVE                  ( ( uint8_t ) 0x01 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:356:42: note: in expansion of macro ‘tmrSTATUS_IS_ACTIVE’
+  356 |                     pxTimer->ucStatus |= tmrSTATUS_IS_ACTIVE;
+      |                                          ^~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:1132:5: warning: implicit declaration of function ‘portTICK_TYPE_ENTER_CRITICAL’ [-Wimplicit-function-declaration]
+ 1132 |     portTICK_TYPE_ENTER_CRITICAL();
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:358:70: error: request for member ‘u’ in something not a structure or union
+  358 |                     if( prvInsertTimerInActiveList( pxTimer, xMessage.u.xTimerParameters.xMessageValue + pxTimer->xTimerPeriodInTicks, xTimeNow, xMessage.u.xTimerParameters.xMessageValue ) != pdFALSE )
+      |                                                                      ^
+../Softtime/src/time.c:358:154: error: request for member ‘u’ in something not a structure or union
+  358 |                     if( prvInsertTimerInActiveList( pxTimer, xMessage.u.xTimerParameters.xMessageValue + pxTimer->xTimerPeriodInTicks, xTimeNow, xMessage.u.xTimerParameters.xMessageValue ) != pdFALSE )
+      |                                                                                                                                                          ^
+../Softtime/src/time.c:36:60: error: expected ‘)’ before numeric constant
+   36 | #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:365:51: note: in expansion of macro ‘tmrSTATUS_IS_AUTORELOAD’
+  365 |                         if( ( pxTimer->ucStatus & tmrSTATUS_IS_AUTORELOAD ) != 0 )
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Softtime/src/time.c:2:
+../Softtime/include/time.h:3:66: error: expected ‘)’ before numeric constant
+    3 | #define tmrCOMMAND_START_DONT_TRACE             ( ( BaseType_t ) 0 )
+      |                                                 ~                ^
+../Softtime/src/time.c:367:70: note: in expansion of macro ‘tmrCOMMAND_START_DONT_TRACE’
+  367 |                             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xMessage.u.xTimerParameters.xMessageValue + pxTimer->xTimerPeriodInTicks, NULL, tmrNO_DELAY );
+      |                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:367:107: error: request for member ‘u’ in something not a structure or union
+  367 |                             xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xMessage.u.xTimerParameters.xMessageValue + pxTimer->xTimerPeriodInTicks, NULL, tmrNO_DELAY );
+      |                                                                                                           ^
+../schedule/src/task.c:1136:5: warning: implicit declaration of function ‘portTICK_TYPE_EXIT_CRITICAL’ [-Wimplicit-function-declaration]
+ 1136 |     portTICK_TYPE_EXIT_CRITICAL();
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c: At top level:
+../schedule/src/task.c:1141:12: warning: no previous prototype for ‘xTaskGetSchedulerState’ [-Wmissing-prototypes]
+ 1141 | BaseType_t xTaskGetSchedulerState( void )
+      |            ^~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Softtime/src/time.c:2:
+../Softtime/include/time.h:6:66: error: expected ‘)’ before numeric constant
+    6 | #define tmrCOMMAND_STOP                         ( ( BaseType_t ) 3 )
+      |                                                 ~                ^
+../Softtime/src/time.c:382:22: note: in expansion of macro ‘tmrCOMMAND_STOP’
+  382 |                 case tmrCOMMAND_STOP:
+      |                      ^~~~~~~~~~~~~~~
+../Softtime/include/time.h:13:66: error: expected ‘)’ before numeric constant
+   13 | #define tmrCOMMAND_STOP_FROM_ISR                ( ( BaseType_t ) 8 )
+      |                                                 ~                ^
+../Softtime/src/time.c:383:22: note: in expansion of macro ‘tmrCOMMAND_STOP_FROM_ISR’
+  383 |                 case tmrCOMMAND_STOP_FROM_ISR:
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:34:60: error: expected ‘)’ before numeric constant
+   34 | #define tmrSTATUS_IS_ACTIVE                  ( ( uint8_t ) 0x01 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:385:43: note: in expansion of macro ‘tmrSTATUS_IS_ACTIVE’
+  385 |                     pxTimer->ucStatus &= ~tmrSTATUS_IS_ACTIVE;
+      |                                           ^~~~~~~~~~~~~~~~~~~
+In file included from ../Softtime/src/time.c:2:
+../Softtime/include/time.h:7:66: error: expected ‘)’ before numeric constant
+    7 | #define tmrCOMMAND_CHANGE_PERIOD                ( ( BaseType_t ) 4 )
+      |                                                 ~                ^
+../Softtime/src/time.c:388:22: note: in expansion of macro ‘tmrCOMMAND_CHANGE_PERIOD’
+  388 |                 case tmrCOMMAND_CHANGE_PERIOD:
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/include/time.h:14:66: error: expected ‘)’ before numeric constant
+   14 | #define tmrCOMMAND_CHANGE_PERIOD_FROM_ISR       ( ( BaseType_t ) 9 )
+      |                                                 ~                ^
+../Softtime/src/time.c:389:22: note: in expansion of macro ‘tmrCOMMAND_CHANGE_PERIOD_FROM_ISR’
+  389 |                 case tmrCOMMAND_CHANGE_PERIOD_FROM_ISR:
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:34:60: error: expected ‘)’ before numeric constant
+   34 | #define tmrSTATUS_IS_ACTIVE                  ( ( uint8_t ) 0x01 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:390:42: note: in expansion of macro ‘tmrSTATUS_IS_ACTIVE’
+  390 |                     pxTimer->ucStatus |= tmrSTATUS_IS_ACTIVE;
+      |                                          ^~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c: In function ‘xTaskGetSchedulerState’:
+../Softtime/src/time.c:391:60: error: request for member ‘u’ in something not a structure or union
+  391 |                     pxTimer->xTimerPeriodInTicks = xMessage.u.xTimerParameters.xMessageValue;
+      |                                                            ^
+../schedule/src/task.c:1147:19: error: ‘taskSCHEDULER_NOT_STARTED’ undeclared (first use in this function)
+ 1147 |         xReturn = taskSCHEDULER_NOT_STARTED;
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Softtime/src/time.c:2:
+../Softtime/include/time.h:8:66: error: expected ‘)’ before numeric constant
+    8 | #define tmrCOMMAND_DELETE                       ( ( BaseType_t ) 5 )
+      |                                                 ~                ^
+../Softtime/src/time.c:402:22: note: in expansion of macro ‘tmrCOMMAND_DELETE’
+  402 |                 case tmrCOMMAND_DELETE:
+      |                      ^~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:34:60: error: expected ‘)’ before numeric constant
+   34 | #define tmrSTATUS_IS_ACTIVE                  ( ( uint8_t ) 0x01 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:423:51: note: in expansion of macro ‘tmrSTATUS_IS_ACTIVE’
+  423 |                             pxTimer->ucStatus &= ~tmrSTATUS_IS_ACTIVE;
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:437:47: error: unknown type name ‘TickType_t’
+  437 | static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime,
+      |                                               ^~~~~~~~~~
+../schedule/src/task.c:1151:13: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
+ 1151 |         if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
+      |             ^~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:438:41: error: unknown type name ‘BaseType_t’
+  438 |                                         BaseType_t xListWasEmpty )
+      |                                         ^~~~~~~~~~
+../Softtime/src/time.c:494:8: error: unknown type name ‘TickType_t’
+  494 | static TickType_t prvSampleTimeNow( BaseType_t * const pxTimerListsWereSwitched )
+      |        ^~~~~~~~~~
+../schedule/src/task.c:1153:23: error: ‘taskSCHEDULER_RUNNING’ undeclared (first use in this function)
+ 1153 |             xReturn = taskSCHEDULER_RUNNING;
+      |                       ^~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:494:37: error: unknown type name ‘BaseType_t’
+  494 | static TickType_t prvSampleTimeNow( BaseType_t * const pxTimerListsWereSwitched )
+      |                                     ^~~~~~~~~~
+../schedule/src/task.c:1157:23: error: ‘taskSCHEDULER_SUSPENDED’ undeclared (first use in this function)
+ 1157 |             xReturn = taskSCHEDULER_SUSPENDED;
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘prvSwitchTimerLists’:
+../Softtime/src/time.c:518:5: error: unknown type name ‘TickType_t’
+  518 |     TickType_t xNextExpireTime, xReloadTime;
+      |     ^~~~~~~~~~
+../schedule/src/task.c: In function ‘prvIdleTask’:
+../schedule/src/task.c:1170:13: warning: implicit declaration of function ‘taskYIELD’ [-Wimplicit-function-declaration]
+ 1170 |             taskYIELD();
+      |             ^~~~~~~~~
+../Softtime/src/time.c:519:5: error: unknown type name ‘List_t’
+  519 |     List_t * pxTemp;
+      |     ^~~~~~
+In file included from ../schedule/src/task.c:3:
+../schedule/src/task.c:1164:40: warning: unused parameter ‘pvParameters’ [-Wunused-parameter]
+ 1164 | static portTASK_FUNCTION( prvIdleTask, pvParameters )
+../Common/include/common.h:25:76: note: in definition of macro ‘portTASK_FUNCTION’
+   25 | #define portTASK_FUNCTION( vFunction, pvParameters ) void vFunction( void *pvParameters )
+      |                                                                            ^~~~~~~~~~~~
+../Softtime/src/time.c:521:5: error: unknown type name ‘BaseType_t’
+  521 |     BaseType_t xResult;
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:527:12: warning: implicit declaration of function ‘listLIST_IS_EMPTY’ [-Wimplicit-function-declaration]
+  527 |     while( listLIST_IS_EMPTY( pxCurrentTimerList ) == pdFALSE )
+      |            ^~~~~~~~~~~~~~~~~
+At top level:
+../Softtime/src/time.c:527:31: error: ‘pxCurrentTimerList’ undeclared (first use in this function)
+  527 |     while( listLIST_IS_EMPTY( pxCurrentTimerList ) == pdFALSE )
+      |                               ^~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:1164:27: warning: ‘prvIdleTask’ defined but not used [-Wunused-function]
+ 1164 | static portTASK_FUNCTION( prvIdleTask, pvParameters )
+      |                           ^~~~~~~~~~~
+../Common/include/common.h:25:59: note: in definition of macro ‘portTASK_FUNCTION’
+   25 | #define portTASK_FUNCTION( vFunction, pvParameters ) void vFunction( void *pvParameters )
+      |                                                           ^~~~~~~~~
+../Softtime/src/time.c:527:55: error: ‘pdFALSE’ undeclared (first use in this function)
+  527 |     while( listLIST_IS_EMPTY( pxCurrentTimerList ) == pdFALSE )
+      |                                                       ^~~~~~~
+../schedule/src/task.c:851:13: warning: ‘prvAddCurrentTaskToDelayedList’ defined but not used [-Wunused-function]
+  851 | static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:480:13: warning: ‘prvInitialiseTaskLists’ defined but not used [-Wunused-function]
+  480 | static void prvInitialiseTaskLists( void )
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../schedule/src/task.c:21:20: warning: ‘uxTaskNumber’ defined but not used [-Wunused-variable]
+   21 | static UBaseType_t uxTaskNumber                     = ( UBaseType_t ) 0U;
+      |                    ^~~~~~~~~~~~
+../schedule/src/task.c:16:15: warning: ‘xSuspendedTaskList’ defined but not used [-Wunused-variable]
+   16 | static List_t xSuspendedTaskList;
+      |               ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:529:27: warning: implicit declaration of function ‘listGET_ITEM_VALUE_OF_HEAD_ENTRY’ [-Wimplicit-function-declaration]
+  529 |         xNextExpireTime = listGET_ITEM_VALUE_OF_HEAD_ENTRY( pxCurrentTimerList );
+      |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:36:50: error: ‘uint8_t’ undeclared (first use in this function)
+   36 | #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
+      |                                                  ^~~~~~~
+../Softtime/src/time.c:540:35: note: in expansion of macro ‘tmrSTATUS_IS_AUTORELOAD’
+  540 |         if( ( pxTimer->ucStatus & tmrSTATUS_IS_AUTORELOAD ) != 0 )
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:36:60: error: expected ‘)’ before numeric constant
+   36 | #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
+      |                                              ~             ^~~~
+../Softtime/src/time.c:540:35: note: in expansion of macro ‘tmrSTATUS_IS_AUTORELOAD’
+  540 |         if( ( pxTimer->ucStatus & tmrSTATUS_IS_AUTORELOAD ) != 0 )
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Softtime/src/time.c:2:
+../Softtime/include/time.h:3:53: error: ‘BaseType_t’ undeclared (first use in this function)
+    3 | #define tmrCOMMAND_START_DONT_TRACE             ( ( BaseType_t ) 0 )
+      |                                                     ^~~~~~~~~~
+../Softtime/src/time.c:558:58: note: in expansion of macro ‘tmrCOMMAND_START_DONT_TRACE’
+  558 |                 xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/include/time.h:3:66: error: expected ‘)’ before numeric constant
+    3 | #define tmrCOMMAND_START_DONT_TRACE             ( ( BaseType_t ) 0 )
+      |                                                 ~                ^
+../Softtime/src/time.c:558:58: note: in expansion of macro ‘tmrCOMMAND_START_DONT_TRACE’
+  558 |                 xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:558:104: error: ‘NULL’ undeclared (first use in this function)
+  558 |                 xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                                                                                                        ^~~~
+../Softtime/src/time.c:558:104: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+make: *** [Makefile:62: ../schedule/src/task.o] Error 1
+../Softtime/src/time.c:558:110: error: ‘tmrNO_DELAY’ undeclared (first use in this function)
+  558 |                 xResult = xTimerGenericCommand( pxTimer, tmrCOMMAND_START_DONT_TRACE, xNextExpireTime, NULL, tmrNO_DELAY );
+      |                                                                                                              ^~~~~~~~~~~
+../Softtime/src/time.c:565:26: error: ‘pxOverflowTimerList’ undeclared (first use in this function)
+  565 |     pxCurrentTimerList = pxOverflowTimerList;
+      |                          ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:570:35: error: unknown type name ‘TickType_t’
+  570 |                             const TickType_t xTimerPeriodInTicks,
+      |                                   ^~~~~~~~~~
+../Softtime/src/time.c:571:35: error: unknown type name ‘UBaseType_t’
+  571 |                             const UBaseType_t uxAutoReload,
+      |                                   ^~~~~~~~~~~
+../Softtime/src/time.c:569:15: warning: no previous prototype for ‘xTimerCreate’ [-Wmissing-prototypes]
+  569 | TimerHandle_t xTimerCreate( const char * const pcTimerName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+      |               ^~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘xTimerCreate’:
+../Softtime/src/time.c:577:32: warning: implicit declaration of function ‘pvPortMalloc’ [-Wimplicit-function-declaration]
+  577 |     pxNewTimer = ( Timer_t * ) pvPortMalloc( sizeof( Timer_t ) ); /*lint !e9087 !e9079 All values returned by pvPortMalloc() have at least the alignment required by the MCU's stack, and the first member of Timer_t is always a pointer to the timer's mame. */
+      |                                ^~~~~~~~~~~~
+../Softtime/src/time.c:577:18: warning: cast from function call of type ‘int’ to non-matching type ‘Timer_t *’ {aka ‘struct tmrTimerControl *’} [-Wbad-function-cast]
+  577 |     pxNewTimer = ( Timer_t * ) pvPortMalloc( sizeof( Timer_t ) ); /*lint !e9087 !e9079 All values returned by pvPortMalloc() have at least the alignment required by the MCU's stack, and the first member of Timer_t is always a pointer to the timer's mame. */
+      |                  ^
+../Softtime/src/time.c:577:18: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+../Softtime/src/time.c:579:23: error: ‘NULL’ undeclared (first use in this function)
+  579 |     if( pxNewTimer != NULL )
+      |                       ^~~~
+../Softtime/src/time.c:579:23: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:591:1: error: unknown type name ‘BaseType_t’
+  591 | BaseType_t xTimerCreateTimerTask( void )
+      | ^~~~~~~~~~
+../Softtime/src/time.c:591:12: warning: no previous prototype for ‘xTimerCreateTimerTask’ [-Wmissing-prototypes]
+  591 | BaseType_t xTimerCreateTimerTask( void )
+      |            ^~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘xTimerCreateTimerTask’:
+../Softtime/src/time.c:593:5: error: unknown type name ‘BaseType_t’
+  593 |     BaseType_t xReturn = pdFAIL;
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:593:26: error: ‘pdFAIL’ undeclared (first use in this function)
+  593 |     BaseType_t xReturn = pdFAIL;
+      |                          ^~~~~~
+../Softtime/src/time.c:601:9: error: ‘xTimerQueue’ undeclared (first use in this function); did you mean ‘xTimerCreate’?
+  601 |     if( xTimerQueue != NULL )
+      |         ^~~~~~~~~~~
+      |         xTimerCreate
+../Softtime/src/time.c:601:24: error: ‘NULL’ undeclared (first use in this function)
+  601 |     if( xTimerQueue != NULL )
+      |                        ^~~~
+../Softtime/src/time.c:601:24: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+../Softtime/src/time.c:625:27: warning: implicit declaration of function ‘xTaskCreate’; did you mean ‘xTimerCreate’? [-Wimplicit-function-declaration]
+  625 |                 xReturn = xTaskCreate( prvTimerTask,
+      |                           ^~~~~~~~~~~
+      |                           xTimerCreate
+../Softtime/src/time.c:626:40: error: ‘configTIMER_SERVICE_TASK_NAME’ undeclared (first use in this function)
+  626 |                                        configTIMER_SERVICE_TASK_NAME,
+      |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:627:40: error: ‘configTIMER_TASK_STACK_DEPTH’ undeclared (first use in this function)
+  627 |                                        configTIMER_TASK_STACK_DEPTH,
+      |                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:629:44: error: ‘UBaseType_t’ undeclared (first use in this function)
+  629 |                                        ( ( UBaseType_t ) configTIMER_TASK_PRIORITY ) | portPRIVILEGE_BIT,
+      |                                            ^~~~~~~~~~~
+../Softtime/src/time.c:629:57: error: expected ‘)’ before ‘configTIMER_TASK_PRIORITY’
+  629 |                                        ( ( UBaseType_t ) configTIMER_TASK_PRIORITY ) | portPRIVILEGE_BIT,
+      |                                        ~                ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                         )
+../Softtime/src/time.c:629:88: error: ‘portPRIVILEGE_BIT’ undeclared (first use in this function)
+  629 |                                        ( ( UBaseType_t ) configTIMER_TASK_PRIORITY ) | portPRIVILEGE_BIT,
+      |                                                                                        ^~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:630:41: error: ‘xTimerTaskHandle’ undeclared (first use in this function)
+  630 |                                        &xTimerTaskHandle );
+      |                                         ^~~~~~~~~~~~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:641:5: error: unknown type name ‘BaseType_t’
+  641 |     BaseType_t xTimerGenericCommand( TimerHandle_t xTimer,
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:642:40: error: unknown type name ‘BaseType_t’
+  642 |                                  const BaseType_t xCommandID,
+      |                                        ^~~~~~~~~~
+../Softtime/src/time.c:643:40: error: unknown type name ‘TickType_t’
+  643 |                                  const TickType_t xOptionalValue,
+      |                                        ^~~~~~~~~~
+../Softtime/src/time.c:644:34: error: unknown type name ‘BaseType_t’
+  644 |                                  BaseType_t * const pxHigherPriorityTaskWoken,
+      |                                  ^~~~~~~~~~
+../Softtime/src/time.c:645:40: error: unknown type name ‘TickType_t’
+  645 |                                  const TickType_t xTicksToWait )
+      |                                        ^~~~~~~~~~
+../Softtime/src/time.c:681:1: error: unknown type name ‘TickType_t’
+  681 | TickType_t xTimerGetExpiryTime( TimerHandle_t xTimer )
+      | ^~~~~~~~~~
+../Softtime/src/time.c:681:12: warning: no previous prototype for ‘xTimerGetExpiryTime’ [-Wmissing-prototypes]
+  681 | TickType_t xTimerGetExpiryTime( TimerHandle_t xTimer )
+      |            ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘xTimerGetExpiryTime’:
+../Softtime/src/time.c:684:5: error: unknown type name ‘TickType_t’
+  684 |     TickType_t xReturn;
+      |     ^~~~~~~~~~
+../Softtime/src/time.c:686:15: warning: implicit declaration of function ‘listGET_LIST_ITEM_VALUE’ [-Wimplicit-function-declaration]
+  686 |     xReturn = listGET_LIST_ITEM_VALUE( &( pxTimer->xTimerListItem ) );
+      |               ^~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘prvSetNextTimerInterrupt’:
+../Softtime/src/time.c:693:38: error: expected ‘(’ before ‘mtimecmp’
+  693 |     __asm volatile("ld t0,0(%0)"::"r"mtimecmp);
+      |                                      ^~~~~~~~
+      |                                      (
+../Softtime/src/time.c:694:42: error: ‘configTICK_CLOCK_HZ’ undeclared (first use in this function)
+  694 |     __asm volatile("add t0,t0,%0" :: "r"(configTICK_CLOCK_HZ / configTICK_RATE_HZ));
+      |                                          ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:694:64: error: ‘configTICK_RATE_HZ’ undeclared (first use in this function)
+  694 |     __asm volatile("add t0,t0,%0" :: "r"(configTICK_CLOCK_HZ / configTICK_RATE_HZ));
+      |                                                                ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:695:38: error: expected ‘(’ before ‘mtimecmp’
+  695 |     __asm volatile("sd t0,0(%0)"::"r"mtimecmp);
+      |                                      ^~~~~~~~
+      |                                      (
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:701:6: warning: no previous prototype for ‘vPortSetupTimer’ [-Wmissing-prototypes]
+  701 | void vPortSetupTimer(void)
+      |      ^~~~~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘vPortSetupTimer’:
+../Softtime/src/time.c:703:36: error: expected ‘(’ before ‘mtime’
+  703 |   __asm volatile("ld t0,0(%0)"::"r"mtime);
+      |                                    ^~~~~
+      |                                    (
+../Softtime/src/time.c:704:38: error: ‘configTICK_CLOCK_HZ’ undeclared (first use in this function)
+  704 |   __asm volatile("add t0,t0,%0"::"r"(configTICK_CLOCK_HZ / configTICK_RATE_HZ));
+      |                                      ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:704:60: error: ‘configTICK_RATE_HZ’ undeclared (first use in this function)
+  704 |   __asm volatile("add t0,t0,%0"::"r"(configTICK_CLOCK_HZ / configTICK_RATE_HZ));
+      |                                                            ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:705:36: error: expected ‘(’ before ‘mtimecmp’
+  705 |   __asm volatile("sd t0,0(%0)"::"r"mtimecmp);
+      |                                    ^~~~~~~~
+      |                                    (
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:711:6: warning: no previous prototype for ‘vPortSysTickHandler’ [-Wmissing-prototypes]
+  711 | void vPortSysTickHandler( void )
+      |      ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘vPortSysTickHandler’:
+../Softtime/src/time.c:716:9: warning: implicit declaration of function ‘xTaskIncrementTick’ [-Wimplicit-function-declaration]
+  716 |     if( xTaskIncrementTick() != pdFALSE )
+      |         ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:716:33: error: ‘pdFALSE’ undeclared (first use in this function)
+  716 |     if( xTaskIncrementTick() != pdFALSE )
+      |                                 ^~~~~~~
+../Softtime/src/time.c:718:9: warning: implicit declaration of function ‘vTaskSwitchContext’ [-Wimplicit-function-declaration]
+  718 |         vTaskSwitchContext();
+      |         ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: At top level:
+../Softtime/src/time.c:721:13: error: redefinition of ‘prvCheckForValidListAndQueue’
+  721 | static void prvCheckForValidListAndQueue( void )
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:97:13: note: previous definition of ‘prvCheckForValidListAndQueue’ was here
+   97 | static void prvCheckForValidListAndQueue( void )
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c: In function ‘prvCheckForValidListAndQueue’:
+../Softtime/src/time.c:723:7: error: ‘xTimerQueue’ undeclared (first use in this function); did you mean ‘xTimerCreate’?
+  723 |   if( xTimerQueue == NULL )
+      |       ^~~~~~~~~~~
+      |       xTimerCreate
+../Softtime/src/time.c:723:22: error: ‘NULL’ undeclared (first use in this function)
+  723 |   if( xTimerQueue == NULL )
+      |                      ^~~~
+../Softtime/src/time.c:723:22: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+../Softtime/src/time.c:725:25: error: ‘xActiveTimerList1’ undeclared (first use in this function)
+  725 |       vListInitialise( &xActiveTimerList1 );
+      |                         ^~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:726:25: error: ‘xActiveTimerList2’ undeclared (first use in this function)
+  726 |       vListInitialise( &xActiveTimerList2 );
+      |                         ^~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:727:7: error: ‘pxCurrentTimerList’ undeclared (first use in this function)
+  727 |       pxCurrentTimerList = &xActiveTimerList1;
+      |       ^~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:728:7: error: ‘pxOverflowTimerList’ undeclared (first use in this function)
+  728 |       pxOverflowTimerList = &xActiveTimerList2;
+      |       ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:729:37: error: ‘UBaseType_t’ undeclared (first use in this function)
+  729 |       xTimerQueue = xQueueCreate( ( UBaseType_t ) configTIMER_QUEUE_LENGTH, sizeof( DaemonTaskMessage_t ) );
+      |                                     ^~~~~~~~~~~
+../Softtime/src/time.c:729:50: error: expected ‘)’ before ‘configTIMER_QUEUE_LENGTH’
+  729 |       xTimerQueue = xQueueCreate( ( UBaseType_t ) configTIMER_QUEUE_LENGTH, sizeof( DaemonTaskMessage_t ) );
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                  )
+../Softtime/src/time.c:733:15: warning: implicit declaration of function ‘vQueueAddToRegistry’ [-Wimplicit-function-declaration]
+  733 |               vQueueAddToRegistry( xTimerQueue, "TmrQ" );
+      |               ^~~~~~~~~~~~~~~~~~~
+At top level:
+../Softtime/src/time.c:721:13: warning: ‘prvCheckForValidListAndQueue’ defined but not used [-Wunused-function]
+  721 | static void prvCheckForValidListAndQueue( void )
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:516:13: warning: ‘prvSwitchTimerLists’ defined but not used [-Wunused-function]
+  516 | static void prvSwitchTimerLists( void )
+      |             ^~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:290:13: warning: ‘prvProcessReceivedCommands’ defined but not used [-Wunused-function]
+  290 | static void prvProcessReceivedCommands( void )
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:248:13: warning: ‘prvProcessExpiredTimer’ defined but not used [-Wunused-function]
+  248 | static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
+      |             ^~~~~~~~~~~~~~~~~~~~~~
+../Softtime/src/time.c:63:8: warning: ‘portTASK_FUNCTION’ defined but not used [-Wunused-function]
+   63 | static portTASK_FUNCTION( prvTimerTask, pvParameters )
+      |        ^~~~~~~~~~~~~~~~~
+make: *** [Makefile:62: ../Softtime/src/time.o] Error 1

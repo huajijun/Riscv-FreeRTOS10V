@@ -1,6 +1,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#define queueYIELD_IF_USING_PREEMPTION() portYIELD_WITHIN_API()
 struct QueueDefinition; /* Using old naming convention so as not to break kernel aware debuggers. */
 typedef struct QueueDefinition   * QueueHandle_t;
 
@@ -41,22 +42,22 @@ typedef struct QueueDefinition   * QueueSetMemberHandle_t;
 BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
                               const void * const pvItemToQueue,
                               TickType_t xTicksToWait,
-                              const BaseType_t xCopyPosition ) PRIVILEGED_FUNCTION;
+                              const BaseType_t xCopyPosition ) ;
 
 BaseType_t xQueuePeek( QueueHandle_t xQueue,
                        void * const pvBuffer,
-                       TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
+                       TickType_t xTicksToWait ) ;
 
 BaseType_t xQueuePeekFromISR( QueueHandle_t xQueue,
-                              void * const pvBuffer ) PRIVILEGED_FUNCTION;
+                              void * const pvBuffer ) ;
 
 BaseType_t xQueueReceive( QueueHandle_t xQueue,
                           void * const pvBuffer,
-                          TickType_t xTicksToWait ) PRIVILEGED_FUNCTION;
+                          TickType_t xTicksToWait ) ;
 
-UBaseType_t uxQueueMessagesWaiting( const QueueHandle_t xQueue ) PRIVILEGED_FUNCTION;
+UBaseType_t uxQueueMessagesWaiting( const QueueHandle_t xQueue ) ;
 
-void vQueueDelete( QueueHandle_t xQueue ) PRIVILEGED_FUNCTION;
+void vQueueDelete( QueueHandle_t xQueue ) ;
 
 
 #define xQueueSendToFrontFromISR( xQueue, pvItemToQueue, pxHigherPriorityTaskWoken ) \
@@ -71,17 +72,17 @@ void vQueueDelete( QueueHandle_t xQueue ) PRIVILEGED_FUNCTION;
 BaseType_t xQueueGenericSendFromISR( QueueHandle_t xQueue,
                                      const void * const pvItemToQueue,
                                      BaseType_t * const pxHigherPriorityTaskWoken,
-                                     const BaseType_t xCopyPosition ) PRIVILEGED_FUNCTION;
+                                     const BaseType_t xCopyPosition ) ;
 BaseType_t xQueueGiveFromISR( QueueHandle_t xQueue,
-                              BaseType_t * const pxHigherPriorityTaskWoken ) PRIVILEGED_FUNCTION;
+                              BaseType_t * const pxHigherPriorityTaskWoken ) ;
 
 
 void vQueueAddToRegistry( QueueHandle_t xQueue,
-                              const char * pcQueueName ) PRIVILEGED_FUNCTION;
+                              const char * pcQueueName ) ;
 
 
 QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
                                        const UBaseType_t uxItemSize,
-                                       const uint8_t ucQueueType ) PRIVILEGED_FUNCTION;
+                                       const uint8_t ucQueueType ) ;
 
 #endif

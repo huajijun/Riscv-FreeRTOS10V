@@ -1,3 +1,29 @@
+#include <task.h>
+#include <list.h>
+#include <common.h>
+#define portBYTE_ALIGNMENT_MASK (0x001f)                                
+static volatile BaseType_t xSchedulerRunning        = pdFALSE;          
+static volatile UBaseType_t uxTopReadyPriority      = tskIDLE_PRIORITY; 
+static List_t pxReadyTasksLists[ configMAX_PRIORITIES ];                
+static List_t xDelayedTaskList1;                                        
+static List_t xDelayedTaskList2;                                        
+static List_t * volatile pxDelayedTaskList;                             
+static List_t * volatile pxOverflowDelayedTaskList;                     
+static List_t xPendingReadyList;       
+static volatile UBaseType_t uxCurrentNumberOfTasks  = ( UBaseType_t ) 0U;
+static volatile TickType_t xTickCount               = ( TickType_t ) 0U; 
+                                       
+static List_t xSuspendedTaskList;      
+                                       
+static volatile UBaseType_t uxPendedTicks           = ( UBaseType_t ) 0U;
+static volatile BaseType_t xYieldPending            = pdFALSE;           
+static volatile BaseType_t xNumOfOverflows          = ( BaseType_t ) 0;  
+static UBaseType_t uxTaskNumber                     = ( UBaseType_t ) 0U;
+static volatile TickType_t xNextTaskUnblockTime     = ( TickType_t ) 0U; 
+TCB_t * volatile pxCurrentTCB = NULL;                                    
+
+
+
     #define taskSELECT_HIGHEST_PRIORITY_TASK()                                \
     {                                                                         \
         UBaseType_t uxTopPriority = uxTopReadyPriority;                       \
@@ -5,7 +31,6 @@
         /* Find the highest priority queue that contains ready tasks. */      \
         while( listLIST_IS_EMPTY( &( pxReadyTasksLists[ uxTopPriority ] ) ) ) \
         {                                                                     \
-            configASSERT( uxTopPriority );                                    \
             --uxTopPriority;                                                  \
         }                                                                     \
                                                                               \
@@ -168,7 +193,6 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
             pxTopOfStack = ( StackType_t * ) ( ( ( portPOINTER_SIZE_TYPE ) pxTopOfStack ) & ( ~( ( portPOINTER_SIZE_TYPE ) portBYTE_ALIGNMENT_MASK ) ) ); /*lint !e923 !e9033 !e9078 MISRA exception.  Avoiding casts between pointers and integers is not practical.  Size differences accounted for using portPOINTER_SIZE_TYPE type.  Checked by assert(). */
 
             /* Check the alignment of the calculated top of stack is correct. */
-            configASSERT( ( ( ( portPOINTER_SIZE_TYPE ) pxTopOfStack & ( portPOINTER_SIZE_TYPE ) portBYTE_ALIGNMENT_MASK ) == 0UL ) );
 
             #if ( configRECORD_STACK_HIGH_ADDRESS == 1 )
                 {
@@ -182,8 +206,6 @@ static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
         {
             pxTopOfStack = pxNewTCB->pxStack;
 
-            /* Check the alignment of the stack buffer is correct. */
-            configASSERT( ( ( ( portPOINTER_SIZE_TYPE ) pxNewTCB->pxStack & ( portPOINTER_SIZE_TYPE ) portBYTE_ALIGNMENT_MASK ) == 0UL ) );
 
             /* The other extreme of the stack space is required if stack checking is
              * performed. */
@@ -611,10 +633,6 @@ void vTaskStartScheduler( void )
             {
                 xReturn = xTimerCreateTimerTask();
             }
-            else
-            {
-                mtCOVERAGE_TEST_MARKER();
-            }
         }
     #endif /* configUSE_TIMERS */
 
@@ -658,7 +676,6 @@ void vTaskStartScheduler( void )
          * FreeRTOSConfig.h file. */
         portCONFIGURE_TIMER_FOR_RUN_TIME_STATS();
 
-        traceTASK_SWITCHED_IN();
 
         /* Setting up the timer tick is hardware specific and thus in the
          * portable interface. */
@@ -677,7 +694,6 @@ void vTaskStartScheduler( void )
         /* This line will only be reached if the kernel could not be started,
          * because there was not enough FreeRTOS heap to create the idle task
          * or the timer task. */
-        configASSERT( xReturn != errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY );
     }
 
     /* Prevent compiler warnings if INCLUDE_xTaskGetIdleTaskHandle is set to 0,
@@ -817,7 +833,6 @@ BaseType_t xTaskCheckForTimeOut( TimeOut_t * const pxTimeOut,
 void vTaskPlaceOnEventList( List_t * const pxEventList,
                             const TickType_t xTicksToWait )
 {
-    configASSERT( pxEventList );
 
     /* THIS FUNCTION MUST BE CALLED WITH EITHER INTERRUPTS DISABLED OR THE
      * SCHEDULER SUSPENDED AND THE QUEUE BEING ACCESSED LOCKED. */
@@ -855,10 +870,6 @@ static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
         /* The current task must be in a ready list, so there is no need to
          * check, and the port reset macro can be called directly. */
         portRESET_READY_PRIORITY( pxCurrentTCB->uxPriority, uxTopReadyPriority ); /*lint !e931 pxCurrentTCB cannot change as it is the calling task.  pxCurrentTCB->uxPriority and uxTopReadyPriority cannot change as called with scheduler suspended or in a critical section. */
-    }
-    else
-    {
-        mtCOVERAGE_TEST_MARKER();
     }
 
     #if ( INCLUDE_vTaskSuspend == 1 )
@@ -933,14 +944,231 @@ static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
                 {
                     xNextTaskUnblockTime = xTimeToWake;
                 }
+            }
+
+            /* Avoid compiler warning when INCLUDE_vTaskSuspend is not 1. */
+        }
+    #endif /* INCLUDE_vTaskSuspend */
+}
+
+
+BaseType_t xTaskIncrementTick( void )
+{
+    TCB_t * pxTCB;
+    TickType_t xItemValue;
+    BaseType_t xSwitchRequired = pdFALSE;
+
+    /* Called by the portable layer each time a tick interrupt occurs.
+     * Increments the tick then checks to see if the new tick value will cause any
+     * tasks to be unblocked. */
+    traceTASK_INCREMENT_TICK( xTickCount );
+
+    if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
+    {
+        /* Minor optimisation.  The tick count cannot change in this
+         * block. */
+        const TickType_t xConstTickCount = xTickCount + ( TickType_t ) 1;
+
+        /* Increment the RTOS tick, switching the delayed and overflowed
+         * delayed lists if it wraps to 0. */
+        xTickCount = xConstTickCount;
+
+        if( xConstTickCount == ( TickType_t ) 0U ) /*lint !e774 'if' does not always evaluate to false as it is looking for an overflow. */
+        {
+            taskSWITCH_DELAYED_LISTS();
+        }
+        else
+        {
+            mtCOVERAGE_TEST_MARKER();
+        }
+
+        /* See if this tick has made a timeout expire.  Tasks are stored in
+         * the  queue in the order of their wake time - meaning once one task
+         * has been found whose block time has not expired there is no need to
+         * look any further down the list. */
+        if( xConstTickCount >= xNextTaskUnblockTime )
+        {
+            for( ; ; )
+            {
+                if( listLIST_IS_EMPTY( pxDelayedTaskList ) != pdFALSE )
+                {
+                    /* The delayed list is empty.  Set xNextTaskUnblockTime
+                     * to the maximum possible value so it is extremely
+                     * unlikely that the
+                     * if( xTickCount >= xNextTaskUnblockTime ) test will pass
+                     * next time through. */
+                    xNextTaskUnblockTime = portMAX_DELAY; /*lint !e961 MISRA exception as the casts are only redundant for some ports. */
+                    break;
+                }
+                else
+                {
+                    /* The delayed list is not empty, get the value of the
+                     * item at the head of the delayed list.  This is the time
+                     * at which the task at the head of the delayed list must
+                     * be removed from the Blocked state. */
+                    pxTCB = listGET_OWNER_OF_HEAD_ENTRY( pxDelayedTaskList ); /*lint !e9079 void * is used as this macro is used with timers and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
+                    xItemValue = listGET_LIST_ITEM_VALUE( &( pxTCB->xStateListItem ) );
+
+                    if( xConstTickCount < xItemValue )
+                    {
+                        /* It is not time to unblock this item yet, but the
+                         * item value is the time at which the task at the head
+                         * of the blocked list must be removed from the Blocked
+                         * state -  so record the item value in
+                         * xNextTaskUnblockTime. */
+                        xNextTaskUnblockTime = xItemValue;
+                        break; /*lint !e9011 Code structure here is deedmed easier to understand with multiple breaks. */
+                    }
+                    else
+                    {
+                        mtCOVERAGE_TEST_MARKER();
+                    }
+
+                    /* It is time to remove the item from the Blocked state. */
+                    ( void ) uxListRemove( &( pxTCB->xStateListItem ) );
+
+                    /* Is the task waiting on an event also?  If so remove
+                     * it from the event list. */
+                    if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) ) != NULL )
+                    {
+                        ( void ) uxListRemove( &( pxTCB->xEventListItem ) );
+                    }
+                    else
+                    {
+                        mtCOVERAGE_TEST_MARKER();
+                    }
+
+                    /* Place the unblocked task into the appropriate ready
+                     * list. */
+                    prvAddTaskToReadyList( pxTCB );
+
+                    /* A task being unblocked cannot cause an immediate
+                     * context switch if preemption is turned off. */
+                    #if ( configUSE_PREEMPTION == 1 )
+                        {
+                            /* Preemption is on, but a context switch should
+                             * only be performed if the unblocked task has a
+                             * priority that is equal to or higher than the
+                             * currently executing task. */
+                            if( pxTCB->uxPriority >= pxCurrentTCB->uxPriority )
+                            {
+                                xSwitchRequired = pdTRUE;
+                            }
+                            else
+                            {
+                                mtCOVERAGE_TEST_MARKER();
+                            }
+                        }
+                    #endif /* configUSE_PREEMPTION */
+                }
+            }
+        }
+
+        /* Tasks of equal priority to the currently running task will share
+         * processing time (time slice) if preemption is on, and the application
+         * writer has not explicitly turned time slicing off. */
+        #if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) )
+            {
+                if( listCURRENT_LIST_LENGTH( &( pxReadyTasksLists[ pxCurrentTCB->uxPriority ] ) ) > ( UBaseType_t ) 1 )
+                {
+                    xSwitchRequired = pdTRUE;
+                }
                 else
                 {
                     mtCOVERAGE_TEST_MARKER();
                 }
             }
+        #endif /* ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) ) */
 
-            /* Avoid compiler warning when INCLUDE_vTaskSuspend is not 1. */
-            ( void ) xCanBlockIndefinitely;
-        }
-    #endif /* INCLUDE_vTaskSuspend */
+        #if ( configUSE_TICK_HOOK == 1 )
+            {
+                /* Guard against the tick hook being called when the pended tick
+                 * count is being unwound (when the scheduler is being unlocked). */
+                if( xPendedTicks == ( TickType_t ) 0 )
+                {
+                    vApplicationTickHook();
+                }
+                else
+                {
+                    mtCOVERAGE_TEST_MARKER();
+                }
+            }
+        #endif /* configUSE_TICK_HOOK */
+
+        #if ( configUSE_PREEMPTION == 1 )
+            {
+                if( xYieldPending != pdFALSE )
+                {
+                    xSwitchRequired = pdTRUE;
+                }
+                else
+                {
+                    mtCOVERAGE_TEST_MARKER();
+                }
+            }
+        #endif /* configUSE_PREEMPTION */
+    }
+    else
+    {
+        ++xPendedTicks;
+
+        /* The tick hook gets called at regular intervals, even if the
+         * scheduler is locked. */
+        #if ( configUSE_TICK_HOOK == 1 )
+            {
+                vApplicationTickHook();
+            }
+        #endif
+    }
+
+    return xSwitchRequired;
 }
+
+TickType_t xTaskGetTickCount( void )
+{
+    TickType_t xTicks;
+ 
+    /* Critical section required if running on a 16 bit processor. */
+    portTICK_TYPE_ENTER_CRITICAL();
+    {
+        xTicks = xTickCount;
+    }
+    portTICK_TYPE_EXIT_CRITICAL();
+ 
+    return xTicks;
+}               
+
+BaseType_t xTaskGetSchedulerState( void )
+{
+    BaseType_t xReturn;
+
+    if( xSchedulerRunning == pdFALSE )
+    {
+        xReturn = taskSCHEDULER_NOT_STARTED;
+    }
+    else     
+    {
+        if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
+        {    
+            xReturn = taskSCHEDULER_RUNNING;
+        }    
+        else 
+        {    
+            xReturn = taskSCHEDULER_SUSPENDED;
+        }    
+    }
+
+    return xReturn;
+}                                                               
+
+static portTASK_FUNCTION( prvIdleTask, pvParameters )
+{
+    for(;;)
+    {
+        if( listCURRENT_LIST_LENGTH( &( pxReadyTasksLists[ tskIDLE_PRIORITY ] ) ) > ( UBaseType_t ) 1 )
+        {
+            taskYIELD();
+        }
+    }
+}                                                                                                       
+

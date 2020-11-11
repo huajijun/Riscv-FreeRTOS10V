@@ -11,9 +11,9 @@ CRT0	= arch/boot.S
 
 FREERTOS_SOURCE_DIR	= ../kernel
 
-SCHEDULE = ../scheduling/src
-TIMER = ../Timer/src
-MEMORY = ../memory_manager/src
+SCHEDULE = ../schedule/src
+TIMER = ../Softtime/src
+MEMORY = ../Memory/src
 COMMON = ../Common/src
 
 
@@ -23,26 +23,26 @@ WARNINGS= -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-alig
 INCLUDES = \
 	-I. \
 	-I../Common/include \
-	-I../memory_manager/include \
-	-I../scheduling/include \
-	-I../Timer/include \
+	-I../Memory/include \
+	-I../schedule/include \
+	-I../Softtime/include \
 
 
 
 FREERTOS_SRC = \
-	$(COMMON)/list2.c \
-	$(COMMON)/queue2.c \
+	$(COMMON)/list.c \
+	$(COMMON)/queue.c \
 	$(SCHEDULE)/task.c \
 	$(TIMER)/time.c \
-	$(MEMORY)/heap2.c \
+	$(MEMORY)/heap.c \
 	$(COMMON)/common.c \
 	$(FREERTOS_SOURCE_DIR)/main.c
 
 
 
 PORT_ASM =	\
-	$(FREERTOS_SOURCE_DIR)/stage0.S  \
-	$(FREERTOS_SOURCE_DIR)/para.S
+	$(FREERTOS_SOURCE_DIR)/boot.S  \
+	$(FREERTOS_SOURCE_DIR)/Content.S
 
 
 CFLAGS = \

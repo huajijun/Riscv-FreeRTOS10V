@@ -1,5 +1,5 @@
-#include <heap2.h>
-#include <queue2.h>
+#include <heap.h>
+#include <queue.h>
 #include <common.h>
 #include <task.h>
 #include <time.h>
