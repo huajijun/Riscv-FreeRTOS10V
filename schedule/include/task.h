@@ -1,4 +1,5 @@
 #include <common.h>
+#include <list.h>
 struct tskTaskControlBlock;     /* The old naming convention is used to prevent breaking kernel aware debuggers. */
 typedef struct tskTaskControlBlock * TaskHandle_t;
 
@@ -8,6 +9,7 @@ typedef struct xTIME_OUT
     BaseType_t xOverflowCount;                                                        
     TickType_t xTimeOnEntering;                                                       
 } TimeOut_t;
+typedef void (*TaskFunction_t)( void * );
             
 /*          
  * Defines the memory ranges allocated to the task when an MPU is used.               

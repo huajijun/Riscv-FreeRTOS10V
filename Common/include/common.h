@@ -1,6 +1,5 @@
-#define portMAX_DELAY ( TickType_t ) 0xffffffffUL
 #define uint32_t unsigned int
-typedef unsigned long UBaseType_t;
+typedef unsigned long   UBaseType_t;
 typedef uint32_t TickType_t;
 #define int8_t  char
 #define uint8_t  unsigned char
@@ -24,3 +23,6 @@ typedef long BaseType_t;
 #define configINITIAL_TICK_COUNT    0
 #define errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY   ( -1 )
 #define portTASK_FUNCTION( vFunction, pvParameters ) void vFunction( void *pvParameters )
+#define NULL    0
+#define configSTACK_DEPTH_TYPE    uint16_t
+#define portMAX_DELAY ( TickType_t ) 0xffffffffUL
