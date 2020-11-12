@@ -2,6 +2,25 @@
 #include <list.h>
 #include <queue.h>
 #include <time.h>
+typedef struct tmrTimerControl                 
+{              
+    const char * pcTimerName;                  
+    ListItem_t xTimerListItem;                 
+    TickType_t xTimerPeriodInTicks;            
+    void * pvTimerID;                          
+    TimerCallbackFunction_t pxCallbackFunction;
+    #if ( configUSE_TRACE_FACILITY == 1 )
+        UBaseType_t uxTimerNumber;             
+    #endif     
+    uint8_t ucStatus;                          
+} xTIMER;      
+
+typedef xTIMER Timer_t;
+typedef struct tmrTimerParameters       
+{                                       
+    TickType_t xMessageValue; 
+    Timer_t * pxTimer;        
+} TimerParameter_t;                     
 typedef struct tmrTimerQueueMessage
 {
         BaseType_t xMessageID; /*<< The command being sent to the timer service task. */
@@ -17,7 +36,6 @@ typedef struct tmrTimerQueueMessage
         } u;
 } DaemonTaskMessage_t;
 
-static void prvCheckForValidListAndQueue( void );
 static void prvCheckForValidListAndQueue( void );
 static TickType_t prvGetNextExpireTime( BaseType_t * const pxListWasEmpty );
 static void prvInitialiseNewTimer( const char * const pcTimerName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
@@ -41,31 +59,12 @@ static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime,
 static TickType_t prvSampleTimeNow( BaseType_t * const pxTimerListsWereSwitched );
 static void prvSetNextTimerInterrupt(void);
 static void prvSwitchTimerLists( void );
-static void prvTimerTask( void *pvParameters );
+BaseType_t xTimerGenericCommand( TimerHandle_t xTimer,const BaseType_t xCommandID,const TickType_t xOptionalValue,BaseType_t * const pxHigherPriorityTaskWoken,const TickType_t xTicksToWait );
 
 
 
 #define portTASK_FUNCTION_PROTO( vFunction, pvParameters )    void vFunction( void * pvParameters )
 
-typedef struct tmrTimerControl                 
-{              
-    const char * pcTimerName;                  
-    ListItem_t xTimerListItem;                 
-    TickType_t xTimerPeriodInTicks;            
-    void * pvTimerID;                          
-    TimerCallbackFunction_t pxCallbackFunction;
-    #if ( configUSE_TRACE_FACILITY == 1 )
-        UBaseType_t uxTimerNumber;             
-    #endif     
-    uint8_t ucStatus;                          
-} xTIMER;      
-
-typedef xTIMER Timer_t;
-typedef struct tmrTimerParameters       
-{                                       
-    TickType_t xMessageValue; 
-    Timer_t * pxTimer;        
-} TimerParameter_t;                     
                                         
                                         
 typedef struct tmrCallbackParameters    
@@ -75,7 +74,8 @@ typedef struct tmrCallbackParameters
     uint32_t ulParameter2;              
 } CallbackParameters_t;                 
 
-
+#define configTIMER_SERVICE_TASK_NAME    "Tmr Svc"
+#define tmrNO_DELAY		( TickType_t ) 0U
 #define tmrSTATUS_IS_ACTIVE                  ( ( uint8_t ) 0x01 )
 #define tmrSTATUS_IS_STATICALLY_ALLOCATED    ( ( uint8_t ) 0x02 )
 #define tmrSTATUS_IS_AUTORELOAD              ( ( uint8_t ) 0x04 )
@@ -90,27 +90,6 @@ static TaskHandle_t xTimerTaskHandle = NULL;
 
 
             
-
-static void prvTimerTask( void *pvParameters )                                  
-{             
-    TickType_t xNextExpireTime;
-    BaseType_t xListWasEmpty;
-    for( ;; ) 
-    {         
-        /* Query the timers list to see if it contains any timers, and if so,
-        obtain the time at which the next timer will expire. */
-        xNextExpireTime = prvGetNextExpireTime( &xListWasEmpty );
-              
-        /* If a timer has expired, process it.  Otherwise, block this task
-        until either a timer does expire, or a command is received. */
-        prvProcessTimerOrBlockTask( xNextExpireTime, xListWasEmpty );
-              
-        /* Empty the command queue. */
-        prvProcessReceivedCommands();
-    }         
-}             
-                    
-
 
 
 static portTASK_FUNCTION( prvTimerTask, pvParameters )
@@ -144,47 +123,6 @@ static portTASK_FUNCTION( prvTimerTask, pvParameters )
         /* Empty the command queue. */
         prvProcessReceivedCommands();
     }
-}
-static void prvCheckForValidListAndQueue( void )
-{
-    /* Check that the list from which active timers are referenced, and the
-     * queue used to communicate with the timer service, have been
-     * initialised. */
-    taskENTER_CRITICAL();
-    {
-        if( xTimerQueue == NULL )
-        {
-            vListInitialise( &xActiveTimerList1 );
-            vListInitialise( &xActiveTimerList2 );
-            pxCurrentTimerList = &xActiveTimerList1;
-            pxOverflowTimerList = &xActiveTimerList2;
-
-            #if ( configSUPPORT_STATIC_ALLOCATION == 1 )
-                {
-                    /* The timer queue is allocated statically in case
-                     * configSUPPORT_DYNAMIC_ALLOCATION is 0. */
-                    PRIVILEGED_DATA static StaticQueue_t xStaticTimerQueue;                                                                          /*lint !e956 Ok to declare in this manner to prevent additional conditional compilation guards in other locations. */
-                    PRIVILEGED_DATA static uint8_t ucStaticTimerQueueStorage[ ( size_t ) configTIMER_QUEUE_LENGTH * sizeof( DaemonTaskMessage_t ) ]; /*lint !e956 Ok to declare in this manner to prevent additional conditional compilation guards in other locations. */
-
-                    xTimerQueue = xQueueCreateStatic( ( UBaseType_t ) configTIMER_QUEUE_LENGTH, ( UBaseType_t ) sizeof( DaemonTaskMessage_t ), &( ucStaticTimerQueueStorage[ 0 ] ), &xStaticTimerQueue );
-                }
-            #else
-                {
-                    xTimerQueue = xQueueCreate( ( UBaseType_t ) configTIMER_QUEUE_LENGTH, sizeof( DaemonTaskMessage_t ) );
-                }
-            #endif /* if ( configSUPPORT_STATIC_ALLOCATION == 1 ) */
-
-            #if ( configQUEUE_REGISTRY_SIZE > 0 )
-                {
-                    if( xTimerQueue != NULL )
-                    {
-                        vQueueAddToRegistry( xTimerQueue, "TmrQ" );
-                    }
-                }
-            #endif /* configQUEUE_REGISTRY_SIZE */
-        }
-    }
-    taskEXIT_CRITICAL();
 }
 
 
@@ -298,7 +236,6 @@ static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
      * been performed to ensure the list is not empty. */
 
     ( void ) uxListRemove( &( pxTimer->xTimerListItem ) );
-    traceTIMER_EXPIRED( pxTimer );
 
     /* If the timer is an auto-reload timer then calculate the next
      * expiry time and re-insert the timer in the list of active timers. */
@@ -365,7 +302,6 @@ static void prvProcessReceivedCommands( void )
                 ( void ) uxListRemove( &( pxTimer->xTimerListItem ) );
             }
 
-            traceTIMER_COMMAND_RECEIVED( pxTimer, xMessage.xMessageID, xMessage.u.xTimerParameters.xMessageValue );
 
             /* In this case the xTimerListsWereSwitched parameter is not used, but
              *  it must be present in the function call.  prvSampleTimeNow() must be
@@ -390,7 +326,6 @@ static void prvProcessReceivedCommands( void )
                         /* The timer expired before it was added to the active
                          * timer list.  Process it now. */
                         pxTimer->pxCallbackFunction( ( TimerHandle_t ) pxTimer );
-                        traceTIMER_EXPIRED( pxTimer );
 
                         if( ( pxTimer->ucStatus & tmrSTATUS_IS_AUTORELOAD ) != 0 )
                         {
@@ -516,7 +451,7 @@ static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime,
 static TickType_t prvSampleTimeNow( BaseType_t * const pxTimerListsWereSwitched )
 {
     TickType_t xTimeNow;
-    PRIVILEGED_DATA static TickType_t xLastTime = ( TickType_t ) 0U; /*lint !e956 Variable is only accessible to one task. */
+    static TickType_t xLastTime = ( TickType_t ) 0U; /*lint !e956 Variable is only accessible to one task. */
 
     xTimeNow = xTaskGetTickCount();
 

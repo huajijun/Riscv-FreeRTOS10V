@@ -1,3 +1,4 @@
+#include <common.h>
 #ifndef QUEUE_H
 #define QUEUE_H
 
@@ -47,21 +48,13 @@ typedef struct QueueDefinition   * QueueSetMemberHandle_t;
 #define xQueueOverwrite( xQueue, pvItemToQueue ) \
     xQueueGenericSend( ( xQueue ), ( pvItemToQueue ), 0, queueOVERWRITE )
 
-BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
-                              const void * const pvItemToQueue,
-                              TickType_t xTicksToWait,
-                              const BaseType_t xCopyPosition ) ;
+BaseType_t xQueueGenericSend( QueueHandle_t xQueue,const void * const pvItemToQueue,TickType_t xTicksToWait,const BaseType_t xCopyPosition );
 
-BaseType_t xQueuePeek( QueueHandle_t xQueue,
-                       void * const pvBuffer,
-                       TickType_t xTicksToWait ) ;
+BaseType_t xQueuePeek( QueueHandle_t xQueue,void * const pvBuffer,TickType_t xTicksToWait );
 
-BaseType_t xQueuePeekFromISR( QueueHandle_t xQueue,
-                              void * const pvBuffer ) ;
+BaseType_t xQueuePeekFromISR( QueueHandle_t xQueue,void * const pvBuffer );
 
-BaseType_t xQueueReceive( QueueHandle_t xQueue,
-                          void * const pvBuffer,
-                          TickType_t xTicksToWait ) ;
+BaseType_t xQueueReceive( QueueHandle_t xQueue,void * const pvBuffer,TickType_t xTicksToWait );
 
 UBaseType_t uxQueueMessagesWaiting( const QueueHandle_t xQueue ) ;
 
@@ -77,32 +70,20 @@ void vQueueDelete( QueueHandle_t xQueue ) ;
 #define xQueueSendFromISR( xQueue, pvItemToQueue, pxHigherPriorityTaskWoken ) \
     xQueueGenericSendFromISR( ( xQueue ), ( pvItemToQueue ), ( pxHigherPriorityTaskWoken ), queueSEND_TO_BACK )
 
-BaseType_t xQueueGenericSendFromISR( QueueHandle_t xQueue,
-                                     const void * const pvItemToQueue,
-                                     BaseType_t * const pxHigherPriorityTaskWoken,
-                                     const BaseType_t xCopyPosition ) ;
-BaseType_t xQueueGiveFromISR( QueueHandle_t xQueue,
-                              BaseType_t * const pxHigherPriorityTaskWoken ) ;
+BaseType_t xQueueGenericSendFromISR( QueueHandle_t xQueue,const void * const pvItemToQueue,BaseType_t * const pxHigherPriorityTaskWoken,const BaseType_t xCopyPosition );
+BaseType_t xQueueGiveFromISR( QueueHandle_t xQueue,BaseType_t * const pxHigherPriorityTaskWoken );
 
 
-void vQueueAddToRegistry( QueueHandle_t xQueue,
-                              const char * pcQueueName ) ;
+void vQueueAddToRegistry( QueueHandle_t xQueue,const char * pcQueueName );
 
 
-QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
-                                       const UBaseType_t uxItemSize,
-                                       const uint8_t ucQueueType ) ;
+QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,const uint8_t ucQueueType );
 
 
-BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
-                              const void * const pvItemToQueue,
-                              TickType_t xTicksToWait,
-                              const BaseType_t xCopyPosition )
+BaseType_t xQueueGenericSend( QueueHandle_t xQueue,const void * const pvItemToQueue,TickType_t xTicksToWait,const BaseType_t xCopyPosition );
 
 
-BaseType_t xQueueReceive( QueueHandle_t xQueue,
-                          void * const pvBuffer,
-                          TickType_t xTicksToWait )
+BaseType_t xQueueReceive( QueueHandle_t xQueue,void * const pvBuffer,TickType_t xTicksToWait);
     
 
 #endif

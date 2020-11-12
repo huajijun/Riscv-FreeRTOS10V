@@ -1,4 +1,6 @@
 #include <task.h>
+#ifndef TIME_ZZY
+#define TIME_ZZY
 #define tmrCOMMAND_EXECUTE_CALLBACK_FROM_ISR    ( ( BaseType_t ) -2 )
 #define tmrCOMMAND_EXECUTE_CALLBACK             ( ( BaseType_t ) -1 )
 #define tmrCOMMAND_START_DONT_TRACE             ( ( BaseType_t ) 0 )
@@ -17,6 +19,8 @@
 #define CSR_MTVEC           (0x305)
 #define mtimecmp	    (0x2004000)
 #define mtime               (0x200bff8)
+#define configTICK_RATE_HZ          ( ( TickType_t ) 1000 )
+#define configTICK_CLOCK_HZ         ( ( unsigned long ) 1000000 )
 
 
 
@@ -31,3 +35,4 @@ typedef void (* PendedFunction_t)( void *,
 #define xTimerStart( xTimer, xTicksToWait ) \
     xTimerGenericCommand( ( xTimer ), tmrCOMMAND_START, ( xTaskGetTickCount() ), NULL, ( xTicksToWait ) )
 
+#endif

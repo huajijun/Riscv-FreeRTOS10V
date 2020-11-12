@@ -3,6 +3,8 @@
 #include <common.h>
 #include <FreeRTOS.h>
 #include <task.h>
+#define queueUNLOCKED             ( ( int8_t ) -1 )
+#define queueLOCKED_UNMODIFIED    ( ( int8_t ) 0 )
 typedef struct QueuePointers
 {
     int8_t * pcTail;     /*< Points to the byte at the end of the queue storage area.  Once more byte is allocated than necessary to store the queue items, this is used as a marker. */
@@ -50,17 +52,24 @@ typedef struct QueueDefinition /* The old naming convention is used to prevent b
         uint8_t ucQueueType;
     #endif
 } xQUEUE;
+typedef struct QUEUE_REGISTRY_ITEM
+    {
+        const char * pcQueueName; /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+        QueueHandle_t xHandle;
+    } xQueueRegistryItem;
+
+    typedef xQueueRegistryItem QueueRegistryItem_t;
 
 #define prvLockQueue( pxQueue )								\
 	taskENTER_CRITICAL();									\
 	{														\
-		if( ( pxQueue )->xRxLock == queueUNLOCKED )			\
+		if( ( pxQueue )->cRxLock == queueUNLOCKED )			\
 		{													\
-			( pxQueue )->xRxLock = queueLOCKED_UNMODIFIED;	\
+			( pxQueue )->cRxLock = queueLOCKED_UNMODIFIED;	\
 		}													\
-		if( ( pxQueue )->xTxLock == queueUNLOCKED )			\
+		if( ( pxQueue )->cTxLock == queueUNLOCKED )			\
 		{													\
-			( pxQueue )->xTxLock = queueLOCKED_UNMODIFIED;	\
+			( pxQueue )->cTxLock = queueLOCKED_UNMODIFIED;	\
 		}													\
 	}														\
 	taskEXIT_CRITICAL()
@@ -70,6 +79,7 @@ typedef struct QueueDefinition /* The old naming convention is used to prevent b
  * name below to enable the use of older kernel aware debuggers. */
 typedef xQUEUE Queue_t;
 
+static void prvUnlockQueue( Queue_t * const pxQueue );
 static void prvCopyDataFromQueue( Queue_t * const pxQueue,void * const pvBuffer );
 static BaseType_t prvCopyDataToQueue( Queue_t * const pxQueue,const void * pvItemToQueue,const BaseType_t xPosition );
 static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,uint8_t * pucQueueStorage,const uint8_t ucQueueType,Queue_t * pxNewQueue );
@@ -79,6 +89,8 @@ QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,const UBaseTy
 BaseType_t xQueueGenericReset( QueueHandle_t xQueue,BaseType_t xNewQueue );
 BaseType_t xQueueGenericSend( QueueHandle_t xQueue,const void * const pvItemToQueue,TickType_t xTicksToWait,const BaseType_t xCopyPosition );
 BaseType_t xQueueReceive( QueueHandle_t xQueue,void * const pvBuffer,TickType_t xTicksToWait );
+
+QueueRegistryItem_t xQueueRegistry[ configQUEUE_REGISTRY_SIZE ];
 
 BaseType_t xQueueGenericReset( QueueHandle_t xQueue,
                                BaseType_t xNewQueue )
@@ -132,7 +144,6 @@ static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,
 {
     /* Remove compiler warnings about unused parameters should
      * configUSE_TRACE_FACILITY not be set to 1. */
-    ( void ) ucQueueType;
 
     if( uxItemSize == ( UBaseType_t ) 0 )
     {
@@ -469,7 +480,7 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
              * the task on the list of tasks waiting to receive from the queue. */
             if( prvIsQueueEmpty( pxQueue ) != pdFALSE )
             {
-                traceBLOCKING_ON_QUEUE_RECEIVE( pxQueue );
+               // traceBLOCKING_ON_QUEUE_RECEIVE( pxQueue );
                 vTaskPlaceOnEventList( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait );
                 prvUnlockQueue( pxQueue );
 
@@ -495,7 +506,6 @@ BaseType_t xQueueReceive( QueueHandle_t xQueue,
 
             if( prvIsQueueEmpty( pxQueue ) != pdFALSE )
             {
-                traceQUEUE_RECEIVE_FAILED( pxQueue );
                 return errQUEUE_EMPTY;
             }
         }
@@ -637,7 +647,7 @@ static void prvUnlockQueue( Queue_t * const pxQueue )
 	taskENTER_CRITICAL();
 	{
 		/* See if data was added to the queue while it was locked. */
-		while( pxQueue->xTxLock > queueLOCKED_UNMODIFIED )
+		while( pxQueue->cTxLock > queueLOCKED_UNMODIFIED )
 		{
 			/* Data was posted while the queue was locked.  Are any tasks
 			blocked waiting for data to become available? */
@@ -650,11 +660,6 @@ static void prvUnlockQueue( Queue_t * const pxQueue )
 						/* The queue is a member of a queue set, and posting to
 						the queue set caused a higher priority task to unblock.
 						A context switch is required. */
-						vTaskMissedYield();
-					}
-					else
-					{
-						mtCOVERAGE_TEST_MARKER();
 					}
 				}
 				else
@@ -667,11 +672,6 @@ static void prvUnlockQueue( Queue_t * const pxQueue )
 						{
 							/* The task waiting has a higher priority so record that a
 							context	switch is required. */
-							vTaskMissedYield();
-						}
-						else
-						{
-							mtCOVERAGE_TEST_MARKER();
 						}
 					}
 					else
@@ -690,11 +690,6 @@ static void prvUnlockQueue( Queue_t * const pxQueue )
 					{
 						/* The task waiting has a higher priority so record that a
 						context	switch is required. */
-						vTaskMissedYield();
-					}
-					else
-					{
-						mtCOVERAGE_TEST_MARKER();
 					}
 				}
 				else
@@ -704,30 +699,25 @@ static void prvUnlockQueue( Queue_t * const pxQueue )
 			}
 			#endif /* configUSE_QUEUE_SETS */
 
-			--( pxQueue->xTxLock );
+			--( pxQueue->cTxLock );
 		}
 
-		pxQueue->xTxLock = queueUNLOCKED;
+		pxQueue->cTxLock = queueUNLOCKED;
 	}
 	taskEXIT_CRITICAL();
 
 	/* Do the same for the Rx lock. */
 	taskENTER_CRITICAL();
 	{
-		while( pxQueue->xRxLock > queueLOCKED_UNMODIFIED )
+		while( pxQueue->cRxLock > queueLOCKED_UNMODIFIED )
 		{
 			if( listLIST_IS_EMPTY( &( pxQueue->xTasksWaitingToSend ) ) == pdFALSE )
 			{
 				if( xTaskRemoveFromEventList( &( pxQueue->xTasksWaitingToSend ) ) != pdFALSE )
 				{
-					vTaskMissedYield();
-				}
-				else
-				{
-					mtCOVERAGE_TEST_MARKER();
 				}
 
-				--( pxQueue->xRxLock );
+				--( pxQueue->cRxLock );
 			}
 			else
 			{
@@ -735,7 +725,7 @@ static void prvUnlockQueue( Queue_t * const pxQueue )
 			}
 		}
 
-		pxQueue->xRxLock = queueUNLOCKED;
+		pxQueue->cRxLock = queueUNLOCKED;
 	}
 	taskEXIT_CRITICAL();
 }
@@ -766,10 +756,28 @@ static void prvUnlockQueue( Queue_t * const pxQueue )
             /* There is nothing in the queue, block for the specified period. */
             vTaskPlaceOnEventListRestricted( &( pxQueue->xTasksWaitingToReceive ), xTicksToWait, xWaitIndefinitely );
         }
-        else
-        {
-            mtCOVERAGE_TEST_MARKER();
-        }
 
         prvUnlockQueue( pxQueue );
+    }
+
+
+
+ void vQueueAddToRegistry( QueueHandle_t xQueue,
+                              const char * pcQueueName ) /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
+    {
+        UBaseType_t ux;
+
+        /* See if there is an empty space in the registry.  A NULL name denotes
+         * a free slot. */
+        for( ux = ( UBaseType_t ) 0U; ux < ( UBaseType_t ) configQUEUE_REGISTRY_SIZE; ux++ )
+        {
+            if( xQueueRegistry[ ux ].pcQueueName == NULL )
+            {
+                /* Store the information on this queue. */
+                xQueueRegistry[ ux ].pcQueueName = pcQueueName;
+                xQueueRegistry[ ux ].xHandle = xQueue;
+
+                break;
+            }
+        }
     }

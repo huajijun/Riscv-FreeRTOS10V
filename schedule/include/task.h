@@ -1,8 +1,11 @@
 #include <common.h>
 #include <list.h>
+#ifndef TASK_ZZY
+#define TASK_ZZY
 struct tskTaskControlBlock;     /* The old naming convention is used to prevent breaking kernel aware debuggers. */
 typedef struct tskTaskControlBlock * TaskHandle_t;
 
+#define taskYIELD()                 portYIELD()
 
 typedef struct xTIME_OUT                                                              
 {           
@@ -49,4 +52,6 @@ BaseType_t xTaskRemoveFromEventList( const List_t * const pxEventList );
 void vTaskEnterCritical( void );
 void vTaskExitCritical( void );
 
+static volatile UBaseType_t uxSchedulerSuspended    = ( UBaseType_t ) pdFALSE;
 
+#endif

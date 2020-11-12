@@ -1,5 +1,6 @@
 #include <task.h>
 #include <list.h>
+#include <queue.h>
 #include <common.h>
 typedef struct tskTaskControlBlock       /* The old naming convention is used to prevent breaking kernel aware debuggers. */
 {
@@ -83,7 +84,11 @@ typedef struct tskTaskControlBlock       /* The old naming convention is used to
 /* The old tskTCB name is maintained above then typedefed to the new TCB_t name
  * below to enable the use of older kernel aware debuggers. */
 typedef tskTCB TCB_t;
+#define configMINIMAL_STACK_SIZE	4096
 #define portBYTE_ALIGNMENT_MASK (0x001f)                                
+#define configIDLE_TASK_NAME    "IDLE"
+static TaskHandle_t xIdleTaskHandle = NULL;
+static volatile TickType_t xPendedTicks = ( TickType_t ) 0U;
 static volatile BaseType_t xSchedulerRunning        = pdFALSE;          
 static volatile UBaseType_t uxTopReadyPriority      = tskIDLE_PRIORITY; 
 static List_t pxReadyTasksLists[ configMAX_PRIORITIES ];                
@@ -104,6 +109,15 @@ static UBaseType_t uxTaskNumber                     = ( UBaseType_t ) 0U;
 static volatile TickType_t xNextTaskUnblockTime     = ( TickType_t ) 0U; 
 TCB_t * volatile pxCurrentTCB = NULL;                                    
 
+#define taskSWITCH_DELAYED_LISTS()                                                                  \
+{                                                                                                   \
+    List_t *pxTemp;                                                                                 \
+    pxTemp = pxDelayedTaskList;                                                                     \
+    pxDelayedTaskList = pxOverflowDelayedTaskList;                                                  \
+    pxOverflowDelayedTaskList = pxTemp;                                                             \
+    xNumOfOverflows++;                                                                              \
+    prvResetNextTaskUnblockTime();                                                                  \
+}
 
 
     #define taskSELECT_HIGHEST_PRIORITY_TASK()                                \
@@ -136,6 +150,7 @@ TCB_t * volatile pxCurrentTCB = NULL;
     vListInsertEnd( &( pxReadyTasksLists[ ( pxTCB )->uxPriority ] ), &( ( pxTCB )->xStateListItem ) ); \
 
 
+static portTASK_FUNCTION( prvIdleTask, pvParameters );
 static void prvInitialiseTaskLists( void );
 static void prvInitialiseTaskLists( void );
 static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
@@ -157,6 +172,75 @@ void vTaskInternalSetTimeOutState( TimeOut_t * const pxTimeOut )
     pxTimeOut->xOverflowCount = xNumOfOverflows;
     pxTimeOut->xTimeOnEntering = xTickCount;
 }
+
+static void prvResetNextTaskUnblockTime( void )
+{
+TCB_t *pxTCB;
+
+    if( listLIST_IS_EMPTY( pxDelayedTaskList ) != pdFALSE )
+    {
+        /* The new current delayed list is empty.  Set xNextTaskUnblockTime to
+        the maximum possible value so it is extremely unlikely that the
+        if( xTickCount >= xNextTaskUnblockTime ) test will pass until
+        there is an item in the delayed list. */
+        xNextTaskUnblockTime = portMAX_DELAY;
+    }
+    else
+    {
+        /* The new current delayed list is not empty, get the value of
+        the item at the head of the delayed list.  This is the time at
+        which the task at the head of the delayed list should be removed
+        from the Blocked state. */
+        ( pxTCB ) = ( TCB_t * ) listGET_OWNER_OF_HEAD_ENTRY( pxDelayedTaskList );
+        xNextTaskUnblockTime = listGET_LIST_ITEM_VALUE( &( ( pxTCB )->xStateListItem ) );
+    }
+}
+#define taskCHECK_FOR_STACK_OVERFLOW()                                                              \
+	{                                                                                                   \
+	    const uint32_t * const pulStack = ( uint32_t * ) pxCurrentTCB->pxStack;                         \
+	    const uint32_t ulCheckValue = ( uint32_t ) 0xa5a5a5a5;                                          \
+	                                                                                                    \
+	    if( ( pulStack[ 0 ] != ulCheckValue ) ||                                                \
+	        ( pulStack[ 1 ] != ulCheckValue ) ||                                                \
+	        ( pulStack[ 2 ] != ulCheckValue ) ||                                                \
+	        ( pulStack[ 3 ] != ulCheckValue ) )                                             \
+	    {                                                                                               \
+	        vApplicationStackOverflowHook( ( TaskHandle_t ) pxCurrentTCB, pxCurrentTCB->pcTaskName );   \
+	    }                                                                                               \
+	}
+	void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
+	{
+
+	    /* Run time stack overflow checking is performed if
+	    configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
+	    function is called if a stack overflow is detected. */
+	    //taskDISABLE_INTERRUPTS();
+	    return 0;
+	}
+
+void prvTaskExitError(void)
+{
+    for(;;);
+}
+
+StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParameters )
+{
+	/* Simulate the stack frame as it would be created by a context switch
+	interrupt. */
+	register int *tp asm("x3");
+	pxTopOfStack--;
+	*pxTopOfStack = (portSTACK_TYPE)pxCode;			/* Start address */
+	pxTopOfStack -= 22;
+	*pxTopOfStack = (portSTACK_TYPE)pvParameters;	/* Register a0 */
+	pxTopOfStack -= 6;
+	*pxTopOfStack = (portSTACK_TYPE)tp; /* Register thread pointer */
+	pxTopOfStack -= 3;
+	*pxTopOfStack = (portSTACK_TYPE)prvTaskExitError; /* Register ra */
+	
+	return pxTopOfStack;
+}
+
+
 
 BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
                         const char * const pcName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
@@ -525,7 +609,6 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
                 pxNewTCB->uxTCBNumber = uxTaskNumber;
             }
         #endif /* configUSE_TRACE_FACILITY */
-        traceTASK_CREATE( pxNewTCB );
 
         prvAddTaskToReadyList( pxNewTCB );
 
@@ -586,7 +669,6 @@ void vTaskSwitchContext( void )
     else
     {
         xYieldPending = pdFALSE;
-        traceTASK_SWITCHED_OUT();
 
         #if ( configGENERATE_RUN_TIME_STATS == 1 )
             {
@@ -625,7 +707,6 @@ void vTaskSwitchContext( void )
         /* Select a new task to run using either the generic C or port
          * optimised asm code. */
         taskSELECT_HIGHEST_PRIORITY_TASK(); /*lint !e9079 void * is used as this macro is used with timers and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
-        traceTASK_SWITCHED_IN();
 
         /* After the new task is switched in, update the global errno. */
         #if ( configUSE_POSIX_ERRNO == 1 )
@@ -736,7 +817,6 @@ void vTaskStartScheduler( void )
          * is set to 0 and the following line fails to build then ensure you do not
          * have portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() defined in your
          * FreeRTOSConfig.h file. */
-        portCONFIGURE_TIMER_FOR_RUN_TIME_STATS();
 
 
         /* Setting up the timer tick is hardware specific and thus in the
@@ -931,7 +1011,7 @@ static void prvAddCurrentTaskToDelayedList( TickType_t xTicksToWait,
     {
         /* The current task must be in a ready list, so there is no need to
          * check, and the port reset macro can be called directly. */
-        portRESET_READY_PRIORITY( pxCurrentTCB->uxPriority, uxTopReadyPriority ); /*lint !e931 pxCurrentTCB cannot change as it is the calling task.  pxCurrentTCB->uxPriority and uxTopReadyPriority cannot change as called with scheduler suspended or in a critical section. */
+       // portRESET_READY_PRIORITY( pxCurrentTCB->uxPriority, uxTopReadyPriority ); /*lint !e931 pxCurrentTCB cannot change as it is the calling task.  pxCurrentTCB->uxPriority and uxTopReadyPriority cannot change as called with scheduler suspended or in a critical section. */
     }
 
     #if ( INCLUDE_vTaskSuspend == 1 )
@@ -1019,7 +1099,7 @@ BaseType_t xTaskIncrementTick( void )
     /* Called by the portable layer each time a tick interrupt occurs.
      * Increments the tick then checks to see if the new tick value will cause any
      * tasks to be unblocked. */
-    traceTASK_INCREMENT_TICK( xTickCount );
+   // traceTASK_INCREMENT_TICK( xTickCount );
 
     if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
     {
@@ -1159,11 +1239,9 @@ TickType_t xTaskGetTickCount( void )
     TickType_t xTicks;
  
     /* Critical section required if running on a 16 bit processor. */
-    portTICK_TYPE_ENTER_CRITICAL();
     {
         xTicks = xTickCount;
     }
-    portTICK_TYPE_EXIT_CRITICAL();
  
     return xTicks;
 }               
@@ -1243,64 +1321,97 @@ void vTaskEnterCritical( void )
 			
 	}
 
-BaseType_t xTaskResumeAll( void )          
-{                                          
-	TCB_t *pxTCB;                              
-	BaseType_t xAlreadyYielded = pdFALSE;
-	taskENTER_CRITICAL();                                                                     
-	{                                                                                         
-	    --uxSchedulerSuspended;
-	                                                                                          
-	    if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
-	    {
-	        if( uxCurrentNumberOfTasks > ( UBaseType_t ) 0U )
-	        {
-	            /* Move any readied tasks from the pending list into the
-	            appropriate ready list. */
-	            while( listLIST_IS_EMPTY( &xPendingReadyList ) == pdFALSE )
-	            {
-	                pxTCB = ( TCB_t * ) listGET_OWNER_OF_HEAD_ENTRY( ( &xPendingReadyList ) );
-	                ( void ) uxListRemove( &( pxTCB->xEventListItem ) );
-	                ( void ) uxListRemove( &( pxTCB->xGenericListItem ) );
-	                prvAddTaskToReadyList( pxTCB );
-	                                                                                          
-	                /* If the moved task has a priority higher than the current
-	                task then a yield must be performed. */
-	                if( pxTCB->uxPriority >= pxCurrentTCB->uxPriority )
-	                {
-	                    xYieldPending = pdTRUE;
-	                }
-	            }
-	                                                                                          
-	            if( uxPendedTicks > ( UBaseType_t ) 0U )
-	            {
-	                while( uxPendedTicks > ( UBaseType_t ) 0U )
-	                {
-	                    if( xTaskIncrementTick() != pdFALSE )
-	                    {
-	                        xYieldPending = pdTRUE;
-	                    }
-	                    --uxPendedTicks;
-	                }
-	            }                                              
-	            if( xYieldPending == pdTRUE )                        
-	            {   
-	                #if( configUSE_PREEMPTION != 0 )                 
-	                {                                                
-	                    xAlreadyYielded = pdTRUE;                     
-	                }                                                
-	                #endif                                           
-	                taskYIELD_IF_USING_PREEMPTION();                 
-	            }   
- 
-	        }       
-	    }           
-        
-	}               
-	taskEXIT_CRITICAL();                                             
-	                
-	return xAlreadyYielded;                                          
+BaseType_t xTaskResumeAll( void )
+{
+    TCB_t * pxTCB = NULL;
+    BaseType_t xAlreadyYielded = pdFALSE;
+
+    /* If uxSchedulerSuspended is zero then this function does not match a
+     * previous call to vTaskSuspendAll(). */
+
+    /* It is possible that an ISR caused a task to be removed from an event
+     * list while the scheduler was suspended.  If this was the case then the
+     * removed task will have been added to the xPendingReadyList.  Once the
+     * scheduler has been resumed it is safe to move all the pending ready
+     * tasks from this list into their appropriate ready list. */
+    taskENTER_CRITICAL();
+    {
+        --uxSchedulerSuspended;
+
+        if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
+        {
+            if( uxCurrentNumberOfTasks > ( UBaseType_t ) 0U )
+            {
+                /* Move any readied tasks from the pending list into the
+                 * appropriate ready list. */
+                while( listLIST_IS_EMPTY( &xPendingReadyList ) == pdFALSE )
+                {
+                    pxTCB = listGET_OWNER_OF_HEAD_ENTRY( ( &xPendingReadyList ) ); /*lint !e9079 void * is used as this macro is used with timers and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
+                    ( void ) uxListRemove( &( pxTCB->xEventListItem ) );
+                    ( void ) uxListRemove( &( pxTCB->xStateListItem ) );
+                    prvAddTaskToReadyList( pxTCB );
+
+                    /* If the moved task has a priority higher than the current
+                     * task then a yield must be performed. */
+                    if( pxTCB->uxPriority >= pxCurrentTCB->uxPriority )
+                    {
+                        xYieldPending = pdTRUE;
+                    }
+                }
+
+                if( pxTCB != NULL )
+                {
+                    /* A task was unblocked while the scheduler was suspended,
+                     * which may have prevented the next unblock time from being
+                     * re-calculated, in which case re-calculate it now.  Mainly
+                     * important for low power tickless implementations, where
+                     * this can prevent an unnecessary exit from low power
+                     * state. */
+                    prvResetNextTaskUnblockTime();
+                }
+
+                /* If any ticks occurred while the scheduler was suspended then
+                 * they should be processed now.  This ensures the tick count does
+                 * not  slip, and that any delayed tasks are resumed at the correct
+                 * time. */
+                {
+                    TickType_t xPendedCounts = xPendedTicks; /* Non-volatile copy. */
+
+                    if( xPendedCounts > ( TickType_t ) 0U )
+                    {
+                        do
+                        {
+                            if( xTaskIncrementTick() != pdFALSE )
+                            {
+                                xYieldPending = pdTRUE;
+                            }
+
+                            --xPendedCounts;
+                        } while( xPendedCounts > ( TickType_t ) 0U );
+
+                        xPendedTicks = 0;
+                    }
+                }
+
+                if( xYieldPending != pdFALSE )
+                {
+                    #if ( configUSE_PREEMPTION != 0 )
+                        {
+                            xAlreadyYielded = pdTRUE;
+                        }
+                    #endif
+                    taskYIELD_IF_USING_PREEMPTION();
+                }
+            }
+        }
+    }
+    taskEXIT_CRITICAL();
+
+    return xAlreadyYielded;
 }
+ 
+
+
 void vTaskSuspendAll( void )
  {
  	++uxSchedulerSuspended;
@@ -1309,7 +1420,6 @@ void vTaskSuspendAll( void )
                                           TickType_t xTicksToWait,
                                           const BaseType_t xWaitIndefinitely )
     {
-        configASSERT( pxEventList );
 
         /* This function should not be called by application code hence the
          * 'Restricted' in its name.  It is not part of the public API.  It is
@@ -1331,6 +1441,5 @@ void vTaskSuspendAll( void )
             xTicksToWait = portMAX_DELAY;
         }
 
-        traceTASK_DELAY_UNTIL( ( xTickCount + xTicksToWait ) );
         prvAddCurrentTaskToDelayedList( xTicksToWait, xWaitIndefinitely );
     }

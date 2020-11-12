@@ -1,957 +1,108 @@
-    CC ../Common/src/list.c
-    CC ../Common/src/queue.c
-riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../Common/src/list.o ../Common/src/list.c
-    CC ../schedule/src/task.c
-riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../Common/src/queue.o ../Common/src/queue.c
-    CC ../Softtime/src/time.c
-riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../schedule/src/task.o ../schedule/src/task.c
-riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../Softtime/src/time.o ../Softtime/src/time.c
-make: *** No rule to make target '../Common/src/common.o', needed by 'riscv-spike.elf'.  Stop.
-make: *** Waiting for unfinished jobs....
-    CC ../Memory/src/heap.c
-riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../Memory/src/heap.o ../Memory/src/heap.c
-../Common/src/list.c: In function ‘vListInitialiseItem’:
-../Common/src/list.c:32:27: error: ‘NULL’ undeclared (first use in this function)
-   32 |     pxItem->pxContainer = NULL;
-      |                           ^~~~
-../Common/src/list.c:3:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
-    2 | #include <common.h>
-  +++ |+#include <stddef.h>
-    3 | 
-../Common/src/list.c:32:27: note: each undeclared identifier is reported only once for each function it appears in
-   32 |     pxItem->pxContainer = NULL;
-      |                           ^~~~
-../Common/src/list.c: In function ‘uxListRemove’:
-../Common/src/list.c:120:35: error: ‘NULL’ undeclared (first use in this function)
-  120 |     pxItemToRemove->pxContainer = NULL;
-      |                                   ^~~~
-../Common/src/list.c:120:35: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
-In file included from ../schedule/src/task.c:1:
-../schedule/include/task.h:26:25: error: unknown type name ‘TaskFunction_t’
-   26 | BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
-      |                         ^~~~~~~~~~~~~~
-In file included from ../schedule/src/task.c:1:
-../schedule/include/task.h:28:31: error: unknown type name ‘configSTACK_DEPTH_TYPE’
-   28 |                         const configSTACK_DEPTH_TYPE usStackDepth,
-      |                               ^~~~~~~~~~~~~~~~~~~~~~
-In file included from ../Memory/src/heap.c:1:
-../Memory/include/heap.h:1:21: error: unknown type name ‘size_t’
-    1 | void *pvPortMalloc( size_t xWantedSize );
-      |                     ^~~~~~
-../Memory/include/heap.h:1:1: note: ‘size_t’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
-  +++ |+#include <stddef.h>
-    1 | void *pvPortMalloc( size_t xWantedSize );
-In file included from ../Common/include/list.h:1,
-                 from ../Common/src/queue.c:2:
-../Common/include/common.h: In function ‘xQueueGenericSend’:
-../Common/include/common.h:3:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘typedef’
-    3 | typedef unsigned long UBaseType_t;
-      | ^~~~~~~
-../Common/include/common.h:4:18: error: storage class specified for parameter ‘TickType_t’
-    4 | typedef uint32_t TickType_t;
-      |                  ^~~~~~~~~~
-../Memory/src/heap.c:9:2: error: unknown type name ‘size_t’
-    9 |  size_t xBlockSize;      /*<< The size of the free block. */
-      |  ^~~~~~
-../Common/include/common.h:10:14: error: storage class specified for parameter ‘BaseType_t’
-   10 | typedef long BaseType_t;
-      |              ^~~~~~~~~~
-../Memory/src/heap.c:18:8: error: unknown type name ‘uint8_t’
-   18 | static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
-      |        ^~~~~~~
-../schedule/include/task.h:34:29: error: unknown type name ‘List_t’
-   34 | void vTaskPlaceOnEventList( List_t * const pxEventList,
-      |                             ^~~~~~
-In file included from ../Common/src/queue.c:2:
-../Common/include/list.h:21:1: warning: empty declaration
-   21 | struct xLIST;
-      | ^~~~~~
-../Memory/src/heap.c:3:36: error: ‘size_t’ undeclared here (not in a function)
-    3 | #define configTOTAL_HEAP_SIZE  ( ( size_t ) ( 100 * 1024 ) )
-      |                                    ^~~~~~
-../Memory/src/heap.c:18:24: note: in expansion of macro ‘configTOTAL_HEAP_SIZE’
-   18 | static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
-      |                        ^~~~~~~~~~~~~~~~~~~~~
-../Memory/src/heap.c:2:1: note: ‘size_t’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
-    1 | #include <heap.h>
-  +++ |+#include <stddef.h>
-    2 | #define portBYTE_ALIGNMENT 8
-../schedule/include/task.h:46:44: error: unknown type name ‘List_t’
-   46 | BaseType_t xTaskRemoveFromEventList( const List_t * const pxEventList );
-      |                                            ^~~~~~
-In file included from ../Common/src/queue.c:2:
-../Common/include/list.h:25:25: error: expected specifier-qualifier-list before ‘TickType_t’
-   25 |     configLIST_VOLATILE TickType_t xItemValue;              /*< The value being listed.  In most cases this is used to sort the list in descending order. */
-      |                         ^~~~~~~~~~
-../Memory/src/heap.c:25:15: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘xFreeBytesRemaining’
-   25 | static size_t xFreeBytesRemaining = configADJUSTED_HEAP_SIZE;
-      |               ^~~~~~~~~~~~~~~~~~~
-In file included from ../Common/src/queue.c:2:
-../Common/include/list.h:22:1: warning: empty declaration
-   22 | struct xLIST_ITEM
-      | ^~~~~~
-In file included from ../Common/src/queue.c:2:
-../Common/include/list.h:32:27: error: storage class specified for parameter ‘ListItem_t’
-   32 | typedef struct xLIST_ITEM ListItem_t;                       /* For some reason lint wants this as two separate definitions. */
-      |                           ^~~~~~~~~~
-../Memory/src/heap.c:57:14: error: unknown type name ‘uint16_t’
-   57 | static const uint16_t heapSTRUCT_SIZE = ( ( sizeof ( BlockLink_t ) + ( portBYTE_ALIGNMENT - 1 ) ) & ~portBYTE_ALIGNMENT_MASK );
-      |              ^~~~~~~~
-../Common/include/list.h:37:25: error: expected specifier-qualifier-list before ‘TickType_t’
-   37 |     configLIST_VOLATILE TickType_t xItemValue;
-      |                         ^~~~~~~~~~
-../Common/include/list.h:34:1: warning: empty declaration
-   34 | struct xMINI_LIST_ITEM
-      | ^~~~~~
-../Common/include/list.h:41:32: error: storage class specified for parameter ‘MiniListItem_t’
-   41 | typedef struct xMINI_LIST_ITEM MiniListItem_t;
-      |                                ^~~~~~~~~~~~~~
-../Common/include/list.h:49:5: error: expected specifier-qualifier-list before ‘ListItem_t’
-   49 |     ListItem_t * configLIST_VOLATILE pxIndex;
-      |     ^~~~~~~~~~
-../Common/include/list.h:51:3: error: storage class specified for parameter ‘List_t’
-   51 | } List_t;
-      |   ^~~~~~
-make: *** [Makefile:62: ../Common/src/list.o] Error 1
-../Common/include/list.h:96:23: error: expected declaration specifiers or ‘...’ before ‘List_t’
-   96 | void vListInitialise( List_t * const pxList ) ;
-      |                       ^~~~~~
-../Common/include/list.h:98:27: error: expected declaration specifiers or ‘...’ before ‘ListItem_t’
-   98 | void vListInitialiseItem( ListItem_t * const pxItem ) ;
-      |                           ^~~~~~~~~~
-../Common/include/list.h:101:19: error: expected declaration specifiers or ‘...’ before ‘List_t’
-  101 | void vListInsert( List_t * const pxList,
-      |                   ^~~~~~
-../Memory/src/heap.c: In function ‘prvHeapInit’:
-../Common/include/list.h:102:19: error: expected declaration specifiers or ‘...’ before ‘ListItem_t’
-  102 |                   ListItem_t * const pxNewListItem ) ;
-      |                   ^~~~~~~~~~
-../Memory/src/heap.c:61:2: error: unknown type name ‘uint8_t’
-   61 |  uint8_t *pucAlignedHeap;
-      |  ^~~~~~~
-../Common/include/list.h:104:22: error: expected declaration specifiers or ‘...’ before ‘List_t’
-  104 | void vListInsertEnd( List_t * const pxList,
-      |                      ^~~~~~
-../Common/include/list.h:105:22: error: expected declaration specifiers or ‘...’ before ‘ListItem_t’
-  105 |                      ListItem_t * const pxNewListItem ) ;
-      |                      ^~~~~~~~~~
-In file included from ../schedule/include/task.h:1,
-                 from ../Softtime/include/time.h:1,
-                 from ../Softtime/src/time.c:4:
-../Common/include/common.h: In function ‘xQueueGenericSend’:
-../Common/include/list.h:107:27: error: expected declaration specifiers or ‘...’ before ‘ListItem_t’
-  107 | UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove ) ;
-      |                           ^~~~~~~~~~
-../Common/include/common.h:3:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘typedef’
-    3 | typedef unsigned long UBaseType_t;
-      | ^~~~~~~
-In file included from ../Common/src/queue.c:3:
-../Common/include/common.h:3:23: error: storage class specified for parameter ‘UBaseType_t’
-    3 | typedef unsigned long UBaseType_t;
-      |                       ^~~~~~~~~~~
-../Common/include/common.h:4:18: error: storage class specified for parameter ‘TickType_t’
-    4 | typedef uint32_t TickType_t;
-      |                  ^~~~~~~~~~
-../Common/include/common.h:4:18: error: storage class specified for parameter ‘TickType_t’
-    4 | typedef uint32_t TickType_t;
-      |                  ^~~~~~~~~~
-../Common/include/common.h:4:18: error: redefinition of parameter ‘TickType_t’
-../Common/include/common.h:10:14: error: storage class specified for parameter ‘BaseType_t’
-   10 | typedef long BaseType_t;
-      |              ^~~~~~~~~~
-In file included from ../Common/include/list.h:1,
-                 from ../Common/src/queue.c:2:
-../Common/include/common.h:4:18: note: previous definition of ‘TickType_t’ was here
-    4 | typedef uint32_t TickType_t;
-      |                  ^~~~~~~~~~
-../Memory/src/heap.c:62:20: error: ‘uint8_t’ undeclared (first use in this function)
-   62 |  pucAlignedHeap = (uint8_t*)(((portPOINTER_SIZE_TYPE)&ucHeap[portBYTE_ALIGNMENT])&(~((portPOINTER_SIZE_TYPE)portBYTE_ALIGNMENT_MASK ) ) );
-      |                    ^~~~~~~
-../Memory/src/heap.c:62:20: note: each undeclared identifier is reported only once for each function it appears in
-In file included from ../Common/src/queue.c:3:
-../Common/include/common.h:10:14: error: storage class specified for parameter ‘BaseType_t’
-   10 | typedef long BaseType_t;
-      |              ^~~~~~~~~~
-../Common/include/common.h:10:14: error: redefinition of parameter ‘BaseType_t’
-../Memory/src/heap.c:62:28: error: expected expression before ‘)’ token
-   62 |  pucAlignedHeap = (uint8_t*)(((portPOINTER_SIZE_TYPE)&ucHeap[portBYTE_ALIGNMENT])&(~((portPOINTER_SIZE_TYPE)portBYTE_ALIGNMENT_MASK ) ) );
-      |                            ^
-In file included from ../Softtime/include/time.h:1,
-                 from ../Softtime/src/time.c:4:
-../schedule/include/task.h:2:1: warning: empty declaration
-    2 | struct tskTaskControlBlock;     /* The old naming convention is used to prevent breaking kernel aware debuggers. */
-      | ^~~~~~
-In file included from ../Common/include/list.h:1,
-                 from ../Common/src/queue.c:2:
-../Common/include/common.h:10:14: note: previous definition of ‘BaseType_t’ was here
-   10 | typedef long BaseType_t;
-      |              ^~~~~~~~~~
-../schedule/include/task.h:3:38: error: storage class specified for parameter ‘TaskHandle_t’
-    3 | typedef struct tskTaskControlBlock * TaskHandle_t;
-      |                                      ^~~~~~~~~~~~
-../schedule/include/task.h:8:5: error: expected specifier-qualifier-list before ‘BaseType_t’
-    8 |     BaseType_t xOverflowCount;
-      |     ^~~~~~~~~~
-../schedule/include/task.h:10:3: error: storage class specified for parameter ‘TimeOut_t’
-   10 | } TimeOut_t;
-      |   ^~~~~~~~~
-In file included from ../schedule/include/task.h:1,
-                 from ../Common/src/queue.c:5:
-../Common/include/common.h:3:23: error: storage class specified for parameter ‘UBaseType_t’
-    3 | typedef unsigned long UBaseType_t;
-      |                       ^~~~~~~~~~~
-../Common/include/common.h:3:23: error: redefinition of parameter ‘UBaseType_t’
-../schedule/include/task.h:20:3: error: storage class specified for parameter ‘MemoryRegion_t’
-   20 | } MemoryRegion_t;
-      |   ^~~~~~~~~~~~~~
-In file included from ../Common/src/queue.c:3:
-../Common/include/common.h:3:23: note: previous definition of ‘UBaseType_t’ was here
-    3 | typedef unsigned long UBaseType_t;
-      |                       ^~~~~~~~~~~
-In file included from ../schedule/include/task.h:1,
-                 from ../Common/src/queue.c:5:
-../Common/include/common.h:4:18: error: storage class specified for parameter ‘TickType_t’
-    4 | typedef uint32_t TickType_t;
-      |                  ^~~~~~~~~~
-../Common/include/common.h:4:18: error: redefinition of parameter ‘TickType_t’
-../schedule/include/task.h:25:36: error: expected declaration specifiers or ‘...’ before ‘TimeOut_t’
-   25 | void vTaskInternalSetTimeOutState( TimeOut_t * const pxTimeOut );
-      |                                    ^~~~~~~~~
-In file included from ../Common/src/queue.c:3:
-../Common/include/common.h:4:18: note: previous definition of ‘TickType_t’ was here
-    4 | typedef uint32_t TickType_t;
-      |                  ^~~~~~~~~~
-../schedule/include/task.h:26:1: error: expected declaration specifiers before ‘BaseType_t’
-   26 | BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
-      | ^~~~~~~~~~
-In file included from ../schedule/include/task.h:1,
-                 from ../Common/src/queue.c:5:
-../Common/include/common.h:10:14: error: storage class specified for parameter ‘BaseType_t’
-   10 | typedef long BaseType_t;
-      |              ^~~~~~~~~~
-../Common/include/common.h:10:14: error: redefinition of parameter ‘BaseType_t’
-In file included from ../schedule/src/task.c:3:
-../Common/include/common.h:16:17: error: ‘false’ undeclared here (not in a function)
-   16 | #define pdFALSE false
-      |                 ^~~~~
-../schedule/src/task.c:87:55: note: in expansion of macro ‘pdFALSE’
-   87 | static volatile BaseType_t xSchedulerRunning        = pdFALSE;
-      |                                                       ^~~~~~~
-In file included from ../Softtime/include/time.h:1,
-                 from ../Softtime/src/time.c:4:
-../schedule/include/task.h:33:36: error: expected declaration specifiers or ‘...’ before ‘TimeOut_t’
-   33 | void vTaskInternalSetTimeOutState( TimeOut_t * const pxTimeOut );
-      |                                    ^~~~~~~~~
-In file included from ../Common/src/queue.c:3:
-../Common/include/common.h:10:14: note: previous definition of ‘BaseType_t’ was here
-   10 | typedef long BaseType_t;
-      |              ^~~~~~~~~~
-../Memory/src/heap.c:62:32: error: ‘portPOINTER_SIZE_TYPE’ undeclared (first use in this function)
-   62 |  pucAlignedHeap = (uint8_t*)(((portPOINTER_SIZE_TYPE)&ucHeap[portBYTE_ALIGNMENT])&(~((portPOINTER_SIZE_TYPE)portBYTE_ALIGNMENT_MASK ) ) );
-      |                                ^~~~~~~~~~~~~~~~~~~~~
-../schedule/include/task.h:35:35: warning: type defaults to ‘int’ in declaration of ‘TickType_t’ [-Wimplicit-int]
-   35 |                             const TickType_t xTicksToWait );
-      |                                   ^~~~~~~~~~
-../schedule/include/task.h:35:46: error: expected ‘;’, ‘,’ or ‘)’ before ‘xTicksToWait’
-   35 |                             const TickType_t xTicksToWait );
-      |                                              ^~~~~~~~~~~~
-../schedule/include/task.h:38:1: error: expected declaration specifiers before ‘BaseType_t’
-   38 | BaseType_t xTaskCheckForTimeOut( TimeOut_t * const pxTimeOut,
-      | ^~~~~~~~~~
-In file included from ../Common/src/queue.c:5:
-../schedule/include/task.h:2:1: warning: empty declaration
-    2 | struct tskTaskControlBlock;     /* The old naming convention is used to prevent breaking kernel aware debuggers. */
-      | ^~~~~~
-../schedule/include/task.h:42:1: error: expected declaration specifiers before ‘BaseType_t’
-   42 | BaseType_t xTaskGetSchedulerState( void );
-      | ^~~~~~~~~~
-../schedule/include/task.h:3:38: error: storage class specified for parameter ‘TaskHandle_t’
-    3 | typedef struct tskTaskControlBlock * TaskHandle_t;
-      |                                      ^~~~~~~~~~~~
-../Memory/src/heap.c:67:25: error: ‘NULL’ undeclared (first use in this function)
-   67 |  xEnd.pxNextFreeBlock = NULL;
-      |                         ^~~~
-../schedule/include/task.h:43:1: error: expected declaration specifiers before ‘TickType_t’
-   43 | TickType_t xTaskGetTickCount( void );
-      | ^~~~~~~~~~
-../Memory/src/heap.c:67:25: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
-../schedule/include/task.h:8:5: error: expected specifier-qualifier-list before ‘BaseType_t’
-    8 |     BaseType_t xOverflowCount;
-      |     ^~~~~~~~~~
-../schedule/include/task.h:45:1: error: expected declaration specifiers before ‘BaseType_t’
-   45 | BaseType_t xTaskIncrementTick( void );
-      | ^~~~~~~~~~
-../schedule/include/task.h:10:3: error: storage class specified for parameter ‘TimeOut_t’
-   10 | } TimeOut_t;
-      |   ^~~~~~~~~
-../schedule/include/task.h:46:1: error: expected declaration specifiers before ‘BaseType_t’
-   46 | BaseType_t xTaskRemoveFromEventList( const List_t * const pxEventList );
-      | ^~~~~~~~~~
-../schedule/include/task.h:20:3: error: storage class specified for parameter ‘MemoryRegion_t’
-   20 | } MemoryRegion_t;
-      |   ^~~~~~~~~~~~~~
-../Memory/src/heap.c: At top level:
-../schedule/src/task.c:105:33: error: ‘NULL’ undeclared here (not in a function)
-  105 | TCB_t * volatile pxCurrentTCB = NULL;
-      |                                 ^~~~
-../Memory/src/heap.c:79:21: error: expected declaration specifiers or ‘...’ before ‘size_t’
-   79 | void *pvPortMalloc( size_t xWantedSize )
-      |                     ^~~~~~
-../schedule/include/task.h:25:36: error: expected declaration specifiers or ‘...’ before ‘TimeOut_t’
-   25 | void vTaskInternalSetTimeOutState( TimeOut_t * const pxTimeOut );
-      |                                    ^~~~~~~~~
-In file included from ../Softtime/src/time.c:4:
-../Softtime/include/time.h:23:1: warning: empty declaration
-   23 | struct tmrTimerControl; /* The old naming convention is used to prevent breaking kernel aware debuggers. */
-      | ^~~~~~
-../schedule/include/task.h:26:1: error: expected declaration specifiers before ‘BaseType_t’
-   26 | BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
-      | ^~~~~~~~~~
-../Softtime/include/time.h:24:34: error: storage class specified for parameter ‘TimerHandle_t’
-   24 | typedef struct tmrTimerControl * TimerHandle_t;
-      |                                  ^~~~~~~~~~~~~
-../schedule/src/task.c:4:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
-    3 | #include <common.h>
-  +++ |+#include <stddef.h>
-    4 | typedef struct tskTaskControlBlock       /* The old naming convention is used to prevent breaking kernel aware debuggers. */
-../Softtime/include/time.h:26:43: error: expected declaration specifiers or ‘...’ before ‘TimerHandle_t’
-   26 | typedef void (* TimerCallbackFunction_t)( TimerHandle_t xTimer );
-      |                                           ^~~~~~~~~~~~~
-In file included from ../Common/src/queue.c:5:
-../schedule/include/task.h:33:36: error: expected declaration specifiers or ‘...’ before ‘TimeOut_t’
-   33 | void vTaskInternalSetTimeOutState( TimeOut_t * const pxTimeOut );
-      |                                    ^~~~~~~~~
-../Softtime/include/time.h:28:17: error: storage class specified for parameter ‘PendedFunction_t’
-   28 | typedef void (* PendedFunction_t)( void *,
-      |                 ^~~~~~~~~~~~~~~~
-../schedule/include/task.h:34:29: error: expected declaration specifiers or ‘...’ before ‘List_t’
-   34 | void vTaskPlaceOnEventList( List_t * const pxEventList,
-      |                             ^~~~~~
-../schedule/include/task.h:35:35: warning: type defaults to ‘int’ in declaration of ‘TickType_t’ [-Wimplicit-int]
-   35 |                             const TickType_t xTicksToWait );
-      |                                   ^~~~~~~~~~
-../schedule/include/task.h:35:46: error: expected ‘;’, ‘,’ or ‘)’ before ‘xTicksToWait’
-   35 |                             const TickType_t xTicksToWait );
-      |                                              ^~~~~~~~~~~~
-../schedule/include/task.h:38:1: error: expected declaration specifiers before ‘BaseType_t’
-   38 | BaseType_t xTaskCheckForTimeOut( TimeOut_t * const pxTimeOut,
-      | ^~~~~~~~~~
-../Softtime/src/time.c:7:9: error: expected specifier-qualifier-list before ‘BaseType_t’
-    7 |         BaseType_t xMessageID; /*<< The command being sent to the timer service task. */
-      |         ^~~~~~~~~~
-../schedule/include/task.h:42:1: error: expected declaration specifiers before ‘BaseType_t’
-   42 | BaseType_t xTaskGetSchedulerState( void );
-      | ^~~~~~~~~~
-../schedule/include/task.h:43:1: error: expected declaration specifiers before ‘TickType_t’
-   43 | TickType_t xTaskGetTickCount( void );
-      | ^~~~~~~~~~
-../schedule/include/task.h:45:1: error: expected declaration specifiers before ‘BaseType_t’
-   45 | BaseType_t xTaskIncrementTick( void );
-      | ^~~~~~~~~~
-../Softtime/src/time.c:18:3: error: storage class specified for parameter ‘DaemonTaskMessage_t’
-   18 | } DaemonTaskMessage_t;
-      |   ^~~~~~~~~~~~~~~~~~~
-../schedule/include/task.h:46:1: error: expected declaration specifiers before ‘BaseType_t’
-   46 | BaseType_t xTaskRemoveFromEventList( const List_t * const pxEventList );
-      | ^~~~~~~~~~
-../Softtime/src/time.c:20:13: error: storage class specified for parameter ‘prvCheckForValidListAndQueue’
-   20 | static void prvCheckForValidListAndQueue( void );
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../Softtime/src/time.c:21:13: error: storage class specified for parameter ‘prvCheckForValidListAndQueue’
-   21 | static void prvCheckForValidListAndQueue( void );
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../Softtime/src/time.c:21:13: error: redefinition of parameter ‘prvCheckForValidListAndQueue’
-../Memory/src/heap.c: In function ‘vPortFree’:
-../Softtime/src/time.c:20:13: note: previous definition of ‘prvCheckForValidListAndQueue’ was here
-   20 | static void prvCheckForValidListAndQueue( void );
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../Memory/src/heap.c:156:2: error: unknown type name ‘uint8_t’
-  156 |  uint8_t *puc = ( uint8_t * ) pv;
-      |  ^~~~~~~
-../Softtime/src/time.c:22:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvGetNextExpireTime’
-   22 | static TickType_t prvGetNextExpireTime( BaseType_t * const pxListWasEmpty );
-      |                   ^~~~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:10:3: error: storage class specified for parameter ‘QueuePointers_t’
-   10 | } QueuePointers_t;
-      |   ^~~~~~~~~~~~~~~
-../Softtime/src/time.c:24:42: warning: type defaults to ‘int’ in declaration of ‘TickType_t’ [-Wimplicit-int]
-   24 |                                    const TickType_t xTimerPeriodInTicks,
-      |                                          ^~~~~~~~~~
-../Common/src/queue.c:14:5: error: expected specifier-qualifier-list before ‘TaskHandle_t’
-   14 |     TaskHandle_t xMutexHolder;        /*< The handle of the task that holds the mutex. */
-      |     ^~~~~~~~~~~~
-../Softtime/src/time.c:24:53: error: expected ‘;’, ‘,’ or ‘)’ before ‘xTimerPeriodInTicks’
-   24 |                                    const TickType_t xTimerPeriodInTicks,
-      |                                                     ^~~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:16:3: error: storage class specified for parameter ‘SemaphoreData_t’
-   16 | } SemaphoreData_t;
-      |   ^~~~~~~~~~~~~~~
-../Softtime/src/time.c:30:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvInsertTimerInActiveList’
-   30 | static BaseType_t prvInsertTimerInActiveList( Timer_t * const pxTimer,
-      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-../Softtime/src/time.c:35:43: warning: type defaults to ‘int’ in declaration of ‘TickType_t’ [-Wimplicit-int]
-   35 | static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
-      |                                           ^~~~~~~~~~
-../Common/src/queue.c:26:9: error: expected specifier-qualifier-list before ‘QueuePointers_t’
-   26 |         QueuePointers_t xQueue;     /*< Data required exclusively when this structure is used as a queue. */
-      |         ^~~~~~~~~~~~~~~
-../Softtime/src/time.c:35:54: error: expected ‘;’, ‘,’ or ‘)’ before ‘xNextExpireTime’
-   35 | static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
-      |                                                      ^~~~~~~~~~~~~~~
-../Common/src/queue.c:30:5: error: expected specifier-qualifier-list before ‘List_t’
-   30 |     List_t xTasksWaitingToSend;             /*< List of tasks that are blocked waiting to post onto this queue.  Stored in priority order. */
-      |     ^~~~~~
-../Softtime/src/time.c:37:13: error: storage class specified for parameter ‘prvProcessReceivedCommands’
-   37 | static void prvProcessReceivedCommands( void );
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
-../Memory/src/heap.c:156:19: error: ‘uint8_t’ undeclared (first use in this function)
-  156 |  uint8_t *puc = ( uint8_t * ) pv;
-      |                   ^~~~~~~
-../Softtime/src/time.c:39:47: warning: type defaults to ‘int’ in declaration of ‘TickType_t’ [-Wimplicit-int]
-   39 | static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime,
-      |                                               ^~~~~~~~~~
-../Memory/src/heap.c:156:29: error: expected expression before ‘)’ token
-  156 |  uint8_t *puc = ( uint8_t * ) pv;
-      |                             ^
-../Softtime/src/time.c:39:58: error: expected ‘;’, ‘,’ or ‘)’ before ‘xNextExpireTime’
-   39 | static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime,
-      |                                                          ^~~~~~~~~~~~~~~
-../Common/src/queue.c:52:3: error: storage class specified for parameter ‘xQUEUE’
-   52 | } xQUEUE;
-      |   ^~~~~~
-../Softtime/src/time.c:41:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvSampleTimeNow’
-   41 | static TickType_t prvSampleTimeNow( BaseType_t * const pxTimerListsWereSwitched );
-      |                   ^~~~~~~~~~~~~~~~
-../Memory/src/heap.c:158:12: error: ‘NULL’ undeclared (first use in this function)
-  158 |  if( pv != NULL )
-      |            ^~~~
-../Common/src/queue.c:71:16: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘Queue_t’
-   71 | typedef xQUEUE Queue_t;
-      |                ^~~~~~~
-../Softtime/src/time.c:42:13: error: storage class specified for parameter ‘prvSetNextTimerInterrupt’
-   42 | static void prvSetNextTimerInterrupt(void);
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:144:35: error: unknown type name ‘TaskFunction_t’
-  144 | static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
-      |                                   ^~~~~~~~~~~~~~
-../Memory/src/heap.c:158:12: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
-../Softtime/src/time.c:43:13: error: storage class specified for parameter ‘prvSwitchTimerLists’
-   43 | static void prvSwitchTimerLists( void );
-      |             ^~~~~~~~~~~~~~~~~~~
-../Softtime/src/time.c:44:13: error: storage class specified for parameter ‘prvTimerTask’
-   44 | static void prvTimerTask( void *pvParameters );
-      |             ^~~~~~~~~~~~
-../Softtime/src/time.c:54:5: error: expected specifier-qualifier-list before ‘TickType_t’
-   54 |     TickType_t xTimerPeriodInTicks;
-      |     ^~~~~~~~~~
-../Softtime/src/time.c:61:3: error: storage class specified for parameter ‘xTIMER’
-   61 | } xTIMER;
-      |   ^~~~~~
-../Memory/src/heap.c:39:8: error: expected ‘;’ before ‘xBlockSize’
-   39 | size_t xBlockSize;                 \
-      |        ^~~~~~~~~~
-../Memory/src/heap.c:169:4: note: in expansion of macro ‘prvInsertBlockIntoFreeList’
-  169 |    prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
-      |    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-../Softtime/src/time.c:63:16: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘Timer_t’
-   63 | typedef xTIMER Timer_t;
-      |                ^~~~~~~
-../Softtime/src/time.c:66:5: error: expected specifier-qualifier-list before ‘TickType_t’
-   66 |     TickType_t xMessageValue;
-      |     ^~~~~~~~~~
-../Softtime/src/time.c:68:3: error: storage class specified for parameter ‘TimerParameter_t’
-   68 | } TimerParameter_t;
-      |   ^~~~~~~~~~~~~~~~
-../Softtime/src/time.c:73:5: error: expected specifier-qualifier-list before ‘PendedFunction_t’
-   73 |     PendedFunction_t pxCallbackFunction;
-      |     ^~~~~~~~~~~~~~~~
-../Softtime/src/time.c:76:3: error: storage class specified for parameter ‘CallbackParameters_t’
-   76 | } CallbackParameters_t;
-      |   ^~~~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:73:35: error: unknown type name ‘Queue_t’
-   73 | static void prvCopyDataFromQueue( Queue_t * const pxQueue,void * const pvBuffer );
-      |                                   ^~~~~~~
-../Softtime/src/time.c:83:15: error: storage class specified for parameter ‘xActiveTimerList1’
-   83 | static List_t xActiveTimerList1;
-      |               ^~~~~~~~~~~~~~~~~
-../Common/src/queue.c:74:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvCopyDataToQueue’
-   74 | static BaseType_t prvCopyDataToQueue( Queue_t * const pxQueue,const void * pvItemToQueue,const BaseType_t xPosition );
-      |                   ^~~~~~~~~~~~~~~~~~
-../Softtime/src/time.c:84:15: error: storage class specified for parameter ‘xActiveTimerList2’
-   84 | static List_t xActiveTimerList2;
-      |               ^~~~~~~~~~~~~~~~~
-../Common/src/queue.c:75:42: warning: type defaults to ‘int’ in declaration of ‘UBaseType_t’ [-Wimplicit-int]
-   75 | static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,uint8_t * pucQueueStorage,const uint8_t ucQueueType,Queue_t * pxNewQueue );
-      |                                          ^~~~~~~~~~~
-../Softtime/src/time.c:85:17: error: storage class specified for parameter ‘pxCurrentTimerList’
-   85 | static List_t * pxCurrentTimerList;
-      |                 ^~~~~~~~~~~~~~~~~~
-../Memory/src/heap.c:41:2: error: ‘xBlockSize’ undeclared (first use in this function)
-   41 |  xBlockSize = pxBlockToInsert->xBlockSize;          \
-      |  ^~~~~~~~~~
-../Memory/src/heap.c:169:4: note: in expansion of macro ‘prvInsertBlockIntoFreeList’
-  169 |    prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
-      |    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:75:54: error: expected ‘;’, ‘,’ or ‘)’ before ‘uxQueueLength’
-   75 | static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,uint8_t * pucQueueStorage,const uint8_t ucQueueType,Queue_t * pxNewQueue );
-      |                                                      ^~~~~~~~~~~~~
-../Softtime/src/time.c:86:17: error: storage class specified for parameter ‘pxOverflowTimerList’
-   86 | static List_t * pxOverflowTimerList;
-      |                 ^~~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:76:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvIsQueueEmpty’
-   76 | static BaseType_t prvIsQueueEmpty( const Queue_t * pxQueue );
-      |                   ^~~~~~~~~~~~~~~
-../Softtime/src/time.c:88:22: error: storage class specified for parameter ‘xTimerQueue’
-   88 | static QueueHandle_t xTimerQueue = NULL;
-      |                      ^~~~~~~~~~~
-../Common/src/queue.c:77:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvIsQueueFull’
-   77 | static BaseType_t prvIsQueueFull( const Queue_t * pxQueue );
-      |                   ^~~~~~~~~~~~~~
-../Softtime/src/time.c:88:1: error: parameter ‘xTimerQueue’ is initialized
-   88 | static QueueHandle_t xTimerQueue = NULL;
-      | ^~~~~~
-../Common/src/queue.c:78:42: warning: type defaults to ‘int’ in declaration of ‘UBaseType_t’ [-Wimplicit-int]
-   78 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,const uint8_t ucQueueType );
-      |                                          ^~~~~~~~~~~
-../Softtime/src/time.c:88:36: error: ‘NULL’ undeclared (first use in this function)
-   88 | static QueueHandle_t xTimerQueue = NULL;
-      |                                    ^~~~
-../Common/src/queue.c:78:54: error: expected ‘;’, ‘,’ or ‘)’ before ‘uxQueueLength’
-   78 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,const UBaseType_t uxItemSize,const uint8_t ucQueueType );
-      |                                                      ^~~~~~~~~~~~~
-../Softtime/src/time.c:5:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
-    4 | #include <time.h>
-  +++ |+#include <stddef.h>
-    5 | typedef struct tmrTimerQueueMessage
-../Common/src/queue.c:79:1: error: expected declaration specifiers before ‘BaseType_t’
-   79 | BaseType_t xQueueGenericReset( QueueHandle_t xQueue,BaseType_t xNewQueue );
-      | ^~~~~~~~~~
-../Softtime/src/time.c:88:36: note: each undeclared identifier is reported only once for each function it appears in
-   88 | static QueueHandle_t xTimerQueue = NULL;
-      |                                    ^~~~
-../Common/src/queue.c:80:1: error: expected declaration specifiers before ‘BaseType_t’
-   80 | BaseType_t xQueueGenericSend( QueueHandle_t xQueue,const void * const pvItemToQueue,TickType_t xTicksToWait,const BaseType_t xCopyPosition );
-      | ^~~~~~~~~~
-../Softtime/src/time.c:89:21: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘xTimerTaskHandle’
-   89 | static TaskHandle_t xTimerTaskHandle = NULL;
-      |                     ^~~~~~~~~~~~~~~~
-../Common/src/queue.c:81:1: error: expected declaration specifiers before ‘BaseType_t’
-   81 | BaseType_t xQueueReceive( QueueHandle_t xQueue,void * const pvBuffer,TickType_t xTicksToWait );
-      | ^~~~~~~~~~
-../Softtime/src/time.c:95:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-   95 | {
-      | ^
-../Common/src/queue.c:83:1: error: expected declaration specifiers before ‘BaseType_t’
-   83 | BaseType_t xQueueGenericReset( QueueHandle_t xQueue,
-      | ^~~~~~~~~~
-../schedule/src/task.c:161:25: error: unknown type name ‘TaskFunction_t’
-  161 | BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
-      |                         ^~~~~~~~~~~~~~
-../Softtime/src/time.c:117:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  117 | {
-      | ^
-../schedule/src/task.c:163:31: error: unknown type name ‘configSTACK_DEPTH_TYPE’
-  163 |                         const configSTACK_DEPTH_TYPE usStackDepth,
-      |                               ^~~~~~~~~~~~~~~~~~~~~~
-../Softtime/src/time.c:149:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  149 | {
-      | ^
-../Memory/src/heap.c:170:4: error: ‘xFreeBytesRemaining’ undeclared (first use in this function)
-  170 |    xFreeBytesRemaining += pxLink->xBlockSize;
-      |    ^~~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:127:42: warning: type defaults to ‘int’ in declaration of ‘UBaseType_t’ [-Wimplicit-int]
-  127 | static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,
-      |                                          ^~~~~~~~~~~
-../Common/src/queue.c:127:54: error: expected ‘;’, ‘,’ or ‘)’ before ‘uxQueueLength’
-  127 | static void prvInitialiseNewQueue( const UBaseType_t uxQueueLength,
-      |                                                      ^~~~~~~~~~~~~
-../Softtime/src/time.c:191:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvGetNextExpireTime’
-  191 | static TickType_t prvGetNextExpireTime( BaseType_t * const pxListWasEmpty )
-      |                   ^~~~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:171:42: warning: type defaults to ‘int’ in declaration of ‘UBaseType_t’ [-Wimplicit-int]
-  171 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
-      |                                          ^~~~~~~~~~~
-../Common/src/queue.c:171:54: error: expected ‘;’, ‘,’ or ‘)’ before ‘uxQueueLength’
-  171 | QueueHandle_t xQueueGenericCreate( const UBaseType_t uxQueueLength,
-      |                                                      ^~~~~~~~~~~~~
-../Softtime/src/time.c:218:42: warning: type defaults to ‘int’ in declaration of ‘TickType_t’ [-Wimplicit-int]
-  218 |                                    const TickType_t xTimerPeriodInTicks,
-      |                                          ^~~~~~~~~~
-../Softtime/src/time.c:218:53: error: expected ‘;’, ‘,’ or ‘)’ before ‘xTimerPeriodInTicks’
-  218 |                                    const TickType_t xTimerPeriodInTicks,
-      |                                                     ^~~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:219:1: error: expected declaration specifiers before ‘BaseType_t’
-  219 | BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
-      | ^~~~~~~~~~
-../Softtime/src/time.c:247:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvInsertTimerInActiveList’
-  247 | static BaseType_t prvInsertTimerInActiveList( Timer_t * const pxTimer,
-      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
-At top level:
-../Memory/src/heap.c:58:13: warning: ‘prvHeapInit’ defined but not used [-Wunused-function]
-   58 | static void prvHeapInit( void )
-      |             ^~~~~~~~~~~
-../Memory/src/heap.c:18:16: warning: ‘ucHeap’ defined but not used [-Wunused-variable]
-   18 | static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
-      |                ^~~~~~
-../Softtime/src/time.c:291:43: warning: type defaults to ‘int’ in declaration of ‘TickType_t’ [-Wimplicit-int]
-  291 | static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
-      |                                           ^~~~~~~~~~
-../Softtime/src/time.c:291:54: error: expected ‘;’, ‘,’ or ‘)’ before ‘xNextExpireTime’
-  291 | static void prvProcessExpiredTimer( const TickType_t xNextExpireTime,
-      |                                                      ^~~~~~~~~~~~~~~
-../Common/src/queue.c:392:1: error: expected declaration specifiers before ‘BaseType_t’
-  392 | BaseType_t xQueueReceive( QueueHandle_t xQueue,
-      | ^~~~~~~~~~
-../Softtime/src/time.c:329:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  329 | {
-      | ^
-../schedule/src/task.c:249:35: error: unknown type name ‘TaskFunction_t’
-  249 | static void prvInitialiseNewTask( TaskFunction_t pxTaskCode,
-      |                                   ^~~~~~~~~~~~~~
-../Common/src/queue.c:506:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvCopyDataToQueue’
-  506 | static BaseType_t prvCopyDataToQueue( Queue_t * const pxQueue,
-      |                   ^~~~~~~~~~~~~~~~~~
-../Softtime/src/time.c:459:47: warning: type defaults to ‘int’ in declaration of ‘TickType_t’ [-Wimplicit-int]
-  459 | static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime,
-      |                                               ^~~~~~~~~~
-../Softtime/src/time.c:459:58: error: expected ‘;’, ‘,’ or ‘)’ before ‘xNextExpireTime’
-  459 | static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime,
-      |                                                          ^~~~~~~~~~~~~~~
-../Softtime/src/time.c:516:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvSampleTimeNow’
-  516 | static TickType_t prvSampleTimeNow( BaseType_t * const pxTimerListsWereSwitched )
-      |                   ^~~~~~~~~~~~~~~~
-../Softtime/src/time.c:539:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  539 | {
-      | ^
-../Common/src/queue.c:569:35: error: unknown type name ‘Queue_t’
-  569 | static void prvCopyDataFromQueue( Queue_t * const pxQueue,
-      |                                   ^~~~~~~
-../Common/src/queue.c:585:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvIsQueueEmpty’
-  585 | static BaseType_t prvIsQueueEmpty( const Queue_t * pxQueue )
-      |                   ^~~~~~~~~~~~~~~
-../Softtime/src/time.c:591:1: error: expected declaration specifiers before ‘TimerHandle_t’
-  591 | TimerHandle_t xTimerCreate( const char * const pcTimerName, /*lint !e971 Unqualified char types are allowed for strings and single characters only. */
-      | ^~~~~~~~~~~~~
-../Common/src/queue.c:606:19: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘prvIsQueueFull’
-  606 | static BaseType_t prvIsQueueFull( const Queue_t * pxQueue )
-      |                   ^~~~~~~~~~~~~~
-../Softtime/src/time.c:613:1: error: expected declaration specifiers before ‘BaseType_t’
-  613 | BaseType_t xTimerCreateTimerTask( void )
-      | ^~~~~~~~~~
-../Softtime/src/time.c:659:5: error: expected declaration specifiers before ‘BaseType_t’
-  659 |     BaseType_t xTimerGenericCommand( TimerHandle_t xTimer,
-      |     ^~~~~~~~~~
-../Softtime/src/time.c:699:1: error: expected declaration specifiers before ‘TickType_t’
-  699 | TickType_t xTimerGetExpiryTime( TimerHandle_t xTimer )
-      | ^~~~~~~~~~
-../Softtime/src/time.c:710:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  710 | {
-      | ^
-../Common/src/queue.c:629:29: error: unknown type name ‘Queue_t’
-  629 | static void prvUnlockQueue( Queue_t * const pxQueue )
-      |                             ^~~~~~~
-../Softtime/src/time.c:720:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  720 | {
-      | ^
-../Common/src/queue.c:743:42: error: expected declaration specifiers or ‘...’ before ‘TickType_t’
-  743 |                                          TickType_t xTicksToWait,
-      |                                          ^~~~~~~~~~
-../Softtime/src/time.c:730:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  730 | {
-      | ^
-../schedule/src/task.c: In function ‘prvAddNewTaskToReadyList’:
-../Common/src/queue.c:744:48: warning: type defaults to ‘int’ in declaration of ‘BaseType_t’ [-Wimplicit-int]
-  744 |                                          const BaseType_t xWaitIndefinitely )
-      |                                                ^~~~~~~~~~
-../Softtime/src/time.c:740:1: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  740 | {
-      | ^
-../schedule/src/task.c:488:5: warning: implicit declaration of function ‘taskENTER_CRITICAL’ [-Wimplicit-function-declaration]
-  488 |     taskENTER_CRITICAL();
-      |     ^~~~~~~~~~~~~~~~~~
-../Common/src/queue.c:744:59: error: expected ‘;’, ‘,’ or ‘)’ before ‘xWaitIndefinitely’
-  744 |                                          const BaseType_t xWaitIndefinitely )
-      |                                                           ^~~~~~~~~~~~~~~~~
-In file included from ../Softtime/src/time.c:3:
-../Common/include/queue.h:98:12: error: old-style parameter declarations in prototyped function definition
-   98 | BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
-      |            ^~~~~~~~~~~~~~~~~
-In file included from ../Common/src/queue.c:1:
-../Common/include/queue.h:98:12: error: old-style parameter declarations in prototyped function definition
-   98 | BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
-      |            ^~~~~~~~~~~~~~~~~
-make: *** [Makefile:62: ../Memory/src/heap.o] Error 1
-../Softtime/src/time.c:756: error: expected ‘{’ at end of input
-  756 | 
-      | 
-In file included from ../Softtime/src/time.c:3:
-../Common/include/queue.h:98:45: warning: unused parameter ‘xQueue’ [-Wunused-parameter]
-   98 | BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
-      |                               ~~~~~~~~~~~~~~^~~~~~
-../Common/include/queue.h:99:50: warning: unused parameter ‘pvItemToQueue’ [-Wunused-parameter]
-   99 |                               const void * const pvItemToQueue,
-      |                               ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-../Common/src/queue.c:775: error: expected ‘{’ at end of input
-  775 |     }
-      | 
-../Common/include/queue.h:100:42: warning: unused parameter ‘xTicksToWait’ [-Wunused-parameter]
-  100 |                               TickType_t xTicksToWait,
-      |                               ~~~~~~~~~~~^~~~~~~~~~~~
-../Common/include/queue.h:101:48: warning: unused parameter ‘xCopyPosition’ [-Wunused-parameter]
-  101 |                               const BaseType_t xCopyPosition )
-      |                               ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-In file included from ../Common/src/queue.c:1:
-../Common/include/queue.h:98:45: warning: unused parameter ‘xQueue’ [-Wunused-parameter]
-   98 | BaseType_t xQueueGenericSend( QueueHandle_t xQueue,
-      |                               ~~~~~~~~~~~~~~^~~~~~
-../Common/include/queue.h:99:50: warning: unused parameter ‘pvItemToQueue’ [-Wunused-parameter]
-   99 |                               const void * const pvItemToQueue,
-      |                               ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-../Common/include/queue.h:100:42: warning: unused parameter ‘xTicksToWait’ [-Wunused-parameter]
-  100 |                               TickType_t xTicksToWait,
-      |                               ~~~~~~~~~~~^~~~~~~~~~~~
-../Common/include/queue.h:101:48: warning: unused parameter ‘xCopyPosition’ [-Wunused-parameter]
-  101 |                               const BaseType_t xCopyPosition )
-      |                               ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-../Softtime/src/time.c:755:1: warning: control reaches end of non-void function [-Wreturn-type]
-  755 | }
-      | ^
-../Common/src/queue.c:775:5: warning: control reaches end of non-void function [-Wreturn-type]
-  775 |     }
-      |     ^
-../schedule/src/task.c:528:9: warning: implicit declaration of function ‘traceTASK_CREATE’ [-Wimplicit-function-declaration]
-  528 |         traceTASK_CREATE( pxNewTCB );
-      |         ^~~~~~~~~~~~~~~~
-../schedule/src/task.c:533:5: warning: implicit declaration of function ‘taskEXIT_CRITICAL’ [-Wimplicit-function-declaration]
-  533 |     taskEXIT_CRITICAL();
-      |     ^~~~~~~~~~~~~~~~~
-make: *** [Makefile:62: ../Softtime/src/time.o] Error 1
-../schedule/src/task.c:541:13: warning: implicit declaration of function ‘taskYIELD_IF_USING_PREEMPTION’ [-Wimplicit-function-declaration]
-  541 |             taskYIELD_IF_USING_PREEMPTION();
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-make: *** [Makefile:62: ../Common/src/queue.o] Error 1
-../schedule/src/task.c: In function ‘vTaskSwitchContext’:
-../schedule/src/task.c:580:9: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
-  580 |     if( uxSchedulerSuspended != ( UBaseType_t ) pdFALSE )
-      |         ^~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:580:9: note: each undeclared identifier is reported only once for each function it appears in
-In file included from ../schedule/src/task.c:3:
-../Common/include/common.h:17:17: error: ‘true’ undeclared (first use in this function)
-   17 | #define pdTRUE  true
-      |                 ^~~~
-../schedule/src/task.c:584:25: note: in expansion of macro ‘pdTRUE’
-  584 |         xYieldPending = pdTRUE;
-      |                         ^~~~~~
-../schedule/src/task.c:589:9: warning: implicit declaration of function ‘traceTASK_SWITCHED_OUT’ [-Wimplicit-function-declaration]
-  589 |         traceTASK_SWITCHED_OUT();
-      |         ^~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:616:9: warning: implicit declaration of function ‘taskCHECK_FOR_STACK_OVERFLOW’ [-Wimplicit-function-declaration]
-  616 |         taskCHECK_FOR_STACK_OVERFLOW();
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:628:9: warning: implicit declaration of function ‘traceTASK_SWITCHED_IN’ [-Wimplicit-function-declaration]
-  628 |         traceTASK_SWITCHED_IN();
-      |         ^~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c: In function ‘vTaskStartScheduler’:
-../schedule/src/task.c:683:23: warning: implicit declaration of function ‘xTaskCreate’ [-Wimplicit-function-declaration]
-  683 |             xReturn = xTaskCreate( prvIdleTask,
-      |                       ^~~~~~~~~~~
-../schedule/src/task.c:683:36: error: ‘prvIdleTask’ undeclared (first use in this function)
-  683 |             xReturn = xTaskCreate( prvIdleTask,
-      |                                    ^~~~~~~~~~~
-../schedule/src/task.c:684:36: error: ‘configIDLE_TASK_NAME’ undeclared (first use in this function); did you mean ‘configMAX_TASK_NAME_LEN’?
-  684 |                                    configIDLE_TASK_NAME,
-      |                                    ^~~~~~~~~~~~~~~~~~~~
-      |                                    configMAX_TASK_NAME_LEN
-../schedule/src/task.c:685:36: error: ‘configMINIMAL_STACK_SIZE’ undeclared (first use in this function)
-  685 |                                    configMINIMAL_STACK_SIZE,
-      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:688:37: error: ‘xIdleTaskHandle’ undeclared (first use in this function)
-  688 |                                    &xIdleTaskHandle ); /*lint !e961 MISRA exception, justified as it is not a redundant explicit cast to all supported compilers. */
-      |                                     ^~~~~~~~~~~~~~~
-In file included from ../schedule/src/task.c:3:
-../Common/include/common.h:17:17: error: ‘true’ undeclared (first use in this function)
-   17 | #define pdTRUE  true
-      |                 ^~~~
-../Common/include/common.h:18:27: note: in expansion of macro ‘pdTRUE’
-   18 | #define pdPASS          ( pdTRUE )
-      |                           ^~~~~~
-../schedule/src/task.c:701:20: note: in expansion of macro ‘pdPASS’
-  701 |     if( xReturn == pdPASS )
-      |                    ^~~~~~
-../schedule/src/task.c:717:9: warning: implicit declaration of function ‘portDISABLE_INTERRUPTS’ [-Wimplicit-function-declaration]
-  717 |         portDISABLE_INTERRUPTS();
-      |         ^~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:739:9: warning: implicit declaration of function ‘portCONFIGURE_TIMER_FOR_RUN_TIME_STATS’ [-Wimplicit-function-declaration]
-  739 |         portCONFIGURE_TIMER_FOR_RUN_TIME_STATS();
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:744:13: warning: implicit declaration of function ‘xPortStartScheduler’; did you mean ‘vTaskStartScheduler’? [-Wimplicit-function-declaration]
-  744 |         if( xPortStartScheduler() != pdFALSE )
-      |             ^~~~~~~~~~~~~~~~~~~
-      |             vTaskStartScheduler
-../schedule/src/task.c: At top level:
-../schedule/src/task.c:766:12: error: conflicting types for ‘xTaskRemoveFromEventList’
-  766 | BaseType_t xTaskRemoveFromEventList( const List_t * const pxEventList )
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~
-In file included from ../schedule/src/task.c:1:
-../schedule/include/task.h:46:12: note: previous declaration of ‘xTaskRemoveFromEventList’ was here
-   46 | BaseType_t xTaskRemoveFromEventList( const List_t * const pxEventList );
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c: In function ‘xTaskRemoveFromEventList’:
-../schedule/src/task.c:787:9: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
-  787 |     if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
-      |         ^~~~~~~~~~~~~~~~~~~~
-In file included from ../schedule/src/task.c:3:
-../Common/include/common.h:17:17: error: ‘true’ undeclared (first use in this function)
-   17 | #define pdTRUE  true
-      |                 ^~~~
-../schedule/src/task.c:818:19: note: in expansion of macro ‘pdTRUE’
-  818 |         xReturn = pdTRUE;
-      |                   ^~~~~~
-../schedule/src/task.c: In function ‘xTaskCheckForTimeOut’:
-../Common/include/common.h:17:17: error: ‘true’ undeclared (first use in this function)
-   17 | #define pdTRUE  true
-      |                 ^~~~
-../schedule/src/task.c:873:23: note: in expansion of macro ‘pdTRUE’
-  873 |             xReturn = pdTRUE;
-      |                       ^~~~~~
-../schedule/src/task.c: At top level:
-../schedule/src/task.c:895:6: warning: no previous prototype for ‘vTaskPlaceOnEventList’ [-Wmissing-prototypes]
-  895 | void vTaskPlaceOnEventList( List_t * const pxEventList,
-      |      ^~~~~~~~~~~~~~~~~~~~~
-In file included from ../schedule/src/task.c:3:
-../schedule/src/task.c: In function ‘vTaskPlaceOnEventList’:
-../Common/include/common.h:17:17: error: ‘true’ undeclared (first use in this function)
-   17 | #define pdTRUE  true
-      |                 ^~~~
-../schedule/src/task.c:908:51: note: in expansion of macro ‘pdTRUE’
-  908 |     prvAddCurrentTaskToDelayedList( xTicksToWait, pdTRUE );
-      |                                                   ^~~~~~
-../schedule/src/task.c: In function ‘prvAddCurrentTaskToDelayedList’:
-../schedule/src/task.c:934:9: warning: implicit declaration of function ‘portRESET_READY_PRIORITY’; did you mean ‘taskRECORD_READY_PRIORITY’? [-Wimplicit-function-declaration]
-  934 |         portRESET_READY_PRIORITY( pxCurrentTCB->uxPriority, uxTopReadyPriority ); /*lint !e931 pxCurrentTCB cannot change as it is the calling task.  pxCurrentTCB->uxPriority and uxTopReadyPriority cannot change as called with scheduler suspended or in a critical section. */
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~
-      |         taskRECORD_READY_PRIORITY
-../schedule/src/task.c:914:62: warning: unused parameter ‘xCanBlockIndefinitely’ [-Wunused-parameter]
-  914 |                                             const BaseType_t xCanBlockIndefinitely )
-      |                                             ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c: In function ‘xTaskIncrementTick’:
-../schedule/src/task.c:1022:5: warning: implicit declaration of function ‘traceTASK_INCREMENT_TICK’ [-Wimplicit-function-declaration]
- 1022 |     traceTASK_INCREMENT_TICK( xTickCount );
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:1024:9: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
- 1024 |     if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
-      |         ^~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:1036:13: warning: implicit declaration of function ‘taskSWITCH_DELAYED_LISTS’ [-Wimplicit-function-declaration]
- 1036 |             taskSWITCH_DELAYED_LISTS();
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~
-In file included from ../schedule/src/task.c:3:
-../Common/include/common.h:17:17: error: ‘true’ undeclared (first use in this function)
-   17 | #define pdTRUE  true
-      |                 ^~~~
-../Common/include/list.h:70:116: note: in expansion of macro ‘pdTRUE’
-   70 | #define listLIST_IS_EMPTY( pxList )                       ( ( ( pxList )->uxNumberOfItems == ( UBaseType_t ) 0 ) ? pdTRUE : pdFALSE )
-      |                                                                                                                    ^~~~~~
-../schedule/src/task.c:1047:21: note: in expansion of macro ‘listLIST_IS_EMPTY’
- 1047 |                 if( listLIST_IS_EMPTY( pxDelayedTaskList ) != pdFALSE )
-      |                     ^~~~~~~~~~~~~~~~~
-../schedule/src/task.c:1143:11: error: ‘xPendedTicks’ undeclared (first use in this function); did you mean ‘uxPendedTicks’?
- 1143 |         ++xPendedTicks;
-      |           ^~~~~~~~~~~~
-      |           uxPendedTicks
-../schedule/src/task.c: In function ‘xTaskGetTickCount’:
-../schedule/src/task.c:1162:5: warning: implicit declaration of function ‘portTICK_TYPE_ENTER_CRITICAL’ [-Wimplicit-function-declaration]
- 1162 |     portTICK_TYPE_ENTER_CRITICAL();
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:1166:5: warning: implicit declaration of function ‘portTICK_TYPE_EXIT_CRITICAL’ [-Wimplicit-function-declaration]
- 1166 |     portTICK_TYPE_EXIT_CRITICAL();
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c: In function ‘xTaskGetSchedulerState’:
-../schedule/src/task.c:1181:13: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
- 1181 |         if( uxSchedulerSuspended == ( UBaseType_t ) pdFALSE )
-      |             ^~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c: In function ‘prvIdleTask’:
-../schedule/src/task.c:1200:13: warning: implicit declaration of function ‘taskYIELD’ [-Wimplicit-function-declaration]
- 1200 |             taskYIELD();
-      |             ^~~~~~~~~
-In file included from ../schedule/src/task.c:3:
-../schedule/src/task.c:1194:40: warning: unused parameter ‘pvParameters’ [-Wunused-parameter]
- 1194 | static portTASK_FUNCTION( prvIdleTask, pvParameters )
-../Common/include/common.h:26:76: note: in definition of macro ‘portTASK_FUNCTION’
-   26 | #define portTASK_FUNCTION( vFunction, pvParameters ) void vFunction( void *pvParameters )
-      |                                                                            ^~~~~~~~~~~~
-../schedule/src/task.c: In function ‘vTaskEnterCritical’:
-../schedule/src/task.c:1211:18: error: ‘TCB_t’ {aka ‘struct tskTaskControlBlock’} has no member named ‘uxCriticalNesting’
- 1211 |    ( pxCurrentTCB->uxCriticalNesting )++;
-      |                  ^~
-../schedule/src/task.c:1219:20: error: ‘TCB_t’ {aka ‘struct tskTaskControlBlock’} has no member named ‘uxCriticalNesting’
- 1219 |    if( pxCurrentTCB->uxCriticalNesting == 1 )
-      |                    ^~
-../schedule/src/task.c: In function ‘vTaskExitCritical’:
-../schedule/src/task.c:1233:20: error: ‘TCB_t’ {aka ‘struct tskTaskControlBlock’} has no member named ‘uxCriticalNesting’
- 1233 |    if( pxCurrentTCB->uxCriticalNesting > 0U )
-      |                    ^~
-../schedule/src/task.c:1235:19: error: ‘TCB_t’ {aka ‘struct tskTaskControlBlock’} has no member named ‘uxCriticalNesting’
- 1235 |     ( pxCurrentTCB->uxCriticalNesting )--;
-      |                   ^~
-../schedule/src/task.c:1237:21: error: ‘TCB_t’ {aka ‘struct tskTaskControlBlock’} has no member named ‘uxCriticalNesting’
- 1237 |     if( pxCurrentTCB->uxCriticalNesting == 0U )
-      |                     ^~
-../schedule/src/task.c:1239:6: warning: implicit declaration of function ‘portENABLE_INTERRUPTS’ [-Wimplicit-function-declaration]
- 1239 |      portENABLE_INTERRUPTS();
-      |      ^~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c: At top level:
-../schedule/src/task.c:1246:12: warning: no previous prototype for ‘xTaskResumeAll’ [-Wmissing-prototypes]
- 1246 | BaseType_t xTaskResumeAll( void )
-      |            ^~~~~~~~~~~~~~
-../schedule/src/task.c: In function ‘xTaskResumeAll’:
-../schedule/src/task.c:1252:8: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
- 1252 |      --uxSchedulerSuspended;
-      |        ^~~~~~~~~~~~~~~~~~~~
-In file included from ../schedule/src/task.c:3:
-../Common/include/common.h:17:17: error: ‘true’ undeclared (first use in this function)
-   17 | #define pdTRUE  true
-      |                 ^~~~
-../Common/include/list.h:70:116: note: in expansion of macro ‘pdTRUE’
-   70 | #define listLIST_IS_EMPTY( pxList )                       ( ( ( pxList )->uxNumberOfItems == ( UBaseType_t ) 0 ) ? pdTRUE : pdFALSE )
-      |                                                                                                                    ^~~~~~
-../schedule/src/task.c:1260:21: note: in expansion of macro ‘listLIST_IS_EMPTY’
- 1260 |              while( listLIST_IS_EMPTY( &xPendingReadyList ) == pdFALSE )
-      |                     ^~~~~~~~~~~~~~~~~
-../schedule/src/task.c:1264:51: error: ‘TCB_t’ {aka ‘struct tskTaskControlBlock’} has no member named ‘xGenericListItem’; did you mean ‘xEventListItem’?
- 1264 |                  ( void ) uxListRemove( &( pxTCB->xGenericListItem ) );
-      |                                                   ^~~~~~~~~~~~~~~~
-      |                                                   xEventListItem
-../schedule/src/task.c: At top level:
-../schedule/src/task.c:1304:6: warning: no previous prototype for ‘vTaskSuspendAll’ [-Wmissing-prototypes]
- 1304 | void vTaskSuspendAll( void )
-      |      ^~~~~~~~~~~~~~~
-../schedule/src/task.c: In function ‘vTaskSuspendAll’:
-../schedule/src/task.c:1306:5: error: ‘uxSchedulerSuspended’ undeclared (first use in this function)
- 1306 |   ++uxSchedulerSuspended;
+    CC ../kernel/main.c
+riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../kernel/main.o ../kernel/main.c
+../kernel/main.c:12:6: 警告： ‘vSyscallInit’先前没有原型 [-Wmissing-prototypes]
+   12 | void vSyscallInit(void)
+      |      ^~~~~~~~~~~~
+../kernel/main.c: 在函数‘vSyscallInit’中:
+../kernel/main.c:16:15: 警告： 传递‘xTaskCreate’的第 1 个参数时在不兼容的指针类型间转换 [-Wincompatible-pointer-types]
+   16 |  xTaskCreate( TestProgram, "TestProgram", 4096, NULL, 20, NULL );
+      |               ^~~~~~~~~~~
+      |               |
+      |               void (*)(void)
+In file included from ../kernel/main.c:4:
+../schedule/include/task.h:30:40: 附注： 需要类型‘TaskFunction_t’ {或称 ‘void (*)(void *)’}，但实参的类型为‘void (*)(void)’
+   30 | BaseType_t xTaskCreate( TaskFunction_t pxTaskCode,
+      |                         ~~~~~~~~~~~~~~~^~~~~~~~~~
+../kernel/main.c:18:16: 警告： implicit declaration of function ‘xTimerCreate’; did you mean ‘xTaskCreate’? [-Wimplicit-function-declaration]
+   18 |  xCheckTimer = xTimerCreate( "CheckTimer",( mainCHECK_TIMER_PERIOD_MS ),pdTRUE,( void * ) 0,prvCheckTimerCallback);
+      |                ^~~~~~~~~~~~
+      |                xTaskCreate
+../kernel/main.c:18:14: 警告： assignment to ‘TimerHandle_t’ {或称 ‘struct tmrTimerControl *’} from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+   18 |  xCheckTimer = xTimerCreate( "CheckTimer",( mainCHECK_TIMER_PERIOD_MS ),pdTRUE,( void * ) 0,prvCheckTimerCallback);
+      |              ^
+In file included from ../kernel/main.c:5:
+../Softtime/include/time.h:36:5: 警告： 隐式声明函数‘xTimerGenericCommand’ [-Wimplicit-function-declaration]
+   36 |     xTimerGenericCommand( ( xTimer ), tmrCOMMAND_START, ( xTaskGetTickCount() ), NULL, ( xTicksToWait ) )
       |     ^~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c: At top level:
-../schedule/src/task.c:1308:8: warning: no previous prototype for ‘vTaskPlaceOnEventListRestricted’ [-Wmissing-prototypes]
- 1308 |   void vTaskPlaceOnEventListRestricted( List_t * const pxEventList,
-      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c: In function ‘vTaskPlaceOnEventListRestricted’:
-../schedule/src/task.c:1312:9: warning: implicit declaration of function ‘configASSERT’ [-Wimplicit-function-declaration]
- 1312 |         configASSERT( pxEventList );
-      |         ^~~~~~~~~~~~
-../schedule/src/task.c:1334:9: warning: implicit declaration of function ‘traceTASK_DELAY_UNTIL’ [-Wimplicit-function-declaration]
- 1334 |         traceTASK_DELAY_UNTIL( ( xTickCount + xTicksToWait ) );
-      |         ^~~~~~~~~~~~~~~~~~~~~
-In file included from ../schedule/src/task.c:3:
-At top level:
-../schedule/src/task.c:1194:27: warning: ‘prvIdleTask’ defined but not used [-Wunused-function]
- 1194 | static portTASK_FUNCTION( prvIdleTask, pvParameters )
-      |                           ^~~~~~~~~~~
-../Common/include/common.h:26:59: note: in definition of macro ‘portTASK_FUNCTION’
-   26 | #define portTASK_FUNCTION( vFunction, pvParameters ) void vFunction( void *pvParameters )
-      |                                                           ^~~~~~~~~
-../schedule/src/task.c:484:13: warning: ‘prvAddNewTaskToReadyList’ defined but not used [-Wunused-function]
-  484 | static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~
-../schedule/src/task.c:98:15: warning: ‘xSuspendedTaskList’ defined but not used [-Wunused-variable]
-   98 | static List_t xSuspendedTaskList;
-      |               ^~~~~~~~~~~~~~~~~~
-make: *** [Makefile:62: ../schedule/src/task.o] Error 1
+../kernel/main.c:22:6: 附注： in expansion of macro ‘xTimerStart’
+   22 |      xTimerStart( xCheckTimer, mainDONT_BLOCK );
+      |      ^~~~~~~~~~~
+../kernel/main.c: 在函数‘prvCheckTimerCallback’中:
+../kernel/main.c:43:6: 警告： 未使用的变量‘a’ [-Wunused-variable]
+   43 |  int a=0;
+      |      ^
+    CC ../kernel/boot.S
+riscv64-ls-elf-gcc  -c -Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare -Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused -I. -I../Common/include -I../Memory/include -I../schedule/include -I../Softtime/include  -fomit-frame-pointer -fno-strict-aliasing -fno-builtin -D__gracefulExit -o ../kernel/boot.o ../kernel/boot.S
+../kernel/boot.S: Assembler messages:
+../kernel/boot.S:80: 错误： unrecognized opcode `load t0,0x0(sp)'
+../kernel/boot.S:81: 错误： illegal operands `addi sp,sp,REGBYTES'
+../kernel/boot.S:93: 错误： illegal operands `addi sp,sp,-REGBYTES'
+../kernel/boot.S:94: 错误： unrecognized opcode `store t0,0(sp)'
+../kernel/boot.S:97: 错误： unrecognized opcode `load t0,0(sp)'
+../kernel/boot.S:98: 错误： illegal operands `addi sp,sp,REGBYTES'
+../kernel/boot.S:100: 错误： illegal operands `addi sp,sp,-REGBYTES*31'
+../kernel/boot.S:101: 错误： unrecognized opcode `store x1,1*REGBYTES(sp)'
+../kernel/boot.S:102: 错误： unrecognized opcode `store x2,2*REGBYTES(sp)'
+../kernel/boot.S:103: 错误： unrecognized opcode `store x3,3*REGBYTES(sp)'
+../kernel/boot.S:104: 错误： unrecognized opcode `store x4,4*REGBYTES(sp)'
+../kernel/boot.S:105: 错误： unrecognized opcode `store x5,5*REGBYTES(sp)'
+../kernel/boot.S:106: 错误： unrecognized opcode `store x6,6*REGBYTES(sp)'
+../kernel/boot.S:107: 错误： unrecognized opcode `store x7,7*REGBYTES(sp)'
+../kernel/boot.S:108: 错误： unrecognized opcode `store x8,8*REGBYTES(sp)'
+../kernel/boot.S:109: 错误： unrecognized opcode `store x9,9*REGBYTES(sp)'
+../kernel/boot.S:110: 错误： unrecognized opcode `store x10,10*REGBYTES(sp)'
+../kernel/boot.S:111: 错误： unrecognized opcode `store x11,11*REGBYTES(sp)'
+../kernel/boot.S:112: 错误： unrecognized opcode `store x12,12*REGBYTES(sp)'
+../kernel/boot.S:113: 错误： unrecognized opcode `store x13,13*REGBYTES(sp)'
+../kernel/boot.S:114: 错误： unrecognized opcode `store x14,14*REGBYTES(sp)'
+../kernel/boot.S:115: 错误： unrecognized opcode `store x15,15*REGBYTES(sp)'
+../kernel/boot.S:116: 错误： unrecognized opcode `store x16,16*REGBYTES(sp)'
+../kernel/boot.S:117: 错误： unrecognized opcode `store x17,17*REGBYTES(sp)'
+../kernel/boot.S:118: 错误： unrecognized opcode `store x18,18*REGBYTES(sp)'
+../kernel/boot.S:119: 错误： unrecognized opcode `store x19,19*REGBYTES(sp)'
+../kernel/boot.S:120: 错误： unrecognized opcode `store x20,20*REGBYTES(sp)'
+../kernel/boot.S:121: 错误： unrecognized opcode `store x21,21*REGBYTES(sp)'
+../kernel/boot.S:122: 错误： unrecognized opcode `store x22,22*REGBYTES(sp)'
+../kernel/boot.S:123: 错误： unrecognized opcode `store x23,23*REGBYTES(sp)'
+../kernel/boot.S:124: 错误： unrecognized opcode `store x24,24*REGBYTES(sp)'
+../kernel/boot.S:125: 错误： unrecognized opcode `store x25,25*REGBYTES(sp)'
+../kernel/boot.S:126: 错误： unrecognized opcode `store x26,26*REGBYTES(sp)'
+../kernel/boot.S:127: 错误： unrecognized opcode `store x27,27*REGBYTES(sp)'
+../kernel/boot.S:128: 错误： unrecognized opcode `store x28,28*REGBYTES(sp)'
+../kernel/boot.S:129: 错误： unrecognized opcode `store x29,29*REGBYTES(sp)'
+../kernel/boot.S:130: 错误： unrecognized opcode `store x30,30*REGBYTES(sp)'
+../kernel/boot.S:131: 错误： unrecognized opcode `store x31,31*REGBYTES(sp)'
+../kernel/boot.S:141: 错误： unrecognized opcode `load x1,1*REGBYTES(sp)'
+../kernel/boot.S:142: 错误： unrecognized opcode `load x2,2*REGBYTES(sp)'
+../kernel/boot.S:143: 错误： unrecognized opcode `load x3,3*REGBYTES(sp)'
+../kernel/boot.S:144: 错误： unrecognized opcode `load x4,4*REGBYTES(sp)'
+../kernel/boot.S:145: 错误： unrecognized opcode `load x5,5*REGBYTES(sp)'
+../kernel/boot.S:146: 错误： unrecognized opcode `load x6,6*REGBYTES(sp)'
+../kernel/boot.S:147: 错误： unrecognized opcode `load x7,7*REGBYTES(sp)'
+../kernel/boot.S:148: 错误： unrecognized opcode `load x8,8*REGBYTES(sp)'
+../kernel/boot.S:149: 错误： unrecognized opcode `load x9,9*REGBYTES(sp)'
+../kernel/boot.S:150: 错误： unrecognized opcode `load x10,10*REGBYTES(sp)'
+../kernel/boot.S:151: 错误： unrecognized opcode `load x11,11*REGBYTES(sp)'
+../kernel/boot.S:152: 错误： unrecognized opcode `load x12,12*REGBYTES(sp)'
+../kernel/boot.S:153: 错误： unrecognized opcode `load x13,13*REGBYTES(sp)'
+../kernel/boot.S:154: 错误： unrecognized opcode `load x14,14*REGBYTES(sp)'
+../kernel/boot.S:155: 错误： unrecognized opcode `load x15,15*REGBYTES(sp)'
+../kernel/boot.S:156: 错误： unrecognized opcode `load x16,16*REGBYTES(sp)'
+../kernel/boot.S:157: 错误： unrecognized opcode `load x17,17*REGBYTES(sp)'
+../kernel/boot.S:158: 错误： unrecognized opcode `load x18,18*REGBYTES(sp)'
+../kernel/boot.S:159: 错误： unrecognized opcode `load x19,19*REGBYTES(sp)'
+../kernel/boot.S:160: 错误： unrecognized opcode `load x20,20*REGBYTES(sp)'
+../kernel/boot.S:161: 错误： unrecognized opcode `load x21,21*REGBYTES(sp)'
+../kernel/boot.S:162: 错误： unrecognized opcode `load x22,22*REGBYTES(sp)'
+../kernel/boot.S:163: 错误： unrecognized opcode `load x23,23*REGBYTES(sp)'
+../kernel/boot.S:164: 错误： unrecognized opcode `load x24,24*REGBYTES(sp)'
+../kernel/boot.S:165: 错误： unrecognized opcode `load x25,25*REGBYTES(sp)'
+../kernel/boot.S:166: 错误： unrecognized opcode `load x26,26*REGBYTES(sp)'
+../kernel/boot.S:167: 错误： unrecognized opcode `load x27,27*REGBYTES(sp)'
+../kernel/boot.S:168: 错误： unrecognized opcode `load x28,28*REGBYTES(sp)'
+../kernel/boot.S:169: 错误： unrecognized opcode `load x29,29*REGBYTES(sp)'
+../kernel/boot.S:170: 错误： unrecognized opcode `load x30,30*REGBYTES(sp)'
+../kernel/boot.S:171: 错误： unrecognized opcode `load x31,31*REGBYTES(sp)'
+../kernel/boot.S:173: 错误： illegal operands `addi sp,sp,REGBYTES*31'
+Makefile:65: recipe for target '../kernel/boot.o' failed
+make: *** [../kernel/boot.o] Error 1
